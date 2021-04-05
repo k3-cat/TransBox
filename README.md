@@ -6,7 +6,7 @@
 
 # 安装
 
-只要点 [-> 这里 <-](https://github.com/Rarst/laps/releases/latest) 然后再点那个`.apk`结尾的文件就可以下载安装包了哦 之后在手机上直接安装就行
+只要点 [-> 这里 <-](https://github.com/Pix-00/TransBox/releases/latest) 然后再点那个`.apk`结尾的文件就可以下载安装包了哦 之后在手机上直接安装就行
 
 除此以外&emsp;也可以直接通过~~某不存在的~~ Google Play 安装 (但是目前那边出了点问题..&emsp;主要是我傻fufu的把 package id 写错了然后还非常迅速的直接发布到了Production...&emsp;在联系support了...等我搞好那边之前麻烦先不要用Google Play
 
