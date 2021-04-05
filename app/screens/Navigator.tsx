@@ -1,29 +1,49 @@
-import React from 'react';
+import Analytics from 'expo-firebase-analytics';
+import React, { useRef } from 'react';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 
 import About from './About';
 import Lollipop from './Lollipop';
 import Memorial from './memorial/Index';
 import Reminder from './reminder/Index';
-import Unit from './unit/Index';
+import HoUnits from './ho_units/Index';
 
 const Drawer = createDrawerNavigator();
 
 export default function Navigator() {
-  return (
-    <Drawer.Navigator
-      initialRouteName='Unit'
-    >
-      <Drawer.Screen name='Unit' options={{ title: '单位换算' }} component={Unit} />
-      <Drawer.Screen name='Reminder' options={{ title: '提醒' }} component={Reminder} />
-      <Drawer.Screen name='Memorial' options={{ title: '纪念日' }} component={Memorial} />
+  const navigationRef = useRef<NavigationContainerRef>(null);
+  const routeNameRef = useRef('not-init');
 
-      <Drawer.Screen name='About' options={{ title: '关于' }} component={About} />
-      <Drawer.Screen name='Lollipop' options={{
-        drawerLabel: () => null,
-        title: '棒棒糖~'
-      }} component={Lollipop} />
-    </Drawer.Navigator>
+  return (
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() =>
+        routeNameRef.current = navigationRef.current!.getCurrentRoute()!.name
+      }
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef.current!.getCurrentRoute()!.name;
+
+        if (previousRouteName !== currentRouteName) {
+          routeNameRef.current = currentRouteName;
+          await Analytics.setCurrentScreen(currentRouteName);
+        }
+      }}
+    >
+      <Drawer.Navigator initialRouteName='HoUnits'>
+        <Drawer.Screen name='HoUnits' options={{ title: '单位换算' }} component={HoUnits} />
+        <Drawer.Screen name='Reminder' options={{ title: '提醒' }} component={Reminder} />
+        <Drawer.Screen name='Memorial' options={{ title: '纪念日' }} component={Memorial} />
+
+        <Drawer.Screen name='About' options={{ title: '关于' }} component={About} />
+
+        <Drawer.Screen name='Lollipop' options={{
+          drawerLabel: () => null,
+          title: '棒棒糖~'
+        }} component={Lollipop} />
+      </Drawer.Navigator>
+    </NavigationContainer>
   );
 }

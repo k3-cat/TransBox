@@ -4,8 +4,6 @@ import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { enableScreens } from 'react-native-screens';
 
-import { NavigationContainer } from '@react-navigation/native';
-
 import Navigator from './screens/Navigator';
 import { rootStore, StoreProvider } from './stores/rootStore';
 
@@ -24,9 +22,7 @@ export default function Main() {
   return (
     <StoreProvider value={rootStore}>
       <SafeAreaProvider>
-        <NavigationContainer>
-          <Navigator />
-        </NavigationContainer>
+        <Navigator />
       </SafeAreaProvider>
     </StoreProvider>
   );
