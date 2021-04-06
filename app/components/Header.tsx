@@ -5,13 +5,6 @@ import { Text, View } from 'react-native-ui-lib/core';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 
-const hitSlop = {
-  top: 30,
-  left: 30,
-  right: 30,
-  bottom: 30,
-};
-
 function Header() {
   const navigation = useNavigation();
 
@@ -26,7 +19,7 @@ function Header() {
         style={{
           width: "100%",
           top: 0,
-          height: 60,
+          height: 70,
           backgroundColor: "white",
           ...Platform.select({
             ios: {
@@ -46,11 +39,16 @@ function Header() {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
-            top: 30
+            top: 35
           }}
         >
           <TouchableOpacity
-            hitSlop={hitSlop}
+            hitSlop={{
+              top: 30,
+              left: 30,
+              right: 30,
+              bottom: 30,
+            }}
             accessibilityLabel='菜单'
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             style={{ left: 16, position: 'absolute' }}
@@ -58,10 +56,10 @@ function Header() {
             <Ionicons
               size={30}
               name="menu-outline"
-              color="rgba(110, 157, 251, 1.0)"
+              color="#ff8a65"
             />
           </TouchableOpacity>
-          <Text center style={{ fontSize: 17 }}>TransBox</Text>
+          <Text center text65M>TransBox</Text>
         </View>
       </View >
     </Fragment >

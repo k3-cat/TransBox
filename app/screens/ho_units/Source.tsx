@@ -1,9 +1,9 @@
 import Clipboard from 'expo-clipboard';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Keyboard, Vibration } from 'react-native';
+import { Keyboard, TouchableOpacity, Vibration } from 'react-native';
 import { TextField } from 'react-native-ui-lib';
-import { Button, View } from 'react-native-ui-lib/core';
+import { Text, View } from 'react-native-ui-lib/core';
 
 import { useStore } from '../../stores/rootStore';
 import { clean, vUnits, wUnits } from './utils';
@@ -34,7 +34,7 @@ function Source() {
 
   return (
     <View row>
-      <View flex style={{ maxHeight: 50 }}>
+      <View flex style={{ maxHeight: 55 }}>
         <TextField
           value={R.unit.value}
           contextMenuHidden
@@ -46,13 +46,19 @@ function Source() {
         />
       </View>
       <View paddingV-5 right>
-        <Button
-          bg-transparent
-          avoidInnerPadding
-          label={R.unit.sUnit}
-          labelStyle={{ fontSize: 21, color: '#7e57c2' }}
+        <TouchableOpacity
           onPress={() => { R.unit.setDiag('s'); Keyboard.dismiss(); }}
-        />
+          hitSlop={{
+            top: 30,
+            left: 15,
+            right: 30,
+            bottom: 30
+          }}
+        >
+          <View paddingL-15 paddingB-5>
+            <Text style={{ fontSize: 21.5, color: '#7e57c2' }}>{R.unit.sUnit}</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
