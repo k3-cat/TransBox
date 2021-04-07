@@ -83,7 +83,7 @@ function MolInput() {
             </TouchableOpacity>}
         />
       </Dialog>
-    </Fragment >
+    </Fragment>
   );
 }
 

@@ -6,6 +6,8 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RadioButton } from 'react-native-ui-lib';
 import { Text, View } from 'react-native-ui-lib/core';
 
+import { Ionicons } from '@expo/vector-icons';
+
 import { useStore } from '../../stores/rootStore';
 
 const com = ['pg/mL', 'ng/dL', 'ng/mL'];
@@ -48,8 +50,10 @@ function Output() {
                 bottom: 10
               }}
             >
-              <View row>
-                <Text text50M>{'=>  '}</Text>
+              <View row centerV>
+                <Text style={{ fontSize: 27, color: '#808080', marginRight: -7, marginTop: -3 }}>=</Text>
+                <Ionicons size={27} color='#808080' name='chevron-forward-outline' />
+                <View paddingR-12 />
                 <Text text50M style={{ color: !strResult.endsWith(' ') ? '#64b5f6' : '#ef5350' }}>
                   {strResult}
                 </Text>
@@ -58,27 +62,17 @@ function Output() {
         }
       </View>
       <View row paddingH-10 style={{ alignContent: 'space-between' }}>
-        <View flexG>
-          <RadioButton
-            label={com[0]}
-            selected={R.unit.tUnit === com[0]}
-            onPress={() => R.unit.setT(com[0])}
-          />
-        </View>
-        <View flexG>
-          <RadioButton
-            label={com[1]}
-            selected={R.unit.tUnit === com[1]}
-            onPress={() => R.unit.setT(com[1])}
-          />
-        </View>
-        <View flexG>
-          <RadioButton
-            label={com[2]}
-            selected={R.unit.tUnit === com[2]}
-            onPress={() => R.unit.setT(com[2])}
-          />
-        </View>
+        {
+          com.map((u, i) =>
+            <View key={i} flexG>
+              <RadioButton
+                label={u}
+                selected={R.unit.tUnit === u}
+                onPress={() => R.unit.setT(u)}
+              />
+            </View>
+          )
+        }
         <View>
           <RadioButton
             label={com.includes(R.unit.tUnit) ? '自定义' : R.unit.tUnit}
@@ -88,7 +82,7 @@ function Output() {
           />
         </View>
       </View>
-    </Fragment >
+    </Fragment>
   );
 }
 

@@ -78,12 +78,11 @@ function UnitDiag() {
                 <View paddingL-20 paddingR-30 paddingV-10>
                   <Text center text70M style={{ color: o === ob.vv ? '#ff5722' : '#2196f3' }}>{o}</Text>
                 </View>
-              </TouchableOpacity>}
-            </Observer>}
+              </TouchableOpacity>}</Observer>}
           />
         </View>
       </View>
-    </Dialog >
+    </Dialog>
   );
 }
 

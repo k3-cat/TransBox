@@ -1,7 +1,7 @@
 import { types } from 'mobx-state-tree';
 import React, { useContext } from 'react';
 
-import { UnitStore, unitStore } from './unit/unit';
+import { UnitStore, unitStore } from './unit/store';
 import { UpdaterStore, updaterStore } from './updater/store';
 import { triggerUpdateAction } from './updater/trigger';
 

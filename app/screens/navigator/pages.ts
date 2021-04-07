@@ -1,8 +1,8 @@
-import About from '../screens/About';
-import HoUnits from '../screens/ho_units/Index';
-import Lollipop from '../screens/Lollipop';
-import Memorial from '../screens/memorial/Index';
-import Reminder from '../screens/reminder/Index';
+import About from '../About';
+import HoUnits from '../ho_units/Index';
+import Lollipop from '../Lollipop';
+import Memorial from '../memorial/Index';
+import Reminder from '../reminder/Index';
 
 interface page {
   name: string;

@@ -1,6 +1,7 @@
 import { comMolIndex, vUnitIndex, wUnitIndex } from '../../screens/ho_units/utils';
 
-function getMol(mol: string) {
+function getMol(mol?: string) {
+  if (!mol) { return NaN; }
   if (comMolIndex.has(mol)) {
     return comMolIndex.get(mol)!;
   }
@@ -8,11 +9,11 @@ function getMol(mol: string) {
   return n > 100 ? n : NaN;
 }
 
-export function convert(value: string, sUnit: string, tUnit: string, mol: string = '') {
+export function convert(source: string, sUnit: string, tUnit: string, mol?: string) {
   const s = sUnit.split('/');
   const t = tUnit.split('/');
 
-  let result = parseFloat(value) * wUnitIndex.get(s[0])! / wUnitIndex.get(t[0])! / vUnitIndex.get(s[1])! * vUnitIndex.get(t[1])!;
+  let result = parseFloat(source) * wUnitIndex.get(s[0])! / wUnitIndex.get(t[0])! / vUnitIndex.get(s[1])! * vUnitIndex.get(t[1])!;
 
   if (s[0].endsWith('mol')) { result *= getMol(mol); }
   else if (s[0].endsWith('IU')) { result /= getMol(mol); }
