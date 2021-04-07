@@ -24,7 +24,7 @@ function Output() {
     if (result < 0.000001) { return `<< 0.001 ${R.unit.tUnit} `; }
     if (result < 0.001) { return `< 0.001 ${R.unit.tUnit} `; }
 
-    return result.toFixed(3) + ' ' + R.unit.tUnit;
+    return `${result.toFixed(3)} ${R.unit.tUnit}`;
   };
   const strResult = getTextResult();
 

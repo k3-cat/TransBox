@@ -24,11 +24,11 @@ function UnitDiag() {
 
   const update = (isW: boolean, unit: string) => {
     if (isW) {
-      if (ob.v) { R.unit.setUnit(unit + '/' + ob.v); ob.C(); return; }
+      if (ob.v) { R.unit.setUnit(`${unit}/${ob.v}`); ob.C(); return; }
       ob.W(unit);
     }
     else {
-      if (ob.w) { R.unit.setUnit(ob.w + '/' + unit); ob.C(); return; }
+      if (ob.w) { R.unit.setUnit(`${ob.w}/${unit}`); ob.C(); return; }
       ob.V(unit);
     }
   };
