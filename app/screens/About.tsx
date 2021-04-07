@@ -6,17 +6,14 @@ import { Button, Text, View } from 'react-native-ui-lib/core';
 
 import { useNavigation } from '@react-navigation/native';
 
-import Header from '../components/Header';
-
 function About() {
   const local = Constants.nativeAppVersion;
-  const revisionId = Constants.manifest.revisionId!.replace(`${local}-r.`, '');
+  const revisionId = Constants.manifest.revisionId?.replace(`${local}-r.`, '');
 
   const navigation = useNavigation();
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flexGrow: 1 }}>
-      <Header />
       <View flexG>
         <Text center text20M grey30 style={{ marginVertical: '8%' }}>About</Text>
 

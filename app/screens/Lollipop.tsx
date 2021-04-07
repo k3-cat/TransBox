@@ -4,12 +4,9 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text } from 'react-native-ui-lib/core';
 
-import Header from '../components/Header';
-
 function Lollipop() {
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']}>
-      <Header />
       <ScrollView style={{ paddingHorizontal: '7%' }}>
         <Text center text60M grey30 style={{ marginTop: '10%' }}>* 长按图片也行的哦</Text>
         <TouchableWithoutFeedback

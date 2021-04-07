@@ -2,7 +2,6 @@ import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native-ui-lib/core';
 
-import Header from '../../components/Header';
 import Bottom from './Bottom';
 import MolInput from './MolInput';
 import Output from './Output';
@@ -13,7 +12,6 @@ import UnitDiag from './UnitDiag';
 function Index() {
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flexGrow: 1 }}>
-      <Header />
       <View flexG style={{ margin: '7%' }}>
         <Source />
         <MolInput />

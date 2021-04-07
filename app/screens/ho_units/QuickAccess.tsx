@@ -36,6 +36,7 @@ function QuickAccess() {
               <Drawer
                 rightItems={[{
                   text: '移除',
+                  background: '#e57373',
                   onPress: () => onDelete(index)
                 }]}
               >

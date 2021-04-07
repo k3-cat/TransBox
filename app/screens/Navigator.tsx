@@ -4,11 +4,9 @@ import React, { useRef } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 
-import About from './About';
-import Lollipop from './Lollipop';
-import Memorial from './memorial/Index';
-import Reminder from './reminder/Index';
-import HoUnits from './ho_units/Index';
+import Header from '../components/Header';
+import { pages } from '../components/pages';
+import SideDrawer from '../components/SideDrawer';
 
 const Drawer = createDrawerNavigator();
 
@@ -32,17 +30,27 @@ export default function Navigator() {
         }
       }}
     >
-      <Drawer.Navigator initialRouteName='HoUnits'>
-        <Drawer.Screen name='HoUnits' options={{ title: '单位换算' }} component={HoUnits} />
-        <Drawer.Screen name='Reminder' options={{ title: '提醒' }} component={Reminder} />
-        <Drawer.Screen name='Memorial' options={{ title: '纪念日' }} component={Memorial} />
-
-        <Drawer.Screen name='About' options={{ title: '关于' }} component={About} />
-
-        <Drawer.Screen name='Lollipop' options={{
-          drawerLabel: () => null,
-          title: '棒棒糖~'
-        }} component={Lollipop} />
+      <Drawer.Navigator
+        edgeWidth={70}
+        minSwipeDistance={40}
+        drawerType='slide'
+        initialRouteName='HoUnits'
+        screenOptions={{
+          headerShown: true,
+          header: ({ scene }) => {
+            return (<Header title={scene.descriptor.options.title!} />);
+          }
+        }}
+        drawerContent={SideDrawer}
+      >
+        {
+          pages.map((p, i) =>
+            p.name === '' ?
+              null
+              :
+              <Drawer.Screen key={i} name={p.name} options={{ title: p.title }} component={p.screen} />
+          )
+        }
       </Drawer.Navigator>
     </NavigationContainer>
   );
