@@ -1,4 +1,4 @@
-import Analytics from 'expo-firebase-analytics';
+import * as Analytics from 'expo-firebase-analytics';
 import React, { useRef } from 'react';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -17,9 +17,9 @@ export default function Navigator() {
   return (
     <NavigationContainer
       ref={navigationRef}
-      onReady={() =>
-        routeNameRef.current = navigationRef.current!.getCurrentRoute()!.name
-      }
+      onReady={() => {
+        routeNameRef.current = navigationRef.current!.getCurrentRoute()!.name;
+      }}
       onStateChange={async () => {
         const previousRouteName = routeNameRef.current;
         const currentRouteName = navigationRef.current!.getCurrentRoute()!.name;
@@ -39,7 +39,7 @@ export default function Navigator() {
           headerShown: true,
           header: ({ scene }) => {
             return (<Header title={scene.descriptor.options.title!} />);
-          }
+          },
         }}
         drawerContent={SideDrawer}
       >
