@@ -1,8 +1,9 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Vibration } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import { FlatList } from 'react-native-gesture-handler';
-import { ListItem, Text, View } from 'react-native-ui-lib';
+import { AnimatableManager, ListItem, Text, View } from 'react-native-ui-lib';
 import Drawer from 'react-native-ui-lib/drawer';
 
 import { useStore } from '../../stores/rootStore';
@@ -37,7 +38,7 @@ function QuickAccess() {
                 rightItems={[{
                   text: '移除',
                   background: '#e57373',
-                  onPress: () => onDelete(index)
+                  onPress: () => onDelete(index),
                 }]}
               >
                 <ListItem
@@ -45,11 +46,14 @@ function QuickAccess() {
                   paddingH-15
                   containerStyle={{ maxHeight: 50, backgroundColor: '#f3f3f3' }}
                   onLongPress={() => { Vibration.vibrate(20); R.unit.setS(o.s); R.unit.setT(o.t); R.unit.setMol(o.m); }}>
-                  <ListItem.Part>
+                  <Animatable.View
+                    key={index}
+                    style={{ alignSelf: 'center' }}
+                    {...AnimatableManager.getZoomInSlideDown(index, {}, index)}>
                     <Text grey20 text70M>
                       {`${o.s} -> ${o.t}` + (!o.m ? '' : (comMolIndex.has(o.m) ? `  @${o.m.replace('*', '')}` : `  @ ${o.m} g/mol`))}
                     </Text>
-                  </ListItem.Part>
+                  </Animatable.View>
                 </ListItem>
               </Drawer>}
           />

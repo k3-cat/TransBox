@@ -13,11 +13,11 @@ function MolInput() {
   const R = useStore();
   const ob = useLocalObservable(() => ({
     diag: false,
-    D() { this.diag = !this.diag; }
+    D() { this.diag = !this.diag; },
   }));
 
   if (!R.unit.needMol) {
-    return <Fragment></Fragment>;
+    return <Fragment />;
   }
 
   return (
@@ -28,11 +28,12 @@ function MolInput() {
         </View>
         <View flex style={{ maxHeight: 55 }}>
           <TextField
-            value={R.unit.mol}
+            accessibilityLabel='分子量'
+            blurOnSubmit
             contextMenuHidden
             selectTextOnFocus
             keyboardType='numeric'
-            accessibilityLabel='分子量'
+            value={R.unit.mol}
             onChangeText={(m: string) => R.unit.setMol(clean(m))} />
         </View>
         <View right>
@@ -45,7 +46,7 @@ function MolInput() {
               top: 5,
               left: 30,
               right: 30,
-              bottom: 30
+              bottom: 30,
             }}
           >
             <View paddingL-15 paddingB-5>
@@ -65,7 +66,7 @@ function MolInput() {
           paddingBottom: 25,
           paddingHorizontal: 35,
           marginHorizontal: 50,
-          borderRadius: 12
+          borderRadius: 12,
         }}
         onDismiss={() => ob.D()}
       >
@@ -78,7 +79,7 @@ function MolInput() {
           renderItem={({ item: o }) =>
             <TouchableOpacity onPress={() => { R.unit.setMol(o); ob.D(); }}>
               <View marginH-20 paddingV-10 paddingH-10>
-                <Text center text70M style={{ color: o === R.unit.mol ? '#ff5722' : '#2196f3' }}>{o}</Text>
+                <Text center text70M style={{ color: o === R.unit.mol ? '#ff7043' : '#64b5f6' }}>{o}</Text>
               </View>
             </TouchableOpacity>}
         />
