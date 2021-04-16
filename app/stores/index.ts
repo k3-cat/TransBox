@@ -1,23 +1,22 @@
 import { types } from 'mobx-state-tree';
 import React, { useContext } from 'react';
 
-import { UnitStore, unitStore } from './unit/store';
-import { UpdaterStore, updaterStore } from './updater/store';
-import { triggerUpdateAction } from './updater/trigger';
+import { HoUnitStore } from './ho_units';
 
 const RootStore = types.model({
-  unit: UnitStore,
-  updater: UpdaterStore
+  unit: HoUnitStore,
 });
 
 export const rootStore = RootStore.create({
-  unit: unitStore,
-  updater: updaterStore
+  unit: HoUnitStore.create(),
 });
 
-triggerUpdateAction(rootStore);
+export async function loadStores(R: typeof rootStore) {
+  await R.unit.load();
+}
 
 
+// - - - - - - - init StoreProvider - - - - - - -
 const RootStoreContext = React.createContext<typeof rootStore>(rootStore);
 
 export const StoreProvider = RootStoreContext.Provider;

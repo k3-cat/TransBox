@@ -6,7 +6,7 @@ import { Text, View } from 'react-native-ui-lib/core';
 import Dialog from 'react-native-ui-lib/dialog';
 import TextField from 'react-native-ui-lib/textField';
 
-import { useStore } from '../../stores/rootStore';
+import { useStore } from '../../stores';
 import { clean, comMolIndex, comMols } from './utils';
 
 function MolInput() {
@@ -42,12 +42,7 @@ function MolInput() {
         <View right>
           <TouchableOpacity
             onPress={() => { ob.D(); Keyboard.dismiss(); }}
-            hitSlop={{
-              top: 5,
-              left: 30,
-              right: 30,
-              bottom: 30,
-            }}
+            hitSlop={{ top: 5, left: 30, right: 30, bottom: 30 }}
           >
             <View paddingL-15 paddingB-5>
               <Text text65M style={{ color: '#7e57c2' }}>[常用值]</Text>

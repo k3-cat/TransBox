@@ -6,7 +6,7 @@ export const wUnitIndex = new Map([
   ['mIU', 0.001],
   ['μIU', 0.000001],
   ['nmol', 0.000000001],
-  ['pmol', 0.000000000001]
+  ['pmol', 0.000000000001],
 ]);
 
 export const wUnits = [...wUnitIndex.keys()];
@@ -14,7 +14,7 @@ export const wUnits = [...wUnitIndex.keys()];
 export const vUnitIndex = new Map([
   ['L', 1.0],
   ['dL', 0.1],
-  ['mL', 0.001]
+  ['mL', 0.001],
 ]);
 
 export const vUnits = [...vUnitIndex.keys()];

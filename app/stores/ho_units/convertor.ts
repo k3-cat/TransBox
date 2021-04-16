@@ -1,4 +1,4 @@
-import { comMolIndex, vUnitIndex, wUnitIndex } from '../../screens/ho_units/utils';
+import { comMolIndex, vUnitIndex, wUnitIndex } from '../../screens/HoUnits/utils';
 
 function getMol(mol?: string) {
   if (!mol) { return NaN; }

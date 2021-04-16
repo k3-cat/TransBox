@@ -5,7 +5,7 @@ import { PanningProvider } from 'react-native-ui-lib';
 import { Text, View } from 'react-native-ui-lib/core';
 import Dialog from 'react-native-ui-lib/dialog';
 
-import { useStore } from '../../stores/rootStore';
+import { useStore } from '../../stores';
 import { vUnits, wUnits } from './utils';
 
 function UnitDiag() {

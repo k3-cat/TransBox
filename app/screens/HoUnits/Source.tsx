@@ -5,7 +5,7 @@ import { Keyboard, TouchableOpacity, Vibration } from 'react-native';
 import { Text, View } from 'react-native-ui-lib/core';
 import TextField from 'react-native-ui-lib/textField';
 
-import { useStore } from '../../stores/rootStore';
+import { useStore } from '../../stores';
 import { clean, vUnitIndex, wUnitIndex } from './utils';
 
 function Source() {
@@ -60,12 +60,7 @@ function Source() {
       <View paddingV-5 right>
         <TouchableOpacity
           onPress={() => { R.unit.setDiag('s'); Keyboard.dismiss(); }}
-          hitSlop={{
-            top: 30,
-            left: 15,
-            right: 30,
-            bottom: 30,
-          }}
+          hitSlop={{ top: 30, left: 15, right: 30, bottom: 30 }}
         >
           <View paddingL-15 paddingB-5>
             <Text style={{ fontSize: 21.5, color: '#7e57c2' }}>{R.unit.sUnit}</Text>

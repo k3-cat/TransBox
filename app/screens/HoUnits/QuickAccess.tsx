@@ -6,14 +6,14 @@ import { FlatList } from 'react-native-gesture-handler';
 import { AnimatableManager, ListItem, Text, View } from 'react-native-ui-lib';
 import Drawer from 'react-native-ui-lib/drawer';
 
-import { useStore } from '../../stores/rootStore';
+import { useStore } from '../../stores';
 import { comMolIndex } from './utils';
 
 function QuickAccess() {
   const R = useStore();
 
   const onDelete = (id: number) => {
-    R.unit.qa.remove(id);
+    R.unit.removePreset(id);
     Vibration.vibrate(40);
   };
 
@@ -21,7 +21,7 @@ function QuickAccess() {
     <View flexG>
       <Text text70M style={{ color: '#607d8b' }}>可爱的预设们~</Text>
       {
-        R.unit.qa.presets.length === 0 ?
+        R.unit.presets.length === 0 ?
           <View centerV flexG>
             <View style={{ top: '-7%' }}>
               <Text center text60M grey30>点击按钮保存预设</Text>
@@ -31,7 +31,7 @@ function QuickAccess() {
           </View>
           :
           <FlatList
-            data={R.unit.qa.presets}
+            data={R.unit.presets}
             keyExtractor={(o) => o.s + o.t + o.m}
             renderItem={({ item: o, index }) =>
               <Drawer

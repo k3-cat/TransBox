@@ -1,5 +1,5 @@
 {
-  "main": "main.ts",
+  "main": "app/index.tsx",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",

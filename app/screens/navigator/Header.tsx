@@ -21,16 +21,16 @@ function Header({ title }: HeaderProps) {
       />
       <View
         style={{
-          width: "100%",
+          width: '100%',
           top: 0,
           height: 70,
-          backgroundColor: "white",
+          backgroundColor: 'white',
           ...Platform.select({
             ios: {
               shadowRadius: 5,
               shadowOpacity: 0.15,
               shadowOffset: { width: 1, height: 7 },
-              shadowColor: "#757575",
+              shadowColor: '#757575',
             },
             android: {
               elevation: 6,
@@ -40,28 +40,19 @@ function Header({ title }: HeaderProps) {
       >
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            top: 35
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            top: 35,
           }}
         >
           <TouchableOpacity
-            hitSlop={{
-              top: 30,
-              left: 30,
-              right: 30,
-              bottom: 30,
-            }}
+            hitSlop={{ top: 30, left: 30, right: 30, bottom: 30 }}
             accessibilityLabel='菜单'
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             style={{ left: 16, position: 'absolute' }}
           >
-            <Ionicons
-              size={30}
-              name="menu-outline"
-              color="#ff8a65"
-            />
+            <Ionicons size={30} name='menu-outline' color='#ff8a65' />
           </TouchableOpacity>
           <Text center text65M>{title}</Text>
         </View>
