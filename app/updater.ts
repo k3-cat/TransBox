@@ -7,6 +7,7 @@ import { rootStore } from './stores';
 const api = create({
   baseURL: 'https://api.github.com',
   headers: { Accept: 'application/vnd.github.v3+json' },
+  timeout: 2000,
 });
 
 interface GitHubReleases {
@@ -58,7 +59,11 @@ export async function triggerUpdate(R: typeof rootStore) {
     const v8a = Device.supportedCpuArchitectures!.includes('arm64-v8a');
     for (let asset of data.assets) {
       if (asset.name === (v8a ? 'TransBox-v8a.apk' : 'TransBox.apk')) {
-        R.updater.setUrlandCount(asset.browser_download_url, asset.download_count);
+        let url = asset.browser_download_url;
+        if (!R.settings.connectionGood) {
+          url = 'https://mirror.ghproxy.com/' + url;
+        }
+        R.updater.setUrlandCount(url, asset.download_count);
       }
     }
 
