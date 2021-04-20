@@ -1,14 +1,15 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Navigator from './Navigator';
 import Updater from './Updater';
 
 function Screens() {
   return (
-    <Fragment>
+    <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flexGrow: 1 }}>
       <Navigator />
       <Updater />
-    </Fragment>
+    </SafeAreaView>
   );
 }
 

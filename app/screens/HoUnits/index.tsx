@@ -1,5 +1,4 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native-ui-lib/core';
 
 import Bottom from './Bottom';
@@ -9,9 +8,9 @@ import QuickAccess from './QuickAccess';
 import Source from './Source';
 import UnitDiag from './UnitDiag';
 
-function Index() {
+function HoUnits() {
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flexGrow: 1 }}>
+    <>
       <View flexG style={{ margin: '7%' }}>
         <Source />
         <MolInput />
@@ -21,9 +20,8 @@ function Index() {
         <QuickAccess />
       </View>
       <Bottom />
-    </SafeAreaView>
+    </>
   );
 }
 
-
-export default Index;
+export default HoUnits;

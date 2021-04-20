@@ -5,7 +5,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 
 import Header from './Header';
-import { pages } from './pages';
+import { screens } from './screens';
 import SideDrawer from './SideDrawer';
 
 const Drawer = createDrawerNavigator();
@@ -24,7 +24,7 @@ function Navigator() {
         const previousRouteName = routeNameRef.current;
         const currentRouteName = navigationRef.current!.getCurrentRoute()!.name;
 
-        if (previousRouteName !== currentRouteName) {
+        if (previousRouteName !== currentRouteName && !currentRouteName.startsWith('-')) {
           routeNameRef.current = currentRouteName;
           await Analytics.setCurrentScreen(currentRouteName);
         }
@@ -44,11 +44,11 @@ function Navigator() {
         drawerContent={SideDrawer}
       >
         {
-          pages.map((p, i) =>
+          screens.map((p) =>
             p.name === '' ?
               null
               :
-              <Drawer.Screen key={i} name={p.name} options={{ title: p.title }} component={p.screen} />
+              <Drawer.Screen key={p.name} name={p.name} options={{ title: p.title }} component={p.comp} />
           )
         }
       </Drawer.Navigator>

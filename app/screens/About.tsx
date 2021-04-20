@@ -2,7 +2,6 @@ import Constants from 'expo-constants';
 import * as Analytics from 'expo-firebase-analytics';
 import React from 'react';
 import { Linking } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Text, View } from 'react-native-ui-lib/core';
 
 import { useStore } from '../stores';
@@ -15,7 +14,7 @@ function About() {
   const revisionId = Constants.manifest.revisionId?.replace(`${otaVer}-r.`, '');
 
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flexGrow: 1 }}>
+    <>
       <View flexG>
         <Text center text20M grey30 style={{ marginVertical: '8%' }}>About</Text>
 
@@ -82,7 +81,7 @@ function About() {
           Apache 2.0{'\n'}© 2021 Pix-00
         </Text>
       </View>
-    </SafeAreaView>
+    </>
   );
 }
 
