@@ -2,11 +2,13 @@ import { types } from 'mobx-state-tree';
 import React, { useContext } from 'react';
 
 import { HoUnitStore } from './ho_units';
+import { MemorialStore } from './memorial';
 import { ReminderStore } from './reminder';
 import { SettingStore } from './settings';
 import { UpdaterStore } from './updater';
 
 const RootStore = types.model({
+  memorial: MemorialStore,
   reminder: ReminderStore,
   unit: HoUnitStore,
   settings: SettingStore,
@@ -14,6 +16,7 @@ const RootStore = types.model({
 });
 
 export const rootStore = RootStore.create({
+  memorial: MemorialStore.create(),
   reminder: ReminderStore.create(),
   unit: HoUnitStore.create(),
   settings: SettingStore.create(),
@@ -21,6 +24,8 @@ export const rootStore = RootStore.create({
 });
 
 export async function loadStores(R: typeof rootStore) {
+  await R.memorial.load();
+  await R.reminder.load();
   await R.unit.load();
   await R.settings.load();
 }
