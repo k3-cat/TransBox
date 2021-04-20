@@ -2,16 +2,19 @@ import { types } from 'mobx-state-tree';
 import React, { useContext } from 'react';
 
 import { HoUnitStore } from './ho_units';
+import { ReminderStore } from './reminder';
 import { SettingStore } from './settings';
 import { UpdaterStore } from './updater';
 
 const RootStore = types.model({
+  reminder: ReminderStore,
   unit: HoUnitStore,
   settings: SettingStore,
   updater: UpdaterStore,
 });
 
 export const rootStore = RootStore.create({
+  reminder: ReminderStore.create(),
   unit: HoUnitStore.create(),
   settings: SettingStore.create(),
   updater: UpdaterStore.create(),
