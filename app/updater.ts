@@ -1,6 +1,5 @@
 import { create } from 'apisauce';
 import Constants from 'expo-constants';
-import * as Device from 'expo-device';
 
 import { rootStore } from './stores';
 
@@ -42,31 +41,32 @@ export async function triggerUpdate(R: typeof rootStore) {
   if (!res.ok) {
     return;
   }
-  const data = <GitHubReleases>res.data;
+  const r = <GitHubReleases>res.data;
   const ver = Constants.manifest.version;
 
-  if (data.name === `v${ver}-ota`
-    || (data.name === `v${ver}` && Constants.nativeAppVersion === ver)
-    || !verComp(ver!.slice(1), data.name.slice(1))) {
+  if (r.name === `v${ver}-ota`
+    || (r.name === `v${ver}` && Constants.nativeAppVersion === ver)
+    || !verComp(ver!.slice(1), r.name.slice(1))) {
     return;
   }
 
-  R.updater.setInfo(data.body);
-  if (data.name.endsWith('-ota')) {
+  R.updater.setInfo(r.body);
+  if (r.name.endsWith('-ota')) {
     R.updater.setDiag('ota');
 
   } else {
-    const v8a = Device.supportedCpuArchitectures!.includes('arm64-v8a');
-    for (let asset of data.assets) {
-      if (asset.name === (v8a ? 'TransBox-v8a.apk' : 'TransBox.apk')) {
-        let url = asset.browser_download_url;
-        if (!R.settings.connectionGood) {
-          url = 'https://mirror.ghproxy.com/' + url;
-        }
-        R.updater.setUrlandCount(url, asset.download_count);
-      }
-    }
-
     R.updater.setDiag('apk');
+
+    for (let a of r.assets) {
+      if (a.name !== 'TransBox.apk') {
+        continue;
+      }
+      R.updater.setMetaInfo(
+        r.name,
+        R.settings.connectionGood ? a.browser_download_url : 'https://mirror.ghproxy.com/' + a.browser_download_url,
+        a.download_count
+      );
+      break;
+    }
   }
 }
