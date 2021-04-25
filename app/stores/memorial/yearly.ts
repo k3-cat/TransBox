@@ -8,6 +8,7 @@ export const YearlyEventStore = types
     offset: types.integer, // in days
     hours: types.integer,
     isHide: types.boolean,
+    isInAppNotif: types.boolean,
     notifId: types.maybeNull(types.string),
     notifIdH: types.maybeNull(types.string),
   })
@@ -26,7 +27,18 @@ export const YearlyEventStore = types
   }))
 
   .actions((self) => ({
+    cancelNotif() {
+      if (self.notifId) {
+        Notifications.cancelScheduledNotificationAsync(self.notifId);
+        if (self.notifIdH) {
+          Notifications.cancelScheduledNotificationAsync(self.notifIdH);
+        }
+      }
+    },
+
     createNotif() {
+      this.cancelNotif();
+
       Notifications
         .scheduleNotificationAsync({
           content: {
@@ -63,13 +75,6 @@ export const YearlyEventStore = types
             },
           })
           .then((id) => { self.notifIdH = id; });
-      }
-    },
-
-    cancelNotif() {
-      Notifications.cancelScheduledNotificationAsync(self.notifId!);
-      if (self.notifIdH) {
-        Notifications.cancelScheduledNotificationAsync(self.notifIdH);
       }
     },
   }));

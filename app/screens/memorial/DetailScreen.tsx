@@ -25,6 +25,8 @@ function AddingScreen() {
     offset: 0,
     hours: 0,
     isHide: true,
+    isInAppNotif: true,
+    isNotif: false,
 
     changed: false,
     warning: '',
@@ -35,6 +37,8 @@ function AddingScreen() {
     setOffset(o: number) { this.offset = o; this.changed = true; },
     setHours(h: number) { this.hours = h; this.changed = true; },
     setIsHide(v: boolean) { this.isHide = v; this.changed = true; },
+    setIsInAppNotif(v: boolean) { this.isInAppNotif = v; this.changed = true; },
+    setIsNotif(v: boolean) { this.isNotif = v; this.changed = true; },
 
     setDate(d: Date) {
       let tmp = new Date(this.baseDate);
@@ -59,6 +63,8 @@ function AddingScreen() {
         this.offset = R.memorial.events[R.memorial.index].offset;
         this.hours = R.memorial.events[R.memorial.index].hours;
         this.isHide = R.memorial.events[R.memorial.index].isHide;
+        this.isInAppNotif = R.memorial.events[R.memorial.index].isInAppNotif;
+        this.isNotif = R.memorial.events[R.memorial.index].notifId !== null;
       }
     },
 
@@ -73,7 +79,7 @@ function AddingScreen() {
           return;
         }
 
-        R.memorial.flush(this.name, this.baseDate, this.offset, this.hours, this.isHide);
+        R.memorial.flush(this.name, this.baseDate, this.offset, this.hours, this.isHide, this.isInAppNotif, this.isNotif);
       }
 
       navigation.navigate('Memorial');
@@ -108,61 +114,94 @@ function AddingScreen() {
           />
         </View>
         <View marginB-20 marginH-40 height={1.5} bg-dark50 />
-        <View row marginB-15>
-          <Text text70M marginR-20 grey20>在通知里隐藏具体名称</Text>
+        <View row marginB-25>
+          <Text text70M marginR-20 grey10>开启app内的文字提醒</Text>
           <Switch
             onColor='#64b5f6'
             offColor='#e3f2fd'
-            value={ob.isHide}
-            onValueChange={ob.setIsHide}
+            value={ob.isInAppNotif}
+            onValueChange={ob.setIsInAppNotif}
           />
         </View>
-        <Text marginT-5 text70M grey20>提前几天提醒呢?</Text>
-        <View marginT-5 marginB-15 height={1.5} bg-dark70 />
-        <View row paddingH-10 style={{ alignContent: 'space-between' }}>
-          {
-            offsets.map((o) =>
-              <View key={o} flexG>
-                <RadioButton
-                  label={o === 0 ? '当天' : `${o}天`}
-                  selected={ob.offset === o}
-                  onPress={() => ob.setOffset(o)}
+        {
+          ob.isInAppNotif ?
+            <>
+              <View row marginB-25>
+                <Text text70M marginR-20 grey10>开启系统通知提醒</Text>
+                <Switch
+                  onColor='#64b5f6'
+                  offColor='#e3f2fd'
+                  value={ob.isNotif}
+                  onValueChange={ob.setIsNotif}
                 />
               </View>
-            )
-          }
-          <View>
-            <RadioButton
-              label={offsets.includes(ob.offset) ? '自定义' : `${ob.offset}天`}
-              labelStyle={{ color: '#7e57c2', fontWeight: 'bold' }}
-              selected={!offsets.includes(ob.offset)}
-              onPress={() => ob.setDiag('d')}
-            />
-          </View>
-        </View>
-        <Text marginT-25 text70M grey20>在几点提醒呢?</Text>
-        <View marginT-5 marginB-15 height={1.5} bg-dark70 />
-        <View row paddingH-10 style={{ alignContent: 'space-between' }}>
-          {
-            hours.map((o) =>
-              <View key={o} flexG>
-                <RadioButton
-                  label={`${o}时`}
-                  selected={ob.hours === o}
-                  onPress={() => ob.setHours(o)}
-                />
-              </View>
-            )
-          }
-          <View>
-            <RadioButton
-              label={hours.includes(ob.hours) ? '自定义' : `${ob.hours}时`}
-              labelStyle={{ color: '#7e57c2', fontWeight: 'bold' }}
-              selected={!hours.includes(ob.hours)}
-              onPress={() => ob.setDiag('h')}
-            />
-          </View>
-        </View>
+              {
+                ob.isNotif ?
+                  <>
+                    <View row marginB-15>
+                      <Text text70M marginR-20 grey20>在通知里隐藏具体名称</Text>
+                      <Switch
+                        onColor='#64b5f6'
+                        offColor='#e3f2fd'
+                        value={ob.isHide}
+                        onValueChange={ob.setIsHide}
+                      />
+                    </View>
+                    <Text marginT-5 text70M grey20>提前几天提醒呢?</Text>
+                    <View marginT-5 marginB-15 height={1.5} bg-dark70 />
+                    <View row paddingH-10 style={{ alignContent: 'space-between' }}>
+                      {
+                        offsets.map((o) =>
+                          <View key={o} flexG>
+                            <RadioButton
+                              label={o === 0 ? '当天' : `${o}天`}
+                              selected={ob.offset === o}
+                              onPress={() => ob.setOffset(o)}
+                            />
+                          </View>
+                        )
+                      }
+                      <View>
+                        <RadioButton
+                          label={offsets.includes(ob.offset) ? '自定义' : `${ob.offset}天`}
+                          labelStyle={{ color: '#7e57c2', fontWeight: 'bold' }}
+                          selected={!offsets.includes(ob.offset)}
+                          onPress={() => ob.setDiag('d')}
+                        />
+                      </View>
+                    </View>
+                    <Text marginT-25 text70M grey20>在几点提醒呢?</Text>
+                    <View marginT-5 marginB-15 height={1.5} bg-dark70 />
+                    <View row paddingH-10 style={{ alignContent: 'space-between' }}>
+                      {
+                        hours.map((o) =>
+                          <View key={o} flexG>
+                            <RadioButton
+                              label={`${o}时`}
+                              selected={ob.hours === o}
+                              onPress={() => ob.setHours(o)}
+                            />
+                          </View>
+                        )
+                      }
+                      <View>
+                        <RadioButton
+                          label={hours.includes(ob.hours) ? '自定义' : `${ob.hours}时`}
+                          labelStyle={{ color: '#7e57c2', fontWeight: 'bold' }}
+                          selected={!hours.includes(ob.hours)}
+                          onPress={() => ob.setDiag('h')}
+                        />
+                      </View>
+                    </View>
+                  </>
+                  :
+                  null
+              }
+
+            </>
+            :
+            null
+        }
       </ScrollView>
       <View row marginH-30 marginB-25>
         <Button
