@@ -11,8 +11,8 @@ import Toast from 'react-native-ui-lib/toast';
 
 import { useNavigation } from '@react-navigation/core';
 
-import { useStore } from '../../stores';
 import NumInput from '../../components/NumInput';
+import { useStore } from '../../stores';
 
 const offsets = [0, 1, 7, 14];
 const hours = [0, 9, 12, 18];
@@ -27,20 +27,22 @@ function AddingScreen() {
     hours: 0,
     isHide: true,
 
+    changed: false,
     warning: '',
     diag: '',
     isInit: false,
 
-    setName(n: string) { this.name = n.trim(); },
-    setOffset(o: number) { this.offset = o; },
-    setHours(h: number) { this.hours = h; },
-    setIsHide(v: boolean) { this.isHide = v; },
+    setName(n: string) { this.name = n.trim(); this.changed = true; },
+    setOffset(o: number) { this.offset = o; this.changed = true; },
+    setHours(h: number) { this.hours = h; this.changed = true; },
+    setIsHide(v: boolean) { this.isHide = v; this.changed = true; },
 
     setDate(d: Date) {
       let tmp = new Date(this.baseDate);
       tmp.setFullYear(d.getFullYear(), d.getMonth(), d.getDate());
       tmp.setHours(0, 0, 0, 0);
       this.baseDate = tmp;
+      this.changed = true;
     },
 
     // --------------------------------------
@@ -62,16 +64,19 @@ function AddingScreen() {
     },
 
     flush() {
-      if (!this.name) {
-        this.warning = '必须要给纪念日起个名字哦';
-        return;
-      }
-      if (R.memorial.adding && R.memorial.events.some((e) => e.name === this.name)) {
-        this.warning = '已经存在同名的纪念日了';
-        return;
+      if (this.changed) {
+        if (!this.name) {
+          this.warning = '必须要给纪念日起个名字哦';
+          return;
+        }
+        if (R.memorial.adding && R.memorial.events.some((e) => e.name === this.name)) {
+          this.warning = '已经存在同名的纪念日了';
+          return;
+        }
+
+        R.memorial.flush(this.name, this.baseDate, this.offset, this.hours, this.isHide);
       }
 
-      R.memorial.flush(this.name, this.baseDate, this.offset, this.hours, this.isHide);
       navigation.navigate('Memorial');
     },
   }));
@@ -165,14 +170,6 @@ function AddingScreen() {
           flex
           marginR-10
           outline
-          outlineColor='#42a5f5'
-          label={R.memorial.adding ? '添加' : '更新'}
-          onPress={ob.flush}
-        />
-        <Button
-          flex
-          marginL-10
-          outline
           outlineColor='#ef5350'
           label={R.memorial.adding ? '取消' : '删除'}
           onPress={() => {
@@ -182,11 +179,19 @@ function AddingScreen() {
             navigation.navigate('Memorial');
           }}
         />
+        <Button
+          flex
+          marginL-10
+          outline
+          outlineColor='#42a5f5'
+          label={R.memorial.adding ? '添加' : ob.changed ? '更新' : '返回'}
+          onPress={ob.flush}
+        />
       </View>
       {
         ob.diag !== '' ?
           <NumInput
-            min={ob.diag === 'd' ? 0 : 0}
+            min={0}
             max={ob.diag === 'd' ? 90 : 23}
             step={ob.diag === 'd' ? 7 : 1}
             wholeNumber

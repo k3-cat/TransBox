@@ -15,7 +15,7 @@ function PromoteUpdate() {
       style={{
         flexGrow: 1,
         backgroundColor: '#fefefe',
-        paddingTop: 15,
+        paddingTop: 35,
         paddingBottom: 23,
       }}
     >
