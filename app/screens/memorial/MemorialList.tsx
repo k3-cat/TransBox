@@ -17,27 +17,29 @@ function MemorialList() {
 
   const format = R.settings.format('y');
 
-  const parseNextDate = (d: Date) => {
-    if (isTomorrow(d)) {
-      return ({
-        text65: true,
-        center: true,
-        color: '#5c6bc0',
-        text: '! 明天就是纪念日了哦 !',
-      });
-    }
-    if (isToday(d)) {
-      return ({
-        text65: true,
-        center: true,
-        color: '#ff7043',
-        text: '! 今天是很重要的纪念日 !',
-      });
+  const parseNextDate = (b: Date, d: Date, isInAppNotif: boolean) => {
+    if (isInAppNotif) {
+      if (isTomorrow(d)) {
+        return ({
+          text65: true,
+          center: true,
+          color: '#5c6bc0',
+          text: '! 明天就是纪念日了哦 !',
+        });
+      }
+      if (isToday(d)) {
+        return ({
+          text65: true,
+          center: true,
+          color: '#ff7043',
+          text: '! 今天是很重要的纪念日 !',
+        });
+      }
     }
     return ({
       text70: true,
       grey40: true,
-      text: '下次纪念日在: ' + format(d),
+      text: '发生在: ' + format(b),
     });
   };
 
@@ -89,7 +91,7 @@ function MemorialList() {
           }</Observer>
           <Observer>{() =>
             <Card.Section
-              content={[parseNextDate(o.nextDate)]}
+              content={[parseNextDate(o.baseDate, o.nextDate, o.isInAppNotif)]}
             />
           }</Observer>
         </Card>}
