@@ -11,8 +11,8 @@ import Toast from 'react-native-ui-lib/toast';
 
 import { useNavigation } from '@react-navigation/core';
 
-import { useStore } from '../../stores';
 import NumInput from '../../components/NumInput';
+import { useStore } from '../../stores';
 
 const days = [1, 3, 7, 10];
 const offsets = [0, 10, 30, 60];
@@ -28,26 +28,29 @@ function AddingScreen() {
     isHide: true,
     isNotif: false,
 
+    changed: false,
     warning: '',
     diag: '',
     isInit: false,
 
-    setName(n: string) { this.name = n.trim(); },
-    setPeriod(p: number) { this.period = p; },
-    setOffset(o: number) { this.offset = o; },
-    setIsHide(v: boolean) { this.isHide = v; },
-    setIsNotif(v: boolean) { this.isNotif = v; },
+    setName(n: string) { this.name = n.trim(); this.changed = true; },
+    setPeriod(p: number) { this.period = p; this.changed = true; },
+    setOffset(o: number) { this.offset = o; this.changed = true; },
+    setIsHide(v: boolean) { this.isHide = v; this.changed = true; },
+    setIsNotif(v: boolean) { this.isNotif = v; this.changed = true; },
 
     setDate(d: Date) {
       let tmp = new Date(this.nextDate);
       tmp.setFullYear(d.getFullYear(), d.getMonth(), d.getDate());
       this.nextDate = tmp;
+      this.changed = true;
     },
 
     setTime(t: Date) {
       let tmp = new Date(this.nextDate);
       tmp.setHours(t.getHours(), t.getMinutes(), 0, 0);
       this.nextDate = tmp;
+      this.changed = true;
     },
 
     // --------------------------------------
@@ -70,16 +73,19 @@ function AddingScreen() {
     },
 
     flush() {
-      if (!this.name) {
-        this.warning = '必须要给事件起个名字哦';
-        return;
-      }
-      if (R.reminder.adding && R.reminder.events.some((e) => e.name === this.name)) {
-        this.warning = '已经存在同名的提醒了';
-        return;
+      if (this.changed) {
+        if (!this.name) {
+          this.warning = '必须要给事件起个名字哦';
+          return;
+        }
+        if (R.reminder.adding && R.reminder.events.some((e) => e.name === this.name)) {
+          this.warning = '已经存在同名的提醒了';
+          return;
+        }
+
+        R.reminder.flush(this.name, this.nextDate, this.period, this.offset, this.isHide, this.isNotif);
       }
 
-      R.reminder.flush(this.name, this.nextDate, this.period, this.offset, this.isHide, this.isNotif);
       navigation.navigate('Reminder');
     },
   }));
@@ -212,14 +218,6 @@ function AddingScreen() {
           flex
           marginR-10
           outline
-          outlineColor='#42a5f5'
-          label={R.reminder.adding ? '添加' : '更新'}
-          onPress={ob.flush}
-        />
-        <Button
-          flex
-          marginL-10
-          outline
           outlineColor='#ef5350'
           label={R.reminder.adding ? '取消' : '删除'}
           onPress={() => {
@@ -228,6 +226,14 @@ function AddingScreen() {
             }
             navigation.navigate('Reminder');
           }}
+        />
+        <Button
+          flex
+          marginL-10
+          outline
+          outlineColor='#42a5f5'
+          label={R.reminder.adding ? '添加' : ob.changed ? '更新' : '返回'}
+          onPress={ob.flush}
         />
       </View>
       {

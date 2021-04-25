@@ -59,7 +59,7 @@ function UnitDiag() {
             renderItem={({ item: o }) => <Observer>{() =>
               <TouchableOpacity onPress={() => update(true, o)}>
                 <View paddingL-30 paddingR-20 paddingV-8>
-                  <Text center text70M style={{ color: o === ob.w ? '#ff5722' : o === u[0] && ob.w === '' ? '#ff8a65' : '#42a5f5' }}>{o}</Text>
+                  <Text center text65M style={{ color: o === ob.w ? '#ff5722' : o === u[0] && ob.w === '' ? '#ffb74d' : '#42a5f5' }}>{o}</Text>
                 </View>
               </TouchableOpacity>}
             </Observer>}
@@ -76,7 +76,7 @@ function UnitDiag() {
             renderItem={({ item: o }) => <Observer>{() =>
               <TouchableOpacity onPress={() => update(false, o)}>
                 <View paddingL-20 paddingR-30 paddingV-10>
-                  <Text center text70M style={{ color: o === ob.v ? '#ff5722' : o === u[1] && ob.v === '' ? '#ff8a65' : '#42a5f5' }}>{o}</Text>
+                  <Text center text65M style={{ color: o === ob.v ? '#ff5722' : o === u[1] && ob.v === '' ? '#ffb74d' : '#42a5f5' }}>{o}</Text>
                 </View>
               </TouchableOpacity>}</Observer>}
           />

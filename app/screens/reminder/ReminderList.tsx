@@ -15,7 +15,7 @@ function parseColor(percent: number) {
   if (percent === -1) {
     return '#ff7043';
   }
-  return `rgba(66, 165, 245, ${0.4 + 0.6 * percent})`;
+  return `rgba(66, 165, 245, ${0.25 + 0.75 * percent})`;
 }
 
 function ReminderList() {
@@ -49,12 +49,14 @@ function ReminderList() {
     <FlatList
       data={R.reminder.events}
       keyExtractor={(o) => o.name}
-      style={{ marginTop: 15 }}
+      style={{ marginTop: 5 }}
+      ListHeaderComponent={<View marginB-20 />}
+      ListFooterComponent={<View marginT-50 />}
       renderItem={({ item: o, index }) =>
         <Card
-          marginV-10
           marginH-25
-          containerStyle={{ paddingHorizontal: 20, paddingVertical: 15 }}
+          marginV-18
+          containerStyle={{ width: 320, alignSelf: 'center', paddingHorizontal: 30, paddingVertical: 20 }}
           onLongPress={() => {
             R.reminder.edit(index);
             navigation.navigate('-Detail');
@@ -66,12 +68,12 @@ function ReminderList() {
           />
           <View height={1.5} bg-dark60 />
           <Card.Section
-            marginT-30
+            marginT-35
             marginB-25
             content={[
               {
                 center: true,
-                text50M: true,
+                text40M: true,
                 color: parseColor(o.percent()),
                 text: formatDistanceToNow(o.nextDate, { includeSeconds: false, locale: R.settings.local ? zhCN : enUS }),
               },
