@@ -72,12 +72,12 @@ function AddingScreen() {
     },
 
     flush() {
-      if (this.changed) {
+      if (this.changed || R.reminder.adding) {
         if (!this.name) {
           this.warning = '必须要给事件起个名字哦';
           return;
         }
-        if (R.reminder.adding && R.reminder.events.some((e) => e.name === this.name)) {
+        if (R.reminder.events.some((e, i) => e.name === this.name && i !== R.reminder.index)) {
           this.warning = '已经存在同名的提醒了';
           return;
         }

@@ -1,5 +1,5 @@
 import isToday from 'date-fns/isToday';
-import { observer } from 'mobx-react-lite';
+import { Observer, observer } from 'mobx-react-lite';
 import React from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 import Card from 'react-native-ui-lib/card';
@@ -60,20 +60,26 @@ function MemorialList() {
             navigation.navigate('-Detail');
           }}
         >
-          <Card.Section
-            marginB-5
-            content={[{ text: o.name, text65M: true, grey10: true }]}
-          />
+          <Observer>{() =>
+            <Card.Section
+              marginB-5
+              content={[{ text: o.name, text65M: true, grey10: true }]}
+            />
+          }</Observer>
           <View height={1.5} bg-dark60 />
-          <Card.Section
-            marginT-35
-            marginB-25
-            content={[{ center: true, text40M: true, color: '#66bb6a', text: `${o.daysCount} 天` },
-            ]}
-          />
-          <Card.Section
-            content={[parseNextDate(o.nextDate)]}
-          />
+          <Observer>{() =>
+            <Card.Section
+              marginT-35
+              marginB-25
+              content={[{ center: true, text40M: true, color: '#66bb6a', text: `${o.daysCount} 天` },
+              ]}
+            />
+          }</Observer>
+          <Observer>{() =>
+            <Card.Section
+              content={[parseNextDate(o.nextDate)]}
+            />
+          }</Observer>
         </Card>}
     />
   );

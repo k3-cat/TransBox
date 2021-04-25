@@ -37,14 +37,15 @@ export const PeriodicallyEventStore = types
 
   .views((self) => ({
     get progress() {
-      let diff = self.nextDate.getTime() - Date.now();
-      if (diff < 0) {
-        const k = self.period * 86400000;
-        diff = ((diff % k) + k) % k;
-      }
-      const period_ = self.period * 1440 - self.offset;
+      const diff = self.nextDate.getTime() - Date.now() / 60000;
 
-      return diff > period_ ? -1 : period_ - diff > 1440 ? 0 : (period_ - diff) / 1440;
+      if (diff > 1440) {
+        return 0;
+      }
+      if (diff < self.offset) {
+        return -1;
+      }
+      return 1 - (diff - self.offset) / (self.period > 1 ? 1440 : self.period * 1440);
     },
   }))
 
@@ -52,7 +53,7 @@ export const PeriodicallyEventStore = types
     updateDate() {
       const diff = self.nextDate.getTime() - Date.now();
       if (diff < 0) {
-        self.nextDate.setDate(self.nextDate.getDate() + Math.ceil(-diff / (self.period * 86400000)));
+        self.nextDate.setDate(self.nextDate.getDate() + self.period * Math.ceil(-diff / (self.period * 86400000)));
       }
     },
 

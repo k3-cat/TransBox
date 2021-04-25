@@ -1,11 +1,11 @@
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import { observer } from 'mobx-react-lite';
+import { Observer, observer } from 'mobx-react-lite';
 import React from 'react';
 import { FlatList } from 'react-native-gesture-handler';
 import Card from 'react-native-ui-lib/card';
 import { Text, View } from 'react-native-ui-lib/core';
 
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 import { useStore } from '../../stores';
 
@@ -31,6 +31,11 @@ function ReminderList() {
       text: '下次将在: ' + (period <= 1 ? '' : period <= 7 ? `${formatW(d)} ` : `${formatD(d)} `) + `${formatT(d)} | 每${period}天`,
     });
   };
+
+  const isFocused = useIsFocused();
+  if (isFocused) {
+    R.reminder.refreshAll();
+  }
 
   if (R.reminder.events.length === 0) {
     return (
@@ -59,26 +64,32 @@ function ReminderList() {
             navigation.navigate('-Detail');
           }}
         >
-          <Card.Section
-            marginB-5
-            content={[{ text: o.name, text65M: true, grey10: true }]}
-          />
+          <Observer>{() =>
+            <Card.Section
+              marginB-5
+              content={[{ text: o.name, text65M: true, grey10: true }]}
+            />
+          }</Observer>
           <View height={1.5} bg-dark60 />
-          <Card.Section
-            marginT-35
-            marginB-25
-            content={[
-              {
-                center: true,
-                text40M: true,
-                color: parseColor(o.progress),
-                text: formatDistanceToNow(o.nextDate, { includeSeconds: false, locale: R.settings.timeLocal }),
-              },
-            ]}
-          />
-          <Card.Section
-            content={[parseNextDate(o.nextDate, o.period)]}
-          />
+          <Observer>{() =>
+            <Card.Section
+              marginT-35
+              marginB-25
+              content={[
+                {
+                  center: true,
+                  text40M: true,
+                  color: parseColor(o.progress),
+                  text: formatDistanceToNow(o.nextDate, { includeSeconds: false, locale: R.settings.timeLocal }),
+                },
+              ]}
+            />
+          }</Observer>
+          <Observer>{() =>
+            <Card.Section
+              content={[parseNextDate(o.nextDate, o.period)]}
+            />
+          }</Observer>
         </Card>}
     />
   );
