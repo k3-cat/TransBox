@@ -63,12 +63,12 @@ function AddingScreen() {
     },
 
     flush() {
-      if (this.changed) {
+      if (this.changed || R.memorial.adding) {
         if (!this.name) {
           this.warning = '必须要给纪念日起个名字哦';
           return;
         }
-        if (R.memorial.adding && R.memorial.events.some((e) => e.name === this.name)) {
+        if (R.memorial.adding && R.memorial.events.some((e, i) => e.name === this.name && i !== R.memorial.index)) {
           this.warning = '已经存在同名的纪念日了';
           return;
         }

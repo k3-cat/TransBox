@@ -29,32 +29,42 @@ export const ReminderStore = types
           offset: o,
           isHide: isHide,
         });
+
         if (isNotif) {
           e.createNotif();
         }
+
         self.events.push(e);
         self.adding = false;
 
       } else {
         let e = self.events[self.index];
         e.name = n;
-        e.nextDate = d;
         e.period = p;
         e.offset = o;
         e.isHide = isHide;
+
+        if (p === 1) {
+          let tmp = new Date();
+          tmp.setHours(d.getHours(), d.getMinutes(), 0, 0);
+          e.nextDate = tmp;
+        } else {
+          e.nextDate = d;
+        }
 
         if (isNotif) {
           e.createNotif();
         } else {
           e.cancelNotif();
         }
+
         self.index = NaN;
       }
     },
 
     remove() {
       self.events[self.index].cancelNotif();
-      self.events.splice(self.index!, 1);
+      self.events.splice(self.index, 1);
       self.index = NaN;
     },
 
