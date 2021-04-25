@@ -13,11 +13,11 @@ export const YearlyEventStore = types
   })
 
   .views((self) => ({
-    daysCount() {
+    get daysCount() {
       return Math.floor((Date.now() - self.baseDate.getTime()) / 86400000);
     },
 
-    nextDate() {
+    get nextDate() {
       let tmp = new Date();
       tmp.setMonth(self.baseDate.getMonth(), self.baseDate.getDate());
       tmp.setHours(0, 0, 0, 0);

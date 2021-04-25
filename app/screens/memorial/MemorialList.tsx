@@ -1,4 +1,3 @@
-import format from 'date-fns/format';
 import isToday from 'date-fns/isToday';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
@@ -14,6 +13,8 @@ function MemorialList() {
   const R = useStore();
   const navigation = useNavigation();
 
+  const format = R.settings.format('y');
+
   const parseNextDate = (d: Date) => {
     const t = isToday(d);
     if (t) {
@@ -27,7 +28,7 @@ function MemorialList() {
       return ({
         text70: true,
         grey40: true,
-        text: '下次纪念日在: ' + format(d, `yyyy ${R.settings.dateStr()} EEE`),
+        text: '下次纪念日在: ' + format(d),
       });
     }
   };
@@ -67,11 +68,11 @@ function MemorialList() {
           <Card.Section
             marginT-35
             marginB-25
-            content={[{ center: true, text40M: true, color: '#66bb6a', text: `${o.daysCount()} 天` },
+            content={[{ center: true, text40M: true, color: '#66bb6a', text: `${o.daysCount} 天` },
             ]}
           />
           <Card.Section
-            content={[parseNextDate(o.nextDate())]}
+            content={[parseNextDate(o.nextDate)]}
           />
         </Card>}
     />

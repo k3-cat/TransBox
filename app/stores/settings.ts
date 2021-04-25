@@ -1,15 +1,8 @@
+import format from 'date-fns/format';
 import { types } from 'mobx-state-tree';
 import { withStorage } from 'mst-easy-storage';
 
-const dateStr = new Map([
-  ['zh-CN', 'MMMdo'],
-  ['en-US', 'dd-MMM'],
-]);
-
-const timeStr = new Map([
-  ['zh-CN', 'aaa h:mm'],
-  ['en-US', 'h:mm aaa'],
-]);
+import { dateF, fulldateF, hour12TimeF, hour24TimeF, timeLocal } from '../i18n/datetime';
 
 export const SettingStore = types
   .model({
@@ -17,8 +10,8 @@ export const SettingStore = types
 
     updateChannel: types.maybeNull(types.enumeration(['google', 'github'])),
 
-    local: 'zh-CN',
-    timeLocal: 'zh-CN',
+    localCode: 'zh-CN',
+    timeLocalCode: 'zh-CN',
     hour24: true,
   })
 
@@ -30,15 +23,21 @@ export const SettingStore = types
       return 'http://140.82.114.3' + url;
     },
 
-    dateStr() {
-      return dateStr.get(self.timeLocal)!;
-    },
-
-    timeStr() {
-      if (self.hour24) {
-        return 'HH:mm';
+    get timeLocal() { return timeLocal.get(self.timeLocalCode)!; },
+    format(type: 'y' | 'd' | 'w' | 't') {
+      if (type === 'y') {
+        return fulldateF.get(self.timeLocalCode)!;
       }
-      return timeStr.get(self.timeLocal)!;
+      if (type === 'd') {
+        return dateF.get(self.timeLocalCode)!;
+      }
+      if (type === 'w') {
+        return (d: Date) => format(d, 'EEE', { locale: this.timeLocal });
+      }
+      if (type === 't') {
+        return self.hour24 ? hour24TimeF : hour12TimeF.get(self.timeLocalCode)!;
+      }
+      return (d: Date) => format(d, 'P p');
     },
   }))
 
@@ -52,7 +51,7 @@ export const SettingStore = types
     },
 
     setLocal(local: string) {
-      self.local = local;
+      self.localCode = local;
     },
 
     toggleHour24() {
@@ -60,7 +59,7 @@ export const SettingStore = types
     },
 
     setTimeLocal(local: string) {
-      self.timeLocal = local;
+      self.timeLocalCode = local;
     },
   }))
 
