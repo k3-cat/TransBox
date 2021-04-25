@@ -120,7 +120,7 @@ function NumInput({ min, max, step, wholeNumber, onCancell, onSubmit }: NumInput
       {
         ob.error !== '' ?
           <View style={{ marginBottom: -9 }}>
-            <Text text80M marginT-10 style={{ color: '#ef7550' }}>{ob.error}</Text>
+            <Text text80M marginT-10 style={{ color: '#ef5350' }}>{ob.error}</Text>
           </View>
           :
           null
@@ -130,18 +130,18 @@ function NumInput({ min, max, step, wholeNumber, onCancell, onSubmit }: NumInput
           flex
           marginR-10
           outline
-          outlineColor='#42a5f5'
-          label='确定'
-          disabled={ob.error !== ''}
-          onPress={ob.submit}
+          outlineColor='#ef5350'
+          label='取消'
+          onPress={onCancell}
         />
         <Button
           flex
           marginL-10
           outline
-          outlineColor='#ef5350'
-          label='取消'
-          onPress={onCancell}
+          outlineColor='#42a5f5'
+          label='确定'
+          disabled={ob.error !== ''}
+          onPress={ob.submit}
         />
       </View>
 
