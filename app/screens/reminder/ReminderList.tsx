@@ -1,6 +1,4 @@
-import format from 'date-fns/format';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import { enGB, enUS, zhCN } from 'date-fns/locale';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { FlatList } from 'react-native-gesture-handler';
@@ -11,29 +9,28 @@ import { useNavigation } from '@react-navigation/native';
 
 import { useStore } from '../../stores';
 
-function parseColor(percent: number) {
-  if (percent === -1) {
+function parseColor(progress: number) {
+  if (progress === -1) {
     return '#ff7043';
   }
-  return `rgba(66, 165, 245, ${0.25 + 0.75 * percent})`;
+  return `rgba(66, 165, 245, ${0.25 + 0.75 * progress})`;
 }
 
 function ReminderList() {
   const R = useStore();
   const navigation = useNavigation();
 
-  R.reminder.refreshAll();
+  const formatT = R.settings.format('t');
+  const formatW = R.settings.format('w');
+  const formatD = R.settings.format('d');
 
-  function parseNextDate(d: Date, period: number) {
-    let mask = R.settings.timeStr();
-    if (period > 1) {
-      mask = 'EEE ' + mask;
-      if (period !== 7) {
-        mask = (`${R.settings.dateStr} `) + mask;
-      }
-    }
-    return format(d, mask);
-  }
+  const parseNextDate = (d: Date, period: number) => {
+    return ({
+      text70: true,
+      grey40: true,
+      text: '下次将在: ' + (period <= 1 ? '' : period <= 7 ? `${formatW(d)} ` : `${formatD(d)} `) + `${formatT(d)} | 每${period}天`,
+    });
+  };
 
   if (R.reminder.events.length === 0) {
     return (
@@ -74,13 +71,13 @@ function ReminderList() {
               {
                 center: true,
                 text40M: true,
-                color: parseColor(o.percent()),
-                text: formatDistanceToNow(o.nextDate, { includeSeconds: false, locale: R.settings.local ? zhCN : enUS }),
+                color: parseColor(o.progress),
+                text: formatDistanceToNow(o.nextDate, { includeSeconds: false, locale: R.settings.timeLocal }),
               },
             ]}
           />
           <Card.Section
-            content={[{ text: '下次事件将在: ' + parseNextDate(o.nextDate, o.period) + `@ ${o.period}天`, text70: true, grey40: true }]}
+            content={[parseNextDate(o.nextDate, o.period)]}
           />
         </Card>}
     />

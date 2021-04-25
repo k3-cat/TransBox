@@ -1,4 +1,3 @@
-import format from 'date-fns/format';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -90,6 +89,9 @@ function AddingScreen() {
     },
   }));
 
+  const formatD = R.settings.format('d');
+  const formatW = R.settings.format('w');
+
   if (!ob.isInit) {
     ob.init();
   }
@@ -116,7 +118,7 @@ function AddingScreen() {
                   floatingPlaceholder
                   floatOnFocus
                   value={ob.nextDate}
-                  dateFormatter={(d: Date) => format(d, ob.period !== 7 ? R.settings.dateStr() + ' EEE' : 'EEE')}
+                  dateFormatter={ob.period === 7 ? formatW : formatD}
                   onChange={ob.setDate}
                 />
               </View>
@@ -134,7 +136,7 @@ function AddingScreen() {
               mode='time'
               is24Hour={R.settings.hour24}
               value={ob.nextDate}
-              timeFormatter={(d: Date) => format(d, R.settings.timeStr())}
+              timeFormatter={R.settings.format('t')}
               onChange={ob.setTime}
             />
           </View>

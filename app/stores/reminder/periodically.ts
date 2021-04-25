@@ -36,7 +36,7 @@ export const PeriodicallyEventStore = types
   })
 
   .views((self) => ({
-    percent() {
+    get progress() {
       let diff = self.nextDate.getTime() - Date.now();
       if (diff < 0) {
         const k = self.period * 86400000;
