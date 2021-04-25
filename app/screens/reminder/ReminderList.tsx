@@ -1,6 +1,9 @@
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import isToday from 'date-fns/isToday';
+import isTomorrow from 'date-fns/isTomorrow';
 import { Observer, observer } from 'mobx-react-lite';
 import React from 'react';
+import { Dimensions } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Card from 'react-native-ui-lib/card';
 import { Text, View } from 'react-native-ui-lib/core';
@@ -25,6 +28,22 @@ function ReminderList() {
   const formatD = R.settings.format('d');
 
   const parseNextDate = (d: Date, period: number) => {
+    if (isTomorrow(d) && period > 3) {
+      return ({
+        text65: true,
+        center: true,
+        color: '#7986cb',
+        text: `明天就是惹 | 每${period}天`,
+      });
+    }
+    if (isToday(d) && period > 1) {
+      return ({
+        text70: true,
+        center: true,
+        color: '#ff8a65',
+        text: `看这里看这里 要记得呦 | 每${period}天`,
+      });
+    }
     return ({
       text70: true,
       grey40: true,
@@ -47,11 +66,15 @@ function ReminderList() {
     );
   }
 
+  const rows = Math.floor(Dimensions.get('window').width / 370);
+
   return (
     <FlatList
-      data={R.reminder.events}
+      data={R.reminder.events.slice()}
       keyExtractor={(o) => o.name}
       style={{ marginTop: 5 }}
+      columnWrapperStyle={rows > 1 ? { alignSelf: 'center' } : null}
+      numColumns={rows}
       ListHeaderComponent={<View marginB-20 />}
       ListFooterComponent={<View marginT-50 />}
       renderItem={({ item: o, index }) =>
