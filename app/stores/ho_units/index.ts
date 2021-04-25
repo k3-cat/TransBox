@@ -63,7 +63,7 @@ export const HoUnitsStore = types
     },
 
     savePreset() {
-      self.presets.push(Preset.create({ s: self.sUnit, t: self.tUnit, m: self.mol }));
+      self.presets.push(Preset.create({ s: self.sUnit, t: self.tUnit, m: self.needMol ? self.mol : null }));
     },
 
     removePreset(i: number) {

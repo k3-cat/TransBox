@@ -1,6 +1,8 @@
 import isToday from 'date-fns/isToday';
+import isTomorrow from 'date-fns/isTomorrow';
 import { Observer, observer } from 'mobx-react-lite';
 import React from 'react';
+import { Dimensions } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import Card from 'react-native-ui-lib/card';
 import { Text, View } from 'react-native-ui-lib/core';
@@ -16,21 +18,27 @@ function MemorialList() {
   const format = R.settings.format('y');
 
   const parseNextDate = (d: Date) => {
-    const t = isToday(d);
-    if (t) {
+    if (isTomorrow(d)) {
+      return ({
+        text65: true,
+        center: true,
+        color: '#5c6bc0',
+        text: '! 明天就是纪念日了哦 !',
+      });
+    }
+    if (isToday(d)) {
       return ({
         text65: true,
         center: true,
         color: '#ff7043',
         text: '! 今天是很重要的纪念日 !',
       });
-    } else {
-      return ({
-        text70: true,
-        grey40: true,
-        text: '下次纪念日在: ' + format(d),
-      });
     }
+    return ({
+      text70: true,
+      grey40: true,
+      text: '下次纪念日在: ' + format(d),
+    });
   };
 
   if (R.memorial.events.length === 0) {
@@ -43,11 +51,15 @@ function MemorialList() {
     );
   }
 
+  const rows = Math.floor(Dimensions.get('window').width / 370);
+
   return (
     <FlatList
-      data={R.memorial.events}
+      data={R.memorial.events.slice()}
       keyExtractor={(o) => o.name}
       style={{ marginTop: 5 }}
+      columnWrapperStyle={rows > 1 ? { alignSelf: 'center' } : null}
+      numColumns={rows}
       ListHeaderComponent={<View marginB-20 />}
       ListFooterComponent={<View marginT-50 />}
       renderItem={({ item: o, index }) =>
