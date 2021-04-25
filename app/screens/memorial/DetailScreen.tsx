@@ -1,4 +1,3 @@
-import format from 'date-fns/format';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -104,7 +103,7 @@ function AddingScreen() {
             floatingPlaceholder
             floatOnFocus
             value={ob.baseDate}
-            dateFormatter={(d: Date) => format(d, `${R.settings.dateStr()} EEE`)}
+            dateFormatter={R.settings.format('y')}
             onChange={ob.setDate}
           />
         </View>
