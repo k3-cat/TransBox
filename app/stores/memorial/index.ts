@@ -20,7 +20,7 @@ export const MemorialStore = types
       self.index = i;
     },
 
-    flush(n: string, d: Date, o: number, h: number, isHide: boolean) {
+    flush(n: string, d: Date, o: number, h: number, isHide: boolean, isInAppNotif: boolean, isNotif: boolean) {
       if (self.adding) {
         let e = YearlyEventStore.create({
           name: n,
@@ -28,8 +28,11 @@ export const MemorialStore = types
           offset: o,
           hours: h,
           isHide: isHide,
+          isInAppNotif: isInAppNotif,
         });
-        // e.createNotif();
+        if (isInAppNotif && isNotif) {
+          e.createNotif();
+        }
         self.events.push(e);
         self.adding = false;
 
@@ -40,9 +43,13 @@ export const MemorialStore = types
         e.offset = o;
         e.hours = h;
         e.isHide = isHide;
+        e.isInAppNotif = isInAppNotif;
 
-        // e.createNotif();
-        // e.cancelNotif();
+        if (isInAppNotif && isNotif) {
+          e.createNotif();
+        } else {
+          e.cancelNotif();
+        }
         self.index = NaN;
       }
     },
