@@ -52,7 +52,7 @@ function QuickAccess() {
               centerV
               paddingH-15
               containerStyle={{ maxHeight: 50, backgroundColor: '#f3f3f3' }}
-              onLongPress={() => { Vibration.vibrate(20); R.unit.setS(o.s); R.unit.setT(o.t); R.unit.setMol(o.m); }}>
+              onLongPress={() => { Vibration.vibrate(10); R.unit.setS(o.s); R.unit.setT(o.t); R.unit.setMol(o.m ?? '0'); }}>
               <Animatable.View
                 key={o.s + o.t + o.m}
                 style={{ alignSelf: 'center' }}

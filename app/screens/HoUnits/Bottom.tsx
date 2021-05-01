@@ -20,7 +20,8 @@ function Bottom() {
         return;
       }
       if (R.unit.presets.some((i) =>
-        i.s === R.unit.sUnit && i.t === R.unit.tUnit && i.m === R.unit.mol)) {
+        i.s === R.unit.sUnit && i.t === R.unit.tUnit && (!R.unit.needMol || i.m === R.unit.mol) // if not need Mol, ignore it
+      )) {
         this.warning = '已经保存过这个组合啦！';
         return;
       }
