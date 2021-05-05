@@ -4,7 +4,7 @@ import { View } from '../../ui-lib';
 import Bottom from './Bottom';
 import MolInput from './MolInput';
 import Output from './Output';
-import QuickAccess from './QuickAccess';
+import UnitPresets from './UnitPresets';
 import Source from './Source';
 import UnitDiag from './UnitDiag';
 
@@ -20,7 +20,7 @@ function HoUnits() {
           <Output />
           <UnitDiag />
           <View marginT-15 marginV-25 height={1.2} bg-dark60 />
-          <QuickAccess />
+          <UnitPresets />
         </View>
       </View>
       <Bottom />
