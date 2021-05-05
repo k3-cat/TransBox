@@ -1,90 +1,100 @@
-import { Observer, observer, useLocalObservable } from 'mobx-react-lite';
-import React from 'react';
-import { FlatList, TouchableOpacity } from 'react-native';
-import { PanningProvider } from 'react-native-ui-lib';
-import { Text, View } from 'react-native-ui-lib/core';
-import Dialog from 'react-native-ui-lib/dialog';
+import { Observer, observer } from 'mobx-react-lite';
+import React, { useState } from 'react';
+import { FlatList } from 'react-native';
 
 import { useStore } from '../../stores';
 import { vUnits, wUnits } from '../../stores/ho_units/data';
+import { Button, Dialog, Portal, Text, View } from '../../ui-lib';
 
-function UnitDiag() {
-  const R = useStore();
-  const ob = useLocalObservable(() => ({
-    w: '',
-    v: '',
+interface UnitProps {
+  unit: string;
+  value: string | undefined;
+  init: string;
+  select: (u: string) => void;
+}
 
-    W(w: string) { this.w = w; },
-    V(v: string) { this.v = v; },
-
-    C() { this.w = ''; this.v = ''; },
-  }));
-
-  const u = R.unit.unitDiag === 's' ? R.unit.sUnit.split('/') : R.unit.tUnit.split('/');
-
-  const update = (isW: boolean, unit: string) => {
-    if (isW) {
-      if (ob.v) { R.unit.setUnit(`${unit}/${ob.v}`); ob.C(); return; }
-      ob.W(unit);
-    }
-    else {
-      if (ob.w) { R.unit.setUnit(`${ob.w}/${unit}`); ob.C(); return; }
-      ob.V(unit);
-    }
-  };
-
+function Unit({ unit, value, init, select }: UnitProps) {
   return (
-    <Dialog
-      useSafeArea
-      visible={R.unit.unitDiag !== 'x'}
-      onDismiss={() => { R.unit.setDiag('x'); ob.C(); }}
-      panDirection={PanningProvider.Directions.RIGHT}
-      containerStyle={{
-        alignSelf: 'center',
-        backgroundColor: '#fefefe',
-        paddingTop: 20,
-        paddingBottom: 25,
-        paddingHorizontal: 35,
-        borderRadius: 12,
-      }}
-    >
-      <Text center text65M>{R.unit.unitDiag === 's' ? '所输入数据的单位' : '希望得到的单位'}</Text>
-      <View marginT-15 marginB-5 height={2} bg-dark70 />
-      <View row>
-        <View left marginR-20>
-          <FlatList
-            data={wUnits}
-            style={{ flexGrow: 0 }}
-            keyExtractor={(name) => name}
-            renderItem={({ item: o }) => <Observer>{() =>
-              <TouchableOpacity onPress={() => update(true, o)}>
-                <View paddingL-30 paddingR-20 paddingV-8>
-                  <Text center text65M style={{ color: o === ob.w ? '#ff5722' : o === u[0] && ob.w === '' ? '#ffb74d' : '#42a5f5' }}>{o}</Text>
-                </View>
-              </TouchableOpacity>}
-            </Observer>}
-          />
-        </View>
-        <View centerV>
-          <Text center text40M>/</Text>
-        </View>
-        <View right marginL-20 centerV>
-          <FlatList
-            data={vUnits}
-            style={{ flexGrow: 0 }}
-            keyExtractor={(name) => name}
-            renderItem={({ item: o }) => <Observer>{() =>
-              <TouchableOpacity onPress={() => update(false, o)}>
-                <View paddingL-20 paddingR-30 paddingV-10>
-                  <Text center text65M style={{ color: o === ob.v ? '#ff5722' : o === u[1] && ob.v === '' ? '#ffb74d' : '#42a5f5' }}>{o}</Text>
-                </View>
-              </TouchableOpacity>}</Observer>}
-          />
-        </View>
-      </View>
-    </Dialog>
+    <Button
+      label={unit}
+      color={(unit === value ?? init) ? '#ff5722' : '#42a5f5'}
+      labelStyle={{ fontSize: 18 }}
+      onPress={() => select(unit)}
+    />
   );
 }
 
+function UnitDiag() {
+  const R = useStore();
+  const [w, setW] = useState<string | undefined>(undefined);
+  const [v, setV] = useState<string | undefined>(undefined);
+
+  function setUnit(unit: string) {
+    R.unit.setU(unit);
+    setW(undefined);
+    setV(undefined);
+  }
+
+  function updateW(unit: string) {
+    if (v) {
+      setUnit(`${unit}/${v}`);
+      return;
+    }
+    setW(unit);
+  }
+
+  function updateV(unit: string) {
+    if (w) {
+      setUnit(`${w}/${unit}`);
+      return;
+    }
+    setV(unit);
+  }
+
+  function partialUpdate() {
+    if (w) { setUnit(`${w}/${R.unit.u[1]}`); }
+    else if (v) { setUnit(`${R.unit.u[0]}/${v}`); }
+    else {
+      R.unit.setDiag('x');
+    }
+  }
+
+  return (
+    <Portal>
+      <Dialog
+        visible={R.unit.unitDiag !== 'x'}
+        onDismiss={partialUpdate}
+        style={{ alignSelf: 'center' }}
+      >
+        <Dialog.Title>{R.unit.unitDiag === 's' ? '所输入数据的单位' : '希望得到的单位'}</Dialog.Title>
+        <Dialog.Content style={{ flexDirection: 'row', marginHorizontal: 10 }}>
+          <View centerV>
+            <FlatList
+              data={wUnits}
+              style={{ flexGrow: 0 }}
+              keyExtractor={(unit) => unit}
+              renderItem={({ item: o }) => <Observer>{() =>
+                <Unit unit={o} value={w} init={R.unit.u[0]} select={updateW} />
+              }</Observer>}
+            />
+          </View>
+          <View centerV marginH-20>
+            <Text text40M>/</Text>
+          </View>
+          <View centerV>
+            <FlatList
+              data={vUnits}
+              style={{ flexGrow: 0 }}
+              keyExtractor={(unit) => unit}
+              renderItem={({ item: o }) => <Observer>{() =>
+                <Unit unit={o} value={v} init={R.unit.u[1]} select={updateV} />
+              }</Observer>}
+            />
+          </View>
+        </Dialog.Content>
+      </Dialog>
+    </Portal>
+  );
+}
 
 export default observer(UnitDiag);

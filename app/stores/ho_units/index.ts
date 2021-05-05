@@ -22,6 +22,10 @@ export const HoUnitStore = types
   })
 
   .views(self => ({
+    get u() {
+      return self.unitDiag === 's' ? self.sUnit.split('/') : self.tUnit.split('/');
+    },
+
     get needMol() {
       return self.sUnit.includes('mol') || self.sUnit.includes('IU') || self.tUnit.includes('mol') || self.tUnit.includes('IU');
     },
@@ -36,24 +40,14 @@ export const HoUnitStore = types
       self.value = v;
     },
 
-    setS(u: string) {
-      self.sUnit = u;
-    },
-
-    setT(u: string) {
-      self.tUnit = u;
-    },
-
-    setUnit(u: string) {
+    setU(u: string) {
       if (self.unitDiag === 's') {
         self.sUnit = u;
-      }
-      else if (self.unitDiag === 't') {
+      } else { // t | x
         self.tUnit = u;
       }
       self.unitDiag = 'x';
     },
-
     setMol(m: string) {
       self.mol = m;
     },
@@ -66,12 +60,26 @@ export const HoUnitStore = types
       self.presets.push(Preset.create({ s: self.sUnit, t: self.tUnit, m: self.needMol ? self.mol : null }));
     },
 
+    loadPreset(i: number) {
+      const p = self.presets[i];
+      self.sUnit = p.s;
+      self.tUnit = p.t;
+      self.mol = p.m ?? '0';
+    },
+
+    sortPreset(from: number, to: number) {
+      if (from === to) { return; }
+      const tmp = self.presets.slice();
+      tmp.splice(to, 0, ...tmp.splice(from, 1));
+      self.presets.replace(tmp);
+    },
+
     removePreset(i: number) {
       self.presets.splice(i, 1);
     },
   }))
 
-  .extend(withStorage({ key: 'ho_unit', mode: 'inclusive', names: ['presets'] }));
+  .extend(withStorage({ key: 'ho_unit', autoSave: false, mode: 'inclusive', names: ['presets'] }));
 
 export function loadHoUnitsStore() {
   const store = HoUnitStore.create();
