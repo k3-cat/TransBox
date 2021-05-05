@@ -33,7 +33,7 @@ function verComp(small: string, big: string) {
 }
 
 export async function triggerUpdate(R: typeof rootStore) {
-  if (R.settings.updateChannel === 'google') {
+  if (R.settings.updatingSource === 'google') {
     return;
   }
 
@@ -50,6 +50,12 @@ export async function triggerUpdate(R: typeof rootStore) {
     return;
   }
 
+  const google = create({
+    baseURL: 'https://www.google.com',
+    timeout: 1000,
+  });
+  const connectionGood = (await google.get('/favicon.ico')).ok;
+
   R.updater.setInfo(r.body);
   if (r.name.endsWith('-ota')) {
     R.updater.setDiag('ota');
@@ -63,7 +69,7 @@ export async function triggerUpdate(R: typeof rootStore) {
       }
       R.updater.setMetaInfo(
         r.name,
-        R.settings.connectionGood ? a.browser_download_url : 'https://mirror.ghproxy.com/' + a.browser_download_url,
+        connectionGood ? a.browser_download_url : 'https://mirror.ghproxy.com/' + a.browser_download_url,
         a.download_count
       );
       break;

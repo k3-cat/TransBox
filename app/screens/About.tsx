@@ -4,11 +4,8 @@ import React from 'react';
 import { Linking } from 'react-native';
 import { Button, Text, View } from 'react-native-ui-lib/core';
 
-import { useStore } from '../stores';
 
 function About() {
-  const R = useStore();
-
   const localVer = Constants.nativeAppVersion;
   const otaVer = Constants.manifest.version;
   const revisionId = Constants.manifest.revisionId?.replace(`${otaVer}-r.`, '');
@@ -41,7 +38,7 @@ function About() {
           label='~ 给猫猫投喂棒棒糖 ~'
           labelStyle={{ color: '#f5a9b8' }}
           onPress={() => {
-            Linking.openURL(R.settings.github('/Pix-00/TransBox/wiki/%E6%8A%95%E5%96%82%E7%8C%AB%E7%8C%AB'));
+            Linking.openURL('https://github.com/Pix-00/TransBox/wiki');
             Analytics.logEvent('link_click', { 'target': 'lollipops' });
           }}
         />
@@ -62,19 +59,10 @@ function About() {
           label='- 访问项目主页 -'
           labelStyle={{ fontSize: 21, color: '#ffab91' }}
           onPress={() => {
-            Linking.openURL(R.settings.github('/Pix-00/TransBox'));
+            Linking.openURL('https://github.com/Pix-00/TransBox');
             Analytics.logEvent('link_click', { 'target': 'homepage' });
           }}
         />
-        {
-          !R.settings.connectionGood ?
-            <View marginH-25 marginV-10>
-              <Text grey30 >* 为了提升某个神秘地区的访问速度使用了CND</Text>
-              <Text marginL-15 grey30>第一次点击上面的链接们需要在之后出现的警告页面{'\n'}点"高级"-"继续访问"才能正常访问哦</Text>
-            </View>
-            :
-            null
-        }
       </View>
       <View marginB-25>
         <Text center style={{ lineHeight: 22, color: 'gray' }}>

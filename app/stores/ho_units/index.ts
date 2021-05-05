@@ -72,3 +72,9 @@ export const HoUnitStore = types
   }))
 
   .extend(withStorage({ key: 'ho_unit', mode: 'inclusive', names: ['presets'] }));
+
+export function loadHoUnitsStore() {
+  const store = HoUnitStore.create();
+  store.load();
+  return store;
+}

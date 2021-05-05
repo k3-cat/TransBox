@@ -6,10 +6,10 @@ import { Button, Text, View } from 'react-native-ui-lib/core';
 import Dialog from 'react-native-ui-lib/dialog';
 
 interface AskFromGoogleProps {
-  setChannel: (channel: 'google' | 'github') => void;
+  setSource: (source: 'google' | 'github') => void;
 }
 
-function AskFromGoogle({ setChannel }: AskFromGoogleProps) {
+function AskFromGoogle({ setSource }: AskFromGoogleProps) {
   return (
     <Dialog
       useSafeArea
@@ -33,7 +33,7 @@ function AskFromGoogle({ setChannel }: AskFromGoogleProps) {
           outlineColor='#42a5f5'
           label='~ 是的哦 ~'
           onPress={() => {
-            setChannel('google');
+                setSource('google');
             Analytics.logEvent('alter_upd_source', { 'from': 'google', 'pervious': null });
           }}
         />
@@ -53,7 +53,7 @@ function AskFromGoogle({ setChannel }: AskFromGoogleProps) {
         outlineColor='#ef5350'
         label='不想用它  /  不方便用'
         onPress={() => {
-          setChannel('github');
+              setSource('github');
           Analytics.logEvent('alter_upd_source', { 'from': 'github', 'pervious': null });
         }}
       />

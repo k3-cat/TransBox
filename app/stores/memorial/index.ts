@@ -62,3 +62,9 @@ export const MemorialStore = types
   }))
 
   .extend(withStorage({ key: 'memorial', mode: 'inclusive', 'names': ['events'] }));
+
+export function loadMemorialStore() {
+  const store = MemorialStore.create();
+  store.load();
+  return store;
+}

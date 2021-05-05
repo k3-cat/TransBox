@@ -1,40 +1,26 @@
 import { registerRootComponent } from 'expo';
-import AppLoading from 'expo-app-loading';
-import React, { useState } from 'react';
+import React from 'react';
+import { Platform, UIManager } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { testConnection } from './flagsInitializer';
 import Screens from './screens';
-import { loadStores, rootStore, StoreProvider } from './stores';
-import { initTheme } from './themes/themeManager';
+import { rootStore, StoreProvider } from './stores';
 import { triggerUpdate } from './updater';
 
-async function initApp(R: typeof rootStore) {
-  initTheme();
-  await loadStores(R);
-  R.settings.setConnectionState(await testConnection());
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
 }
 
 function App() {
-  const [ready, setReady] = useState(false);
-
-  if (!ready) {
-    return (
-      <AppLoading
-        startAsync={() => initApp(rootStore)}
-        onFinish={() => setReady(true)}
-        onError={console.warn}
-      />
-    );
-  }
-
   triggerUpdate(rootStore);
 
   return (
     <StoreProvider value={rootStore}>
-      <SafeAreaProvider>
-        <Screens />
-      </SafeAreaProvider>
+        <SafeAreaProvider>
+          <Screens />
+        </SafeAreaProvider>
     </StoreProvider>
   );
 }
