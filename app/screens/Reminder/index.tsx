@@ -5,7 +5,7 @@ import ListScreen from '../../components/RMScreens/ListScreen';
 import ManageScreen from '../../components/RMScreens/ManageScreen';
 import { useStore } from '../../stores';
 import { LocalStoreProvider } from '../../stores/local';
-import DetailScreen from './DetailScreen';
+import EditScreen from './EditScreen';
 import ReminderList from './ReminderList';
 
 const Stack = createNativeStackNavigator();
@@ -22,7 +22,7 @@ function Reminder() {
           {props => <ListScreen {...props}><ReminderList /></ListScreen>}
         </Stack.Screen>
         <Stack.Screen name='-Manage' component={ManageScreen} />
-        <Stack.Screen name='-Edit' component={DetailScreen} />
+        <Stack.Screen name='-Edit' component={EditScreen} />
       </Stack.Navigator>
     </LocalStoreProvider>
   );

@@ -5,7 +5,7 @@ import ListScreen from '../../components/RMScreens/ListScreen';
 import ManageScreen from '../../components/RMScreens/ManageScreen';
 import { useStore } from '../../stores';
 import { LocalStoreProvider } from '../../stores/local';
-import DetailScreen from './DetailScreen';
+import EditScreen from './EditScreen';
 import MemorialList from './MemorialList';
 
 const Stack = createNativeStackNavigator();
@@ -22,7 +22,7 @@ function Memorial() {
           {props => <ListScreen {...props}><MemorialList /></ListScreen>}
         </Stack.Screen>
         <Stack.Screen name='-Manage' component={ManageScreen} />
-        <Stack.Screen name='-Edit' component={DetailScreen} />
+        <Stack.Screen name='-Edit' component={EditScreen} />
       </Stack.Navigator>
     </LocalStoreProvider>
   );
