@@ -1,7 +1,7 @@
 import addDays from 'date-fns/addDays';
 import differenceInDays from 'date-fns/differenceInDays';
-import differenceInMinutes from 'date-fns/differenceInMinutes';
 import { Instance, types } from 'mobx-state-tree';
+import { clock } from './../../globals';
 
 export const PeriodicallyEventStore = types
   .model('PeriodicallyEventStore', {
@@ -30,12 +30,12 @@ export const PeriodicallyEventStore = types
     },
 
     updateDate() {
-      const now = new Date();
-      if (differenceInMinutes(now, self.nextDate) < 60) {
-        return;
+      if (clock.getTime() - self.nextDate.getTime() < 3600000) {
+        return false;
       }
-      const diff = differenceInDays(now, self.nextDate); // DST safe
+      const diff = differenceInDays(clock.getDate(), self.nextDate); // DST safe
       self.nextDate = addDays(self.nextDate, self.period * Math.floor(1 + diff / self.period)); // round up | at least one period
+      return true;
     },
   }));
 
