@@ -98,12 +98,6 @@ export const ReminderStore = types
       self.events.splice(i, 1);
     },
 
-    refreshAll() {
-      for (let e of self.events) {
-        e.updateDate();
-      }
-    },
-
     cancelNotif(id: string) { },
     createNotif() { },
   }))
