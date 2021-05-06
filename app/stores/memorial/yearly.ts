@@ -1,5 +1,7 @@
 import { Instance, types } from 'mobx-state-tree';
 
+import { clock } from '../../globals';
+
 export const YearlyEventStore = types
   .model('YearlyEventStore', {
     id: types.identifier,
@@ -14,7 +16,7 @@ export const YearlyEventStore = types
 
   .views((self) => ({
     get daysCount() {
-      return Math.floor((Date.now() - self.baseDate.getTime()) / 86400000);
+      return Math.floor((clock.getTime() - self.baseDate.getTime()) / 86400000);
     },
 
     get nextDate() {

@@ -1,10 +1,10 @@
+import { useFocusEffect } from '@react-navigation/core';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import { Observer, observer } from 'mobx-react-lite';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Dimensions, FlatList } from 'react-native';
 
-import { useIsFocused } from '@react-navigation/native';
-
+import { clock } from '../../globals';
 import { useStore } from '../../stores';
 import { IPeriodicallyEventStore } from '../../stores/reminder/periodically';
 import { Card, Text, View } from '../../ui-lib';
@@ -18,12 +18,25 @@ function ReminderList() {
   const formatW = R.settings.format('w');
   const formatD = R.settings.format('d');
 
+  useFocusEffect(
+    useCallback(
+      () => {
+        let save = false;
+        R.reminder.events.forEach(o => {
+          save = o.updateDate() || save;
+        });
+        if (save) { R.reminder.save(); }
+      },
+      [R.reminder],
+    )
+  );
+
   function parseDistance(d: Date, offset: number) {
-    const diff = (d.getTime() - Date.now()) / 60000;
+    const diff = (d.getTime() - clock.getTime()) / 60000;
 
     if (diff <= 0) {
       return (
-        <Text center text40BL style={{ color: '#ff7043' }}>! 现在 !</Text>
+        <Text center text40BL style={{ color: '#ff7043' }}>🌟&emsp;现在&emsp;🌟</Text>
       );
     }
 
@@ -43,14 +56,14 @@ function ReminderList() {
   }
 
   function parseNote(d: Date, period: number) {
-    const diff = (d.getTime() - Date.now()) / 3600000;
+    const diff = (d.getTime() - clock.getTime()) / 3600000;
 
     if (diff <= 0) {
       return null;
     }
     if (diff < 12 && period > 1) {
       return (
-        <Text text70M style={{ marginLeft: 5, color: '#ff8a65' }}>* 还剩不到半天啦</Text>
+        <Text text70M style={{ marginLeft: 5, color: '#ff8a65' }}>! 还剩不到半天啦</Text>
       );
     }
     if (diff < 36 && period > 3) {
