@@ -1,11 +1,15 @@
+import { toJS } from 'mobx';
 import { types } from 'mobx-state-tree';
 import { withStorage } from 'mst-easy-storage';
 
 import { PeriodicallyEventStore } from './periodically';
 
+let snapshot: any = null;
+
 export const ReminderStore = types
   .model({
     adding: false,
+    op: false,
     t: types.safeReference(PeriodicallyEventStore),
     // store
     events: types.array(PeriodicallyEventStore),
@@ -40,20 +44,35 @@ export const ReminderStore = types
         offset: 0,
         isHide: true,
       });
+      self.op = false;
       self.adding = true;
       self.events.push(e);
       self.t = e.id as any;
     },
 
     edit(i: number) {
+      self.op = false;
       self.t = self.events[i].id as any;
+      snapshot = toJS(self.events[i]);
+    },
+
+    revert() {
+      if (self.adding) {
+        self.events.pop();
+        self.adding = false;
+      } else {
+        const i = self.events.findIndex(e => e.id === self.t!.id);
+        self.events[i] = snapshot;
+        snapshot = null;
+        self.t = undefined;
+      }
     },
 
     flush(isNotif: boolean) {
+      self.op = true;
       if (self.t!.period === 1) {
-        let tmp = new Date();
-        tmp.setHours(self.t!.nextDate.getHours(), self.t!.nextDate.getMinutes(), 0, 0);
-        self.t!.nextDate = tmp;
+        const today = new Date();
+        self.t!.nextDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
       }
 
       if (isNotif) {
@@ -64,6 +83,7 @@ export const ReminderStore = types
 
       self.adding = false;
       self.t = undefined;
+      snapshot = null;
     },
 
     sort(from: number, to: number) {

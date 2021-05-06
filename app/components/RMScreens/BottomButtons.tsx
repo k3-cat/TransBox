@@ -22,7 +22,7 @@ function BottomButtons({ onUpdate }: BottomButtonsProps) {
         mode='outlined'
         style={{ flexGrow: 1 }}
         labelStyle={{ fontSize: 17 }}
-        onPress={() => { navigation.goBack(); store.load(); }}
+        onPress={navigation.goBack}
       />
       <View marginH-15 />
       <Button
