@@ -1,6 +1,5 @@
-import { Observer, observer } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
-import { FlatList } from 'react-native';
 
 import { useStore } from '../../stores';
 import { vUnits, wUnits } from '../../stores/ho_units/data';
@@ -8,16 +7,16 @@ import { Button, Dialog, Portal, Text, View } from '../../ui-lib';
 
 interface UnitProps {
   unit: string;
-  value: string | undefined;
-  init: string;
+  value: string;
   select: (u: string) => void;
 }
 
-function Unit({ unit, value, init, select }: UnitProps) {
+function Unit({ unit, value, select }: UnitProps) {
   return (
     <Button
       label={unit}
-      color={(unit === value ?? init) ? '#ff5722' : '#42a5f5'}
+      color={unit === value ? '#ff5722' : '#42a5f5'}
+      style={{ width: 90, marginVertical: 2 }}
       labelStyle={{ fontSize: 18 }}
       onPress={() => select(unit)}
     />
@@ -67,29 +66,23 @@ function UnitDiag() {
         style={{ alignSelf: 'center' }}
       >
         <Dialog.Title>{R.unit.unitDiag === 's' ? '所输入数据的单位' : '希望得到的单位'}</Dialog.Title>
-        <Dialog.Content style={{ flexDirection: 'row', marginHorizontal: 10 }}>
+        <Dialog.Content style={{ flexDirection: 'row', marginHorizontal: 5 }}>
           <View centerV>
-            <FlatList
-              data={wUnits}
-              style={{ flexGrow: 0 }}
-              keyExtractor={(unit) => unit}
-              renderItem={({ item: o }) => <Observer>{() =>
-                <Unit unit={o} value={w} init={R.unit.u[0]} select={updateW} />
-              }</Observer>}
-            />
+            {
+              wUnits.map(o => (
+                <Unit key={o} unit={o} value={w ?? R.unit.u[0]} select={updateW} />
+              ))
+            }
           </View>
-          <View centerV marginH-20>
+          <View centerV marginH-15>
             <Text text40M>/</Text>
           </View>
           <View centerV>
-            <FlatList
-              data={vUnits}
-              style={{ flexGrow: 0 }}
-              keyExtractor={(unit) => unit}
-              renderItem={({ item: o }) => <Observer>{() =>
-                <Unit unit={o} value={v} init={R.unit.u[1]} select={updateV} />
-              }</Observer>}
-            />
+            {
+              vUnits.map(o => (
+                <Unit key={o} unit={o} value={v ?? R.unit.u[1]} select={updateV} />
+              ))
+            }
           </View>
         </Dialog.Content>
       </Dialog>

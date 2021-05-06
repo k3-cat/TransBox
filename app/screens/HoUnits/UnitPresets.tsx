@@ -10,32 +10,25 @@ import { Text, View } from '../../ui-lib';
 function UnitPresets() {
   const R = useStore();
 
-  const title = <Text text70M style={{ color: '#607d8b' }}>可爱的预设们~</Text>;
-
-  if (R.unit.presets.length === 0) {
-    return (
-      <>
-        {title}
-        <View centerV flexG>
-          <View style={{ top: '-7%' }}>
-            <Text center text60M grey30>点击按钮保存预设</Text>
-            <View paddingV-3 />
-            <Text center text60M grey30>左滑移除&emsp;长按拖动排序</Text>
-          </View>
-        </View>
-      </>
-    );
-  }
+  const emptyMessage = (
+    <View centerV flexG>
+      <View flexS>
+        <Text center text65M grey30>点击按钮保存预设{'\n'}左滑移除&emsp;长按拖动排序</Text>
+      </View>
+    </View>
+  );
 
   return (
     <>
-      {title}
+      <Text text70M style={{ color: '#607d8b' }}>可爱的预设们~</Text>
       <DraggableList
         data={R.unit.presets}
-        onDelete={(i) => { R.unit.removePreset(i); R.unit.save(); }}
-        onSort={(from, to) => { R.unit.sortPreset(from, to); R.unit.save(); }}
-        onPress={(i) => { Vibration.vibrate(10); R.unit.loadPreset(i); }}
-        title={(o) =>
+        keyExtractor={(o: any) => o.s + o.t + o.m}
+        emptyMessage={emptyMessage}
+        onPress={i => { Vibration.vibrate(10); R.unit.loadPreset(i); }}
+        onSort={data => { R.unit.sortPreset(data); R.unit.save(); }}
+        onDelete={i => { R.unit.removePreset(i); R.unit.save(); }}
+        title={o =>
           `${o.s} -> ${o.t}` + (!o.m ? '' : (comMolIndex.has(o.m) ? `  @${o.m.replace('*', '')}` : `  @ ${o.m} g/mol`))
         }
       />

@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import ListScreen from '../../components/RMScreens/ListScreen';
 import ManageScreen from '../../components/RMScreens/ManageScreen';
 import { useStore } from '../../stores';
-import { LocalStoreProvider } from '../../stores/local';
+import { LocalStoreProvider } from '../../stores/utils/localStore';
 import EditScreen from './EditScreen';
 import MemorialList from './MemorialList';
 

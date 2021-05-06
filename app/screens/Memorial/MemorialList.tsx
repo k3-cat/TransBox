@@ -29,19 +29,7 @@ function MemorialList() {
     return null;
   }
 
-  if (R.memorial.events.length === 0) {
-    return (
-      <View flexG centerV>
-        <View flexS>
-          <Text center text65M grey30 >各种纪念日之类的{'\n'}比如吃糖糖的起始日期啥的{'\n'}点击按钮添加纪念日&emsp;长按修改</Text>
-        </View>
-      </View>
-    );
-  }
-
   function Cards({ item: o, index }: { item: IYearlyEventStore, index: number; }) {
-    if (!o.name) { return null; }
-
     return (
       <Card
         style={{ width: 320, alignSelf: 'center', marginHorizontal: 25, marginVertical: 18 }}
@@ -66,16 +54,27 @@ function MemorialList() {
     );
   }
 
+  const emptyMessage = (
+    <View flexG centerV>
+      <View flexS>
+        <Text center text65M grey30>各种纪念日之类的{'\n'}比如吃糖糖的起始日期啥的{'\n'}点击按钮添加纪念日&emsp;长按修改</Text>
+      </View>
+    </View>
+  );
+
   return (
     <FlatList
       data={R.memorial.events.slice()}
-      keyExtractor={(o) => o.name}
-      style={{ marginVertical: 5 }}
-      columnWrapperStyle={rows > 1 ? { alignSelf: 'center' } : null}
+      extraData={R.memorial.events.length}
+      keyExtractor={(o) => o.id}
       numColumns={rows}
+      renderItem={Cards}
+      ListEmptyComponent={emptyMessage}
       ListHeaderComponent={<View marginB-20 />}
       ListFooterComponent={<View marginT-20 />}
-      renderItem={Cards}
+      style={{ marginVertical: 5 }}
+      contentContainerStyle={{ flexGrow: 1 }}
+      columnWrapperStyle={rows > 1 ? { alignSelf: 'center' } : null}
     />
   );
 }

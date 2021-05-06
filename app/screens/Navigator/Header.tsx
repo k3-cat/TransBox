@@ -1,10 +1,9 @@
 import React from 'react';
-import { Platform, StatusBar, TouchableOpacity } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 
-import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 
-import { Text, View } from '../../ui-lib';
+import { IconButton, Text, View } from '../../ui-lib';
 
 interface HeaderProps {
   title: string;
@@ -47,14 +46,15 @@ function Header({ title }: HeaderProps) {
             top: 35,
           }}
         >
-          <TouchableOpacity
-            hitSlop={{ top: 30, left: 30, right: 30, bottom: 30 }}
+          <IconButton
             accessibilityLabel='菜单'
+            icon='menu-outline'
+            size={30}
+            color='#ff8a65'
+            hitSlop={{ top: 30, left: 30, right: 30, bottom: 30 }}
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-            style={{ left: 16, position: 'absolute' }}
-          >
-            <Ionicons size={30} name='menu-outline' color='#ff8a65' />
-          </TouchableOpacity>
+            style={{ left: 4, position: 'absolute' }}
+          />
           <Text center text65M>{title}</Text>
         </View>
       </View>

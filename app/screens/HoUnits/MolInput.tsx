@@ -47,19 +47,17 @@ function MolInput() {
         >
           <Dialog.Title>常用分子量</Dialog.Title>
           <Dialog.Content>
-            <FlatList
-              data={comMols}
-              style={{ flexGrow: 0 }}
-              keyExtractor={(name) => name}
-              renderItem={({ item: o }) =>
+            {
+              comMols.map(o => (
                 <Button
+                  key={o}
                   label={o}
                   color={o === R.unit.mol ? '#ff7043' : '#64b5f6'}
-                  style={{ marginVertical: 2 }}
+                  style={{ width: 200, marginVertical: 3 }}
                   labelStyle={{ fontSize: 16 }}
                   onPress={() => { R.unit.setMol(o); setDiag(false); }}
-                />}
-            />
+                />))
+            }
           </Dialog.Content>
         </Dialog>
       </Portal>
