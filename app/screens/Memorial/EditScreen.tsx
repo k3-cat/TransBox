@@ -22,6 +22,7 @@ function EditScreen() {
 
   const [diag, setDiag] = useState('x');
   const [warning, setWarning] = useState('x');
+  const [initD, setInitD] = useState(false);
   const [isNotif, setIsNotif] = useState(false);
   const getIsNotif = () => isNotif ?? R.reminder.notifs.has(o.id);
 
@@ -54,6 +55,10 @@ function EditScreen() {
       setWarning('必须要给纪念日起个名字哦');
       return false;
     }
+    if (R.memorial.adding && !initD) {
+      setWarning('请先设置日期哦');
+      return false;
+    }
     if (R.memorial.adding && R.memorial.events.some(e => e.name === o.name && e.id !== o.id)) {
       setWarning('已经存在同名的纪念日了');
       return false;
@@ -75,9 +80,10 @@ function EditScreen() {
         <DateTimePicker
           label='日期'
           mode='date'
+          init={!R.memorial.adding || initD}
           value={o.baseDate}
           formatter={R.settings.format('y')}
-          onChange={o.setDate}
+          onChange={(d) => { o.setDate(d); setInitD(true); }}
         />
         <View marginV-35 marginH-40 height={1.5} bg-dark50 />
         <Switch

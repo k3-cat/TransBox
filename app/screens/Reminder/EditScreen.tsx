@@ -25,6 +25,8 @@ function EditScreen() {
 
   const [diag, setDiag] = useState('x');
   const [warning, setWarning] = useState('x');
+  const [initD, setInitD] = useState(false);
+  const [initT, setInitT] = useState(false);
   const [isNotif, setIsNotif] = useState<boolean | undefined>(undefined);
   const getIsNotif = () => isNotif ?? R.reminder.notifs.has(o.id);
 
@@ -59,6 +61,10 @@ function EditScreen() {
       setWarning('必须要给事件起个名字哦');
       return false;
     }
+    if (R.reminder.adding && (!initT || (o.period !== 1 && !initD))) {
+      setWarning('请先设置时间和日期哦');
+      return false;
+    }
     if (R.reminder.events.some(e => e.name === o.name && e.id !== o.id)) {
       setWarning('已经存在同名的提醒了');
       return false;
@@ -80,23 +86,25 @@ function EditScreen() {
 
           {o.period !== 1 && <>
             <View marginR-30 width='55%'>
-            <DateTimePicker
-              label='日期'
-              mode='date'
+              <DateTimePicker
+                label='日期'
+                mode='date'
+                init={!R.reminder.adding || initD}
                 value={o.nextDate}
                 formatter={o.period === 7 ? formatW : formatD}
-                onChange={o.setDate}
-            />
+                onChange={(d) => { o.setDate(d); setInitD(true); }}
+              />
             </View>
           </>}
 
           <DateTimePicker
             label='时间'
             mode='time'
+            init={!R.reminder.adding || initT}
             is24Hour={R.settings.hour24}
             value={o.nextDate}
             formatter={R.settings.format('t')}
-            onChange={o.setTime}
+            onChange={(d) => { o.setTime(d); setInitT(true); }}
           />
         </View>
         <QuickSelect

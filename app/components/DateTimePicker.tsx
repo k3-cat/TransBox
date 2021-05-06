@@ -8,20 +8,19 @@ import { TextInput } from '../ui-lib';
 interface DateTimePickerProps {
   label: string;
   value: Date;
+  init: boolean;
   mode: 'date' | 'time';
   is24Hour?: boolean;
   formatter: (d: Date) => string;
   onChange: (d: Date) => void;
 }
 
-function DateTimePicker({ label, value, mode, is24Hour, formatter, onChange }: DateTimePickerProps) {
+function DateTimePicker({ label, value, init, mode, is24Hour, formatter, onChange }: DateTimePickerProps) {
   const [show, setShow] = useState(false);
-
-  function text() { return formatter(value); }
 
   function change(event: any, d?: Date) {
     setShow(Platform.OS === 'ios');
-    onChange(d || value);
+    if (d) { onChange(d); }
   }
 
   return (
@@ -32,7 +31,7 @@ function DateTimePicker({ label, value, mode, is24Hour, formatter, onChange }: D
       >
         <TextInput
           label={label}
-          value={text()}
+          value={init ? formatter(value) : ''}
           editable={false}
         />
       </TouchableOpacity>
@@ -49,4 +48,4 @@ function DateTimePicker({ label, value, mode, is24Hour, formatter, onChange }: D
   );
 }
 
-export default observer(DateTimePicker);
+export default DateTimePicker;
