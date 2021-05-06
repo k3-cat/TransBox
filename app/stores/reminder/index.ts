@@ -7,7 +7,7 @@ import { PeriodicallyEventStore } from './periodically';
 let snapshot: any = null;
 
 export const ReminderStore = types
-  .model({
+  .model('ReminderStore', {
     adding: false,
     op: false,
     t: types.safeReference(PeriodicallyEventStore),
@@ -109,9 +109,3 @@ export const ReminderStore = types
   }))
 
   .extend(withStorage({ key: 'reminder', autoSave: false, mode: 'inclusive', 'names': ['events', 'notifs'] }));
-
-export function loadReminderStore() {
-  const store = ReminderStore.create();
-  store.load();
-  return store;
-}

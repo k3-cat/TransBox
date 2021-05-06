@@ -1,39 +1,41 @@
-import { types } from 'mobx-state-tree';
+import { Instance, types } from 'mobx-state-tree';
 import React, { useContext } from 'react';
 
-import { HoUnitStore, loadHoUnitsStore } from './ho_units';
-import { loadMemorialStore, MemorialStore } from './memorial';
-import { loadReminderStore, ReminderStore } from './reminder';
-import { loadSettingStore, SettingStore } from './settings';
+import { HoUnitStore } from './ho_units';
+import { MemorialStore } from './memorial';
+import { ReminderStore } from './reminder';
+import { SettingStore } from './settings';
 import { UpdaterStore } from './updater';
 
-const RootStore = types.model({
-  memorial: MemorialStore,
-  reminder: ReminderStore,
-  unit: HoUnitStore,
-  settings: SettingStore,
-  updater: UpdaterStore,
+const RootStore = types
+  .model('RootStore', {
+    memorial: MemorialStore,
+    reminder: ReminderStore,
+    unit: HoUnitStore,
+    settings: SettingStore,
+    updater: UpdaterStore,
+  });
+
+export interface IRootStore extends Instance<typeof RootStore> { }
+
+export const rootStore = RootStore.create({
+  memorial: MemorialStore.create(),
+  reminder: ReminderStore.create(),
+  unit: HoUnitStore.create(),
+  settings: SettingStore.create(),
+  updater: UpdaterStore.create(),
 });
 
-export function loadRootStores() {
-  const unit = loadHoUnitsStore();
-  const setting = loadSettingStore();
-  const memorial = loadMemorialStore();
-  const reminder = loadReminderStore();
-
-  return RootStore.create({
-    memorial: memorial,
-    reminder: reminder,
-    unit: unit,
-    settings: setting,
-    updater: UpdaterStore.create(),
-  });
+export async function loadRootStores(R: IRootStore) {
+  await R.memorial.load();
+  await R.reminder.load();
+  await R.unit.load();
+  await R.settings.load();
 }
 
-export const rootStore = loadRootStores();
 
 // - - - - - - - init StoreProvider - - - - - - -
-const StoreContext = React.createContext<typeof rootStore>(rootStore);
+const StoreContext = React.createContext<IRootStore>(rootStore);
 
 export const StoreProvider = StoreContext.Provider;
 

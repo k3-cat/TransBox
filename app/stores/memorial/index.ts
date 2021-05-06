@@ -7,7 +7,7 @@ import { YearlyEventStore } from './yearly';
 let snapshot: any = null;
 
 export const MemorialStore = types
-  .model({
+  .model('MemorialStore', {
     adding: false,
     op: false,
     t: types.safeReference(YearlyEventStore),
@@ -100,9 +100,3 @@ export const MemorialStore = types
   }))
 
   .extend(withStorage({ key: 'memorial', autoSave: false, mode: 'inclusive', 'names': ['events', 'notifs'] }));
-
-export function loadMemorialStore() {
-  const store = MemorialStore.create();
-  store.load();
-  return store;
-}
