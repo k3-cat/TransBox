@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
-import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, ScrollView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/core';
 
@@ -24,6 +24,30 @@ function EditScreen() {
   const [warning, setWarning] = useState('x');
   const [isNotif, setIsNotif] = useState(false);
   const getIsNotif = () => isNotif ?? R.reminder.notifs.has(o.id);
+
+  useEffect(
+    () =>
+      navigation.addListener('beforeRemove', e => {
+        if (R.memorial.op) {
+          return;
+        }
+
+        e.preventDefault();
+        Alert.alert(
+          '要放弃修改吗?',
+          '现在改动的内容都会丢失的',
+          [
+            { text: '点错了', style: 'cancel', onPress: () => { } },
+            {
+              text: '放弃',
+              style: 'destructive',
+              onPress: () => { navigation.dispatch(e.data.action); R.memorial.revert(); },
+            },
+          ]
+        );
+      }),
+    [navigation, R.memorial]
+  );
 
   function flush() {
     if (!o.name) {

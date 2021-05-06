@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -10,6 +10,14 @@ import DraggableList from '../DraggableList';
 function ManageScreen() {
   const store = useLocalStore();
   const navigation = useNavigation();
+
+  useEffect(
+    () =>
+      navigation.addListener('beforeRemove', e =>
+        store.save()
+      ),
+    [navigation, store]
+  );
 
   const emptyMessage = (
           <View flexG centerV>
@@ -41,7 +49,7 @@ function ManageScreen() {
           mode='outlined'
           style={{ flexGrow: 1 }}
           labelStyle={{ fontSize: 17 }}
-          onPress={() => { navigation.goBack(); store.save(); }}
+          onPress={navigation.goBack}
         />
       </View>
     </View>

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
-import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, ScrollView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/core';
 
@@ -28,8 +28,31 @@ function EditScreen() {
   const [isNotif, setIsNotif] = useState<boolean | undefined>(undefined);
   const getIsNotif = () => isNotif ?? R.reminder.notifs.has(o.id);
 
-  const formatD = R.settings.format('d');
-  const formatW = R.settings.format('w');
+  useEffect(
+    () =>
+      navigation.addListener('beforeRemove', e => {
+        if (R.reminder.op) {
+          return;
+        }
+
+        e.preventDefault();
+        Alert.alert(
+          '要放弃修改吗?',
+          '现在改动的内容都会丢失的',
+          [
+            { text: '点错了', style: 'cancel', onPress: () => { } },
+            {
+              text: '放弃',
+              style: 'destructive',
+              // If the user confirmed, then we dispatch the action we blocked earlier
+              // This will continue the action that had triggered the removal of the screen
+              onPress: () => { navigation.dispatch(e.data.action); R.reminder.revert(); },
+            },
+          ]
+        );
+      }),
+    [navigation, R.reminder]
+  );
 
   function flush() {
     if (!o.name) {
