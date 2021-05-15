@@ -8,6 +8,7 @@ import DateTimePicker from '../../components/DateTimePicker';
 import NumInput from '../../components/NumInput';
 import QuickSelect from '../../components/QuickSelect';
 import BottomButtons from '../../components/RMScreens/BottomButtons';
+import { formatY } from '../../i18n/datetime';
 import { useStore } from '../../stores';
 import { Snackbar, Switch, TextInput, View } from '../../ui-lib';
 
@@ -82,7 +83,7 @@ function EditScreen() {
           mode='date'
           init={!R.memorial.adding || initD}
           value={o.baseDate}
-          formatter={R.settings.format('y')}
+          formatter={formatY}
           onChange={(d) => { o.setDate(d); setInitD(true); }}
         />
         <View marginV-35 marginH-40 height={1.5} bg-dark50 />
