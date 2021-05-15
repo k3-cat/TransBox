@@ -1,6 +1,6 @@
 import { Observer, observer } from 'mobx-react-lite';
 import React, { useCallback } from 'react';
-import { Dimensions, FlatList } from 'react-native';
+import { FlatList, useWindowDimensions } from 'react-native';
 
 import { useFocusEffect } from '@react-navigation/core';
 import { useNavigation } from '@react-navigation/native';
@@ -68,8 +68,6 @@ function keyExtractor(o: IPeriodicallyEventStore) {
   return o.id;
 }
 
-const rows = Math.floor(Dimensions.get('window').width / 370);
-
 const emptyMessage = (
   <View flexG centerV>
     <View flexS>
@@ -81,6 +79,9 @@ const emptyMessage = (
 function ReminderList() {
   const R = useStore();
   const navigation = useNavigation();
+  const windows = useWindowDimensions();
+
+  const rows = Math.floor(windows.width / 380);
 
   useFocusEffect(
     useCallback(() => {
@@ -92,10 +93,14 @@ function ReminderList() {
     }, [R.reminder])
   );
 
+  const Separator = useCallback(() => {
+    return <View style={{ marginBottom: rows === 1 ? 38 : 48 }} />;
+  }, [rows]);
+
   const Cards = useCallback(({ item: o, index }: { item: IPeriodicallyEventStore, index: number; }) => {
     return (
       <Card
-        style={{ width: 320, alignSelf: 'center', marginHorizontal: 25, marginVertical: 18 }}
+        style={{ width: 320, alignSelf: 'center', marginHorizontal: 30 }}
         onPress={() => {
           navigation.navigate('-Edit');
           R.reminder.edit(index);
@@ -121,14 +126,16 @@ function ReminderList() {
 
   return (
     <FlatList
+      key={rows}
       data={R.reminder.events.slice()}
       extraData={R.reminder.events.length}
       keyExtractor={keyExtractor}
       numColumns={rows}
       renderItem={Cards}
+      ItemSeparatorComponent={Separator}
       ListEmptyComponent={emptyMessage}
-      ListHeaderComponent={<View marginB-20 />}
-      ListFooterComponent={<View marginT-20 />}
+      ListHeaderComponent={<View marginB-40 />}
+      ListFooterComponent={<View marginT-40 />}
       style={{ marginVertical: 5 }}
       contentContainerStyle={{ flexGrow: 1 }}
       columnWrapperStyle={rows > 1 ? { alignSelf: 'center' } : null}

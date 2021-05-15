@@ -2,7 +2,7 @@ import isToday from 'date-fns/isToday';
 import isTomorrow from 'date-fns/isTomorrow';
 import { Observer, observer } from 'mobx-react-lite';
 import React, { useCallback } from 'react';
-import { Dimensions, FlatList } from 'react-native';
+import { FlatList, useWindowDimensions } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -29,8 +29,6 @@ function keyExtractor(o: IYearlyEventStore) {
   return o.id;
 }
 
-const rows = Math.floor(Dimensions.get('window').width / 370);
-
 const emptyMessage = (
   <View flexG centerV>
     <View flexS>
@@ -42,11 +40,18 @@ const emptyMessage = (
 function MemorialList() {
   const R = useStore();
   const navigation = useNavigation();
+  const windows = useWindowDimensions();
+
+  const rows = Math.floor(windows.width / 380);
+
+  const Separator = useCallback(() => {
+    return <View style={{ marginBottom: rows === 1 ? 38 : 48 }} />;
+  }, [rows]);
 
   const Cards = useCallback(({ item: o, index }: { item: IYearlyEventStore, index: number; }) => {
     return (
       <Card
-        style={{ width: 320, alignSelf: 'center', marginHorizontal: 25, marginVertical: 18 }}
+        style={{ width: 320, alignSelf: 'center', marginHorizontal: 30 }}
         onPress={() => {
           navigation.navigate('-Edit');
           R.memorial.edit(index);
@@ -74,14 +79,16 @@ function MemorialList() {
 
   return (
     <FlatList
+      key={rows}
       data={R.memorial.events.slice()}
       extraData={R.memorial.events.length}
       keyExtractor={keyExtractor}
       numColumns={rows}
       renderItem={Cards}
+      ItemSeparatorComponent={Separator}
       ListEmptyComponent={emptyMessage}
-      ListHeaderComponent={<View marginB-20 />}
-      ListFooterComponent={<View marginT-20 />}
+      ListHeaderComponent={<View marginB-40 />}
+      ListFooterComponent={<View marginT-40 />}
       style={{ marginVertical: 5 }}
       contentContainerStyle={{ flexGrow: 1 }}
       columnWrapperStyle={rows > 1 ? { alignSelf: 'center' } : null}
