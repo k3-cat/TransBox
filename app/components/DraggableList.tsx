@@ -1,23 +1,29 @@
-import React from 'react';
+import { toJS } from 'mobx';
+import { observer } from 'mobx-react-lite';
+import React, { useCallback } from 'react';
 import { TouchableOpacity, Vibration } from 'react-native';
-import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
+import DraggableFlatList, {
+  RenderItemParams, ScaleDecorator,
+} from 'react-native-draggable-flatlist';
 import Animated from 'react-native-reanimated';
 import SwipeableItem, { UnderlayParams } from 'react-native-swipeable-item';
 
-import { useLocalStore } from '../stores/utils/localStore';
+import { Button, List, View } from '../ui-lib';
 
-interface DraggableList<T> {
+interface DraggableListProps<T> {
   data: T[];
   title: (o: T) => string;
   keyExtractor: (o: T) => string;
   emptyMessage: JSX.Element;
-  onPress: (i: number) => void;
-  onDelete: (i: number) => void;
-  onSort: (from: number, to: number) => void;
+  onPress: (o: T) => void;
+  onDelete: (o: T) => void;
+  onSort: (data: T[]) => void;
 }
 
-function DraggableList<T>({ data, title, keyExtractor, emptyMessage, onPress, onDelete, onSort }: DraggableList<T>) {
-  function renderUnderlayLeft({ item, percentOpen }: UnderlayParams<number>) {
+function DraggableList<T>({ data, title, keyExtractor, emptyMessage, onPress, onDelete, onSort }: DraggableListProps<T>) {
+  const onDragEnd = useCallback(({ data: data_ }) => onSort(data_), [onSort]);
+
+  const renderUnderlayLeft = useCallback(({ item, percentOpen }: UnderlayParams<T>) => {
     return (
       <Animated.View
         style={{
@@ -38,44 +44,48 @@ function DraggableList<T>({ data, title, keyExtractor, emptyMessage, onPress, on
         />
       </Animated.View>
     );
-  }
+  }, [onDelete]);
 
-  function renderItem({ item, index, drag }: RenderItemParams<T>) {
+  const renderItem = useCallback(({ item, index, drag }: RenderItemParams<T>) => {
     return (
-      <SwipeableItem
-        item={index!}
-        swipeDamping={10}
-        overSwipe={300}
-        snapPointsLeft={[0, 70]}
-        renderUnderlayLeft={renderUnderlayLeft}
-      >
-        <View paddingL-15 height={55} row centerV>
+      <ScaleDecorator>
+        <SwipeableItem
+          item={item}
+          swipeDamping={10}
+          overSwipe={300}
+          snapPointsLeft={[0, 70]}
+          renderUnderlayLeft={renderUnderlayLeft}
+        >
           <TouchableOpacity
-            onPress={() => onPress(index!)}
+            onPress={() => onPress(item)}
             onLongPress={() => { Vibration.vibrate(20); drag(); }}
-            hitSlop={{ top: 15, bottom: 15, left: 40, right: 40 }}
-            style={{ minWidth: 80 }}
+            style={{ height: 55, flexGrow: 1, flexDirection: 'row', alignItems: 'center' }}
           >
-            <Text text70M grey30>{title(item)}</Text>
+            <View flexG>
+              <List.Item
+                title={title(item)}
+                left={props => <List.Icon {...props} icon='reorder-two-outline' style={{ marginLeft: -5, marginRight: -3 }} />}
+              />
+            </View>
+            <View width={75} height={55} style={{ backgroundColor: '#f2f2f2' }} />
           </TouchableOpacity>
-          <View flexG />
-          <View height={55} width={70} style={{ backgroundColor: '#f2f2f2' }} />
-        </View>
-      </SwipeableItem >
+        </SwipeableItem >
+      </ScaleDecorator>
     );
-  }
+  }, [onPress, renderUnderlayLeft, title]);
 
   return (
     <DraggableFlatList
-      data={data}
+      data={toJS(data)}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       ListEmptyComponent={emptyMessage}
+      containerStyle={{ flexGrow: 1 }}
       contentContainerStyle={{ flexGrow: 1 }}
       activationDistance={20}
-      onDragEnd={({ from, to }) => onSort(from, to)}
+      onDragEnd={onDragEnd}
     />
   );
 }
 
-export default DraggableList;
+export default observer(DraggableList);
