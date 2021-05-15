@@ -1,10 +1,11 @@
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { useCallback } from 'react';
-import { TouchableOpacity, Vibration } from 'react-native';
+import { Vibration } from 'react-native';
 import DraggableFlatList, {
   RenderItemParams, ScaleDecorator,
 } from 'react-native-draggable-flatlist';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import SwipeableItem, { UnderlayParams } from 'react-native-swipeable-item';
 
