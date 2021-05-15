@@ -33,7 +33,7 @@ function verComp(small: string, big: string) {
 }
 
 export async function triggerUpdate(R: IRootStore) {
-  if (R.settings.updatingSource === 'google') {
+  if (!R.settings.updatingSource || R.settings.updatingSource === 'google') {
     return;
   }
 
