@@ -30,7 +30,7 @@ function Navigator() {
 
         if (previousRouteName !== currentRouteName && !currentRouteName.startsWith('-')) {
           routeNameRef.current = currentRouteName;
-          await Analytics.setCurrentScreen(currentRouteName);
+          await Analytics.setCurrentScreen(currentRouteName, currentRouteName);
         }
       }}
     >

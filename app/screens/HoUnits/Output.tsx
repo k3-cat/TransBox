@@ -1,7 +1,8 @@
 import Clipboard from 'expo-clipboard';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { TouchableOpacity, Vibration } from 'react-native';
+import { Vibration } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { Ionicons } from '@expo/vector-icons';
 
