@@ -18,7 +18,7 @@ function Reminder() {
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
       >
-        <Stack.Screen name='-List'>
+        <Stack.Screen name='R-List'>
           {props => <ListScreen {...props}><ReminderList /></ListScreen>}
         </Stack.Screen>
         <Stack.Screen name='-Manage' component={ManageScreen} />

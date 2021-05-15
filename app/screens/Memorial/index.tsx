@@ -18,7 +18,7 @@ function Memorial() {
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
       >
-        <Stack.Screen name='-List'>
+        <Stack.Screen name='M-List'>
           {props => <ListScreen {...props}><MemorialList /></ListScreen>}
         </Stack.Screen>
         <Stack.Screen name='-Manage' component={ManageScreen} />
