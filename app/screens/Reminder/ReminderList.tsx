@@ -73,13 +73,14 @@ const rows = Math.floor(Dimensions.get('window').width / 370);
 const emptyMessage = (
   <View flexG centerV>
     <View flexS>
-      <Text center text65M grey30>以天为单位的固定周期提醒{'\n'}比如打针或者隔n天的吃的药{'\n'}点击按钮添加提醒</Text>
+      <Text center text65M grey30>以天为周期的提醒{'\n'}比如打针或者隔n天的吃的药{'\n'}点击按钮添加&emsp;点击卡片修改</Text>
     </View>
   </View>
 );
 
 function ReminderList() {
   const R = useStore();
+  const navigation = useNavigation();
 
   useFocusEffect(
     useCallback(() => {
@@ -95,6 +96,10 @@ function ReminderList() {
     return (
       <Card
         style={{ width: 320, alignSelf: 'center', marginHorizontal: 25, marginVertical: 18 }}
+        onPress={() => {
+          navigation.navigate('-Edit');
+          R.reminder.edit(index);
+        }}
       >
         <Observer>{() =>
           <Card.Title
@@ -112,7 +117,7 @@ function ReminderList() {
         </Card.Content>
       </Card>
     );
-  }, []);
+  }, [navigation, R.reminder]);
 
   return (
     <FlatList
