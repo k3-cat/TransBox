@@ -7,7 +7,7 @@ import { NavigationContainer, NavigationContainerRef } from '@react-navigation/n
 
 import { useStore } from '../../stores';
 import Updater from '../Updater';
-import Header from './Header';
+import HeaderButton from './HeaderButton';
 import { screens } from './screens';
 import SideDrawer from './SideDrawer';
 
@@ -43,9 +43,9 @@ function Navigator() {
         backBehavior='none'
         screenOptions={{
           headerShown: true,
-          header: ({ scene }) => {
-            return (<Header title={scene.descriptor.options.title!} />);
-          },
+          headerStyle: { height: 70 },
+          headerTitleStyle: { fontSize: 18 },
+          headerLeft: HeaderButton,
         }}
       >
         {
