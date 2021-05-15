@@ -12,12 +12,13 @@
     "@react-navigation/drawer": "^5.12.5",
     "@react-navigation/native": "^5.9.4",
     "apisauce": "^2.1.1",
-    "date-fns": "^2.21.1",
+    "date-fns": "^2.21.3",
     "expo": "^41.0.0",
+    "expo-app-loading": "^1.0.3",
     "expo-clipboard": "~1.0.2",
     "expo-firebase-analytics": "~4.0.2",
     "expo-firebase-core": "~3.0.0",
-    "expo-notifications": "~0.11.5",
+    "expo-notifications": "~0.11.6",
     "expo-updates": "~0.5.4",
     "mobx": "^6.3.0",
     "mobx-react-lite": "^3.2.0",
@@ -26,7 +27,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
-    "react-native-draggable-flatlist": "^2.6.1",
+    "react-native-draggable-flatlist": "^3.0.0-beta.7",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-markdown-display": "^7.0.0-alpha.2",
     "react-native-paper": "^4.8.1",
@@ -34,7 +35,7 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.0.0",
     "react-native-swipeable-item": "^1.5.7",
-    "react-native-ui-lib": "^5.23.3"
+    "react-native-ui-lib": "^5.24.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
@@ -42,7 +43,6 @@
     "@types/react": "~16.9.35",
     "@types/react-native": "~0.63.2",
     "eslint": "^7.24.0",
-    "react-native-bundle-visualizer": "^2.2.1",
     "typescript": "~4.0.0"
   }
 }
