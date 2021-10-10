@@ -1,39 +1,8 @@
 {
-  "expo": {
-    "name": "TransBox",
-    "slug": "TransBox",
-    "privacy": "public",
-    "version": "1.2.3",
-    "githubUrl": "https://github.com/Pix-00/TransBox",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#fdfdfd"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 500
-    },
-    "assetBundlePatterns": [
-      "assets/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "package": "com.cybil.transbox",
-      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.cybil.transbox&utm_source=expo",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "versionCode": 5,
-      "useNextNotificationsApi": true,
-      "googleServicesFile": "./google-services.json",
-      "permissions": [
-        "VIBRATE"
-      ]
-    }
+  "name": "TransBox",
+  "displayName": "TransBox",
+  "svgAppIcon": {
+    "foregroundPath": "./assets/icon.svg",
+    "force": true
   }
 }

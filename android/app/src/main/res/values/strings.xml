@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">TransBox</string>
+
+    <!-- App Center -->
+    <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
+    <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">lFy2e-NDWCM8e-Qrt5jU4rkS_54WZ7bwRPO9r</string>
+    <string name="CodePushPublicKey">-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyzHi7dtpcKWJ4aDwkp7x
+/72NgyAY5ZFhjtmhXmmIynfFKQ4eBX1NJ3bg/7qN0cSXwFsR/wC7DTvt6Ifpdt+y
+WmUZqy//lSG47wZwLexXj3rK8zCopJj1khPK889SKmc2mYf7VxEzs62dO6kbFCKs
+iHPikQksY6bHRnRIfzNYLzEILyPVbSJ2NVXRqvD7PtOG2KpIBJsEX9cqy4zVj/6U
+xclB5CNzKkKzolLUEhNkEt59PWpLwDKiBUdlNooe89v88GJ+1kmzi8lpumpc9f2I
+BEdwGciTVPo5panrEPA/rvTYhApeLiZWZ3h2ksFbugR1cPgAAhtXWhGxgjBchDZL
+GQIDAQAB
+-----END PUBLIC KEY-----</string>
+</resources>

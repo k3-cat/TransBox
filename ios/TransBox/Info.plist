@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>TransBox</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string></string>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+
+	<!-- App Center -->
+	<key>CodePushDeploymentKey</key>
+	<string>fd08aTwTMtjDaRN1A-Gd-TJxCPFIUpwgTAqjb</string>
+	<key>CodePushPublicKey</key>
+	<string>-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyzHi7dtpcKWJ4aDwkp7x
+/72NgyAY5ZFhjtmhXmmIynfFKQ4eBX1NJ3bg/7qN0cSXwFsR/wC7DTvt6Ifpdt+y
+WmUZqy//lSG47wZwLexXj3rK8zCopJj1khPK889SKmc2mYf7VxEzs62dO6kbFCKs
+iHPikQksY6bHRnRIfzNYLzEILyPVbSJ2NVXRqvD7PtOG2KpIBJsEX9cqy4zVj/6U
+xclB5CNzKkKzolLUEhNkEt59PWpLwDKiBUdlNooe89v88GJ+1kmzi8lpumpc9f2I
+BEdwGciTVPo5panrEPA/rvTYhApeLiZWZ3h2ksFbugR1cPgAAhtXWhGxgjBchDZL
+GQIDAQAB
+-----END PUBLIC KEY-----</string>
+</dict>
+</plist>

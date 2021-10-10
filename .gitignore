@@ -1,21 +1,70 @@
-/.expo/
-
-# google services
-/google-services.json
-/GoogleService-Info.plist
-
-# node & builds
-/node_modules/
-npm-debug.*
-web-build/
-
-# macOS
+# OSX
+#
 .DS_Store
 
-# safety
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# BUCK
+#
+buck-out/
+\.buckd/
+*.keystore
+!debug.keystore
+
+# Icon
+#
+# use `npx react-native-svg-app-icon` to generate all icons
+#
+ic_launcher*
+ios/TransBox/Images.xcassets/AppIcon.appiconset/
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/
+#
+*/fastlane/report.xml
+*/fastlane/Preview.html
+*/fastlane/screenshots
+
+# Bundle artifact
+#
+*.jsbundle
+
+# CocoaPods
+#
+/ios/Pods/
