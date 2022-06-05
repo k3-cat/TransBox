@@ -3,7 +3,7 @@
     "name": "TransBox",
     "slug": "TransBox",
     "privacy": "public",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "githubUrl": "https://github.com/k3-cat/TransBox",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
