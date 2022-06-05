@@ -6,62 +6,80 @@ import { YearlyEventStore } from './yearly';
 export const MemorialStore = types
   .model({
     adding: false,
-    index: NaN,
-    //store
+    t: types.safeReference(YearlyEventStore),
+    //stores
     events: types.array(YearlyEventStore),
+    notifs: types.map(types.string),
+  })
+
+  .preProcessSnapshot((s) => {
+    if (s.events === undefined || 'id' in s.events[0]) { return s; }
+    return {
+      events: s.events.map((o: any) =>
+        YearlyEventStore.create({
+          id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+
+          name: o.name,
+          baseDate: o.baseDate,
+          offset: o.offset,
+          hours: o.hours,
+          isHide: o.isHide,
+          inAppNotif: o.isInAppNotif,
+        })
+      ),
+    };
   })
 
   .actions((self) => ({
     add() {
       self.adding = true;
+      const e = YearlyEventStore.create({
+        id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+
+        name: '',
+        baseDate: new Date(),
+        offset: 0,
+        hours: 0,
+        isHide: true,
+        inAppNotif: true,
+      });
+      self.adding = true;
+      self.events.push(e);
+      self.t = e.id as any;
     },
 
     edit(i: number) {
-      self.index = i;
+      self.t = self.events[i].id as any;
     },
 
-    flush(n: string, d: Date, o: number, h: number, isHide: boolean, isInAppNotif: boolean, isNotif: boolean) {
-      if (self.adding) {
-        let e = YearlyEventStore.create({
-          name: n,
-          baseDate: d,
-          offset: o,
-          hours: h,
-          isHide: isHide,
-          isInAppNotif: isInAppNotif,
-        });
-        if (isInAppNotif && isNotif) {
-          e.createNotif();
-        }
-        self.events.push(e);
-        self.adding = false;
-
+    flush(isNotif: boolean) {
+      if (self.t!.inAppNotif && isNotif) {
+        this.createNotif();
       } else {
-        let e = self.events[self.index];
-        e.name = n;
-        e.baseDate = d;
-        e.offset = o;
-        e.hours = h;
-        e.isHide = isHide;
-        e.isInAppNotif = isInAppNotif;
-
-        if (isInAppNotif && isNotif) {
-          e.createNotif();
-        } else {
-          e.cancelNotif();
-        }
-        self.index = NaN;
+        this.cancelNotif(self.t!.id);
       }
+
+      self.t = undefined;
+      self.adding = false;
     },
 
-    remove() {
-      // self.events[self.index].cancelNotif();
-      self.events.splice(self.index, 1);
-      self.index = NaN;
+    sort(from: number, to: number) {
+      if (from === to) { return; }
+      const tmp = self.events.slice();
+      tmp.splice(to, 0, ...tmp.splice(from, 1));
+      self.events.replace(tmp);
     },
+
+    remove(i: number) {
+      this.cancelNotif(self.events[i].id);
+      self.events.splice(i, 1);
+    },
+
+    cancelNotif(id: string) { },
+    createNotif() { },
   }))
 
-  .extend(withStorage({ key: 'memorial', mode: 'inclusive', 'names': ['events'] }));
+  .extend(withStorage({ key: 'memorial', autoSave: false, mode: 'inclusive', 'names': ['events', 'notifs'] }));
 
 export function loadMemorialStore() {
   const store = MemorialStore.create();

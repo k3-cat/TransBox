@@ -1,59 +1,44 @@
-import { Observer, useLocalObservable } from 'mobx-react-lite';
-import React from 'react';
-import { View } from 'react-native-ui-lib/core';
-import Fab from 'react-native-ui-lib/floatingButton';
-import Toast from 'react-native-ui-lib/toast';
+import { Observer } from 'mobx-react-lite';
+import React, { useState } from 'react';
 
 import { useStore } from '../../stores';
 import { comMolIndex } from '../../stores/ho_units/data';
+import { FAB, Snackbar } from '../../ui-lib';
 
 function Bottom() {
   const R = useStore();
-  const ob = useLocalObservable(() => ({
-    warning: 'x',
+  const [warning, setWarning] = useState('x');
 
-    savePreset() {
-      if (R.unit.needMol
-        && !comMolIndex.has(R.unit.mol)
-        && (isNaN(parseFloat(R.unit.mol)) || parseFloat(R.unit.mol) <= 100)) {
-        this.warning = '请先提供有效的分子量！';
-        return;
-      }
-      if (R.unit.presets.some((i) =>
-        i.s === R.unit.sUnit && i.t === R.unit.tUnit && (!R.unit.needMol || i.m === R.unit.mol) // if not need Mol, ignore it
-      )) {
-        this.warning = '已经保存过这个组合啦！';
-        return;
-      }
-      R.unit.savePreset();
-    },
-
-    clearWarning() {
-      this.warning = 'x';
-    },
-  }));
+  function savePreset() {
+    if (R.unit.needMol
+      && !comMolIndex.has(R.unit.mol)
+      && (isNaN(parseFloat(R.unit.mol)) || parseFloat(R.unit.mol) <= 100)) {
+      setWarning('请先提供有效的分子量！');
+      return;
+    }
+    if (R.unit.presets.some((i) =>
+      i.s === R.unit.sUnit && i.t === R.unit.tUnit && (!R.unit.needMol || i.m === R.unit.mol) // if not need Mol, ignore it
+    )) {
+      setWarning('已经保存过这个组合啦！');
+      return;
+    }
+    R.unit.savePreset();
+    R.unit.save();
+  }
 
   return (
     <>
-      <View>
-        <Fab
-          visible
-          button={{
-            //iconSource: { <Icon name='add-outline' /> },
-            label: '＋',
-            round: true,
-            onPress: ob.savePreset,
-          }}
-        />
-      </View>
+      <FAB
+        icon='add-outline'
+        onPress={savePreset}
+        style={{ position: 'absolute', margin: 32, right: 0, bottom: 0, backgroundColor: '#ec407a' }}
+      />
       <Observer>{() =>
-        <Toast
-          visible={ob.warning !== 'x'}
-          autoDismiss={2000}
-          position={'bottom'}
-          backgroundColor={'#ef5350'}
-          message={ob.warning}
-          onDismiss={() => ob.clearWarning()}
+        <Snackbar
+          text={warning}
+          visible={warning !== 'x'}
+          color='tomato'
+          onDismiss={() => setWarning('x')}
         />
       }</Observer>
     </>

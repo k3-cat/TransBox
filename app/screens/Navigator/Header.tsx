@@ -1,9 +1,10 @@
 import React from 'react';
 import { Platform, StatusBar, TouchableOpacity } from 'react-native';
-import { Text, View } from 'react-native-ui-lib/core';
 
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
+
+import { Text, View } from '../../ui-lib';
 
 interface HeaderProps {
   title: string;

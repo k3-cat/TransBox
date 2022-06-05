@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text, View } from 'react-native-ui-lib/core';
 
 import {
   DrawerContentComponentProps, DrawerContentScrollView, DrawerItem,
 } from '@react-navigation/drawer';
 
+import { Text, View } from '../../ui-lib';
 import { screens } from './screens';
 
 function SideDrawer(props: DrawerContentComponentProps) {

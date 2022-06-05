@@ -1,21 +1,30 @@
 import React from 'react';
+import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 
-import { createStackNavigator } from '@react-navigation/stack';
-
+import ListScreen from '../../components/RMScreens/ListScreen';
+import ManageScreen from '../../components/RMScreens/ManageScreen';
+import { useStore } from '../../stores';
+import { LocalStoreProvider } from '../../stores/local';
 import DetailScreen from './DetailScreen';
-import ListScreen from './ListScreen';
+import ReminderList from './ReminderList';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 function Reminder() {
+  const R = useStore();
+
   return (
-    <Stack.Navigator
-      initialRouteName='Reminder'
-      screenOptions={{ header: () => null }}
-    >
-      <Stack.Screen name='Reminder' component={ListScreen} />
-      <Stack.Screen name='-Detail' component={DetailScreen} />
-    </Stack.Navigator>
+    <LocalStoreProvider value={R.reminder}>
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name='-List'>
+          {props => <ListScreen {...props}><ReminderList /></ListScreen>}
+        </Stack.Screen>
+        <Stack.Screen name='-Manage' component={ManageScreen} />
+        <Stack.Screen name='-Edit' component={DetailScreen} />
+      </Stack.Navigator>
+    </LocalStoreProvider>
   );
 }
 
