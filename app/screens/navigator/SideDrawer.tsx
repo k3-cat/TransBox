@@ -12,7 +12,7 @@ function SideDrawer(props: DrawerContentComponentProps) {
 
   return (
     <DrawerContentScrollView {...props}>
-      <View paddingV-40 margin-10 style={{ borderRadius: 12, backgroundColor: '#fff3e0' }}>
+      <View paddingV-40 margin-10 br40 style={{ backgroundColor: '#fff3e0' }}>
         <Text center text70M style={{ color: '#ffb74d' }}>按照惯例这里要有图</Text>
       </View>
       {

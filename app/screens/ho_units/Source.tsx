@@ -2,12 +2,11 @@ import Clipboard from 'expo-clipboard';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Keyboard, TouchableOpacity, Vibration } from 'react-native';
-import { TextField } from 'react-native-ui-lib';
 import { Text, View } from 'react-native-ui-lib/core';
+import TextField from 'react-native-ui-lib/textField';
 
 import { useStore } from '../../stores/rootStore';
 import { clean, vUnitIndex, wUnitIndex } from './utils';
-
 
 function Source() {
   const R = useStore();
@@ -48,12 +47,13 @@ function Source() {
     <View row>
       <View flex style={{ maxHeight: 55 }}>
         <TextField
-          value={R.ho_units.value}
+          accessibilityLabel='原始值'
+          blurOnSubmit
           contextMenuHidden
           selectTextOnFocus
           keyboardType='numeric'
+          value={R.ho_units.value}
           onFocus={autoPaste}
-          accessibilityLabel='原始值'
           onChangeText={(v: string) => R.ho_units.setValue(clean(v))}
         />
       </View>
@@ -64,7 +64,7 @@ function Source() {
             top: 30,
             left: 15,
             right: 30,
-            bottom: 30
+            bottom: 30,
           }}
         >
           <View paddingL-15 paddingB-5>
