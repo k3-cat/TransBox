@@ -3,71 +3,53 @@ import React from 'react';
 import { Linking } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Markdown from 'react-native-markdown-display';
-import { PanningProvider } from 'react-native-ui-lib';
 import { Button, Text, View } from 'react-native-ui-lib/core';
-import Dialog from 'react-native-ui-lib/dialog';
 
-import { useStore } from '../../stores';
+import { useStore } from '../stores';
 
 function PromoteUpdate() {
   const R = useStore();
 
   return (
-    <Dialog
-      visible
-      useSafeArea
-      panDirection={PanningProvider.Directions.LEFT}
-      containerStyle={{
-        alignSelf: 'center',
+    <View
+      style={{
+        flexGrow: 1,
         backgroundColor: '#fefefe',
-        marginVertical: 40,
-        paddingTop: 20,
+        paddingTop: 15,
         paddingBottom: 23,
-        paddingHorizontal: 25,
-        borderRadius: 12,
       }}
     >
-      <Text center text60M>有更新发布啦!</Text>
-      <View marginV-15 height={1.5} bg-dark60 />
+      <Text center text60M>{`${R.updater.name} 刚刚发布啦!`}</Text>
+      <View marginH-30 marginV-15 height={1.5} bg-dark60 />
       <ScrollView
-        contentInsetAdjustmentBehavior='automatic'
-        style={{ width: 310, marginBottom: 20 }}
+        automaticallyAdjustContentInsets
+        style={{ flex: 1, paddingHorizontal: 25 }}
       >
-        <Markdown
-          onLinkPress={(url) => { Linking.openURL(url); return true; }}
-        >
+        <Markdown onLinkPress={(url) => { Linking.openURL(url); return true; }}>
           {R.updater.info}
         </Markdown>
       </ScrollView>
-      {
-        R.updater.diag === 'apk' ?
-          <View>
-            {
-              (R.updater.count > 10) ?
-                <Text marginB-15 text70M grey40>{`* 这个apk已经被下载 ${R.updater.count} 次啦~`}</Text>
-                :
-                null
+      <View marginT-15 marginH-20>
+        <Text marginL-10 marginB-15 text70M grey40>{
+          R.updater.diag === 'ota' ?
+            '* 只要重启应用就可以啦 不需要重新安装呦'
+            :
+            (R.updater.count > 10) ? `* 这个版本已经被下载 ${R.updater.count} 次啦~` : '* 这次更新需要重新安装才能正常使用哦'}
+        </Text>
+        <Button
+          outline
+          outlineColor='#42a5f5'
+          label={R.updater.diag === 'apk' ? '帮我下载apk~' : '知道啦~ 帮我重启~'}
+          onPress={() => {
+            if (R.updater.diag === 'apk') {
+              Linking.openURL(R.updater.url);
+            } else {
+              Updates.reloadAsync();
             }
-            <Button
-              outline
-              outlineColor='#42a5f5'
-              label='帮我下载apk~'
-              disabled={!R.updater.url}
-              onPress={() => Linking.openURL(R.updater.url)}
-            />
-          </View>
-          :
-          <View>
-            <Text marginB-15 text70M grey40>* 只要重启应用就可以啦 不需要重新安装呦</Text>
-            <Button
-              outline
-              outlineColor='#42a5f5'
-              label='知道啦~ 帮我重启~'
-              onPress={() => Updates.reloadAsync()}
-            />
-          </View>
-      }
-    </Dialog>
+          }}
+        />
+      </View>
+    </View>
   );
 }
 

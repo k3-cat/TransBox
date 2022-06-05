@@ -2,14 +2,15 @@ import { types } from 'mobx-state-tree';
 
 export const UpdaterStore = types
   .model({
-    diag: types.optional(types.enumeration(['ota', 'apk', '']), ''),
+    diag: types.optional(types.enumeration(['ota', 'apk', 'x']), 'x'),
+    name: '',
     info: '',
     url: '',
     count: NaN,
   })
 
   .actions((self) => ({
-    setDiag(diag: 'ota' | 'apk' | '') {
+    setDiag(diag: 'ota' | 'apk' | 'x') {
       self.diag = diag;
     },
 
@@ -17,7 +18,8 @@ export const UpdaterStore = types
       self.info = info;
     },
 
-    setUrlandCount(url: string, count: number) {
+    setMetaInfo(name: string, url: string, count: number) {
+      self.name = name;
       self.url = url;
       self.count = count;
     },
