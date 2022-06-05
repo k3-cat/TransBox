@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#fcfcfc"
+      "backgroundColor": "#fdfdfd"
     },
     "updates": {
       "fallbackToCacheTimeout": 5000
@@ -21,11 +21,16 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.cybil.transbox",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./google-services.json",
       "permissions": [
         "VIBRATE"
-      ],
-      "package": "com.cybil.TransBox",
-      "googleServicesFile": "./google-services.json"
+      ]
     }
   }
 }
