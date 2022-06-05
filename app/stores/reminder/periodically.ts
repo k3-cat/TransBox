@@ -1,3 +1,6 @@
+import addDays from 'date-fns/addDays';
+import differenceInDays from 'date-fns/differenceInDays';
+import differenceInMinutes from 'date-fns/differenceInMinutes';
 import * as Notifications from 'expo-notifications';
 import { types } from 'mobx-state-tree';
 
@@ -35,26 +38,14 @@ export const PeriodicallyEventStore = types
     notifId: types.maybeNull(types.string),
   })
 
-  .views((self) => ({
-    get progress() {
-      const diff = self.nextDate.getTime() - Date.now() / 60000;
-
-      if (diff > 1440) {
-        return 0;
-      }
-      if (diff < self.offset) {
-        return -1;
-      }
-      return 1 - (diff - self.offset) / (self.period > 1 ? 1440 : self.period * 1440);
-    },
-  }))
-
   .actions((self) => ({
     updateDate() {
-      const diff = self.nextDate.getTime() - Date.now();
-      if (diff < 0) {
-        self.nextDate.setDate(self.nextDate.getDate() + self.period * Math.ceil(-diff / (self.period * 86400000)));
+      const now = new Date();
+      if (differenceInMinutes(now, self.nextDate) < 60) {
+        return;
       }
+      const diff = differenceInDays(now, self.nextDate); // DST safe
+      self.nextDate = addDays(self.nextDate, self.period * Math.floor(1 + diff / self.period)); // round up | at least one period
     },
 
     cancelNotif() {

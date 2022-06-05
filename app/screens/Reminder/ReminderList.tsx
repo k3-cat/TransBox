@@ -1,23 +1,15 @@
+import differenceInHours from 'date-fns/differenceInHours';
+import differenceInMinutes from 'date-fns/differenceInMinutes';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import isToday from 'date-fns/isToday';
-import isTomorrow from 'date-fns/isTomorrow';
 import { Observer, observer } from 'mobx-react-lite';
 import React from 'react';
-import { Dimensions } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { Dimensions, FlatList } from 'react-native';
 import Card from 'react-native-ui-lib/card';
 import { Text, View } from 'react-native-ui-lib/core';
 
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 import { useStore } from '../../stores';
-
-function parseColor(progress: number) {
-  if (progress === -1) {
-    return '#ff7043';
-  }
-  return `rgba(66, 165, 245, ${0.25 + 0.75 * progress})`;
-}
 
 function ReminderList() {
   const R = useStore();
@@ -27,25 +19,50 @@ function ReminderList() {
   const formatW = R.settings.format('w');
   const formatD = R.settings.format('d');
 
-  const parseNextDate = (d: Date, period: number) => {
-    if (isTomorrow(d) && period > 3) {
-      return ({
-        text65: true,
-        center: true,
-        color: '#7986cb',
-        text: `明天就是惹 | 每${period}天`,
-      });
+  const parseDistance = (d: Date, offset: number) => {
+    const diff = differenceInMinutes(d, new Date());
+
+    if (diff <= 0) {
+      return {
+        color: '#ff7043',
+        text: '现在',
+      };
     }
-    if (isToday(d) && period > 1) {
+
+    let color;
+    if (diff > 1440) {
+      color = 'rgba(66, 165, 245, 0.25)';
+
+    } else if (diff <= offset) {
+      color = '#ff7043';
+
+    } else {
+      color = `rgba(66, 165, 245, ${0.25 + 0.75 * (1 - (diff - offset) / 1440)})`;
+    }
+    return {
+      color: color,
+      text: formatDistanceToNow(d, { includeSeconds: false, locale: R.settings.timeLocal }),
+    };
+  };
+
+  const parseNextDate = (d: Date, period: number) => {
+    const diff = differenceInHours(d, new Date());
+
+    if (diff === 0 || (diff < 12 && period > 1)) {
       return ({
-        text70: true,
         center: true,
         color: '#ff8a65',
         text: `看这里看这里 要记得呦 | 每${period}天`,
       });
     }
+    if (diff < 36 && period > 3) {
+      return ({
+        center: true,
+        color: '#7986cb',
+        text: `还剩不到两天惹 | 每${period}天`,
+      });
+    }
     return ({
-      text70: true,
       grey40: true,
       text: '下次将在: ' + (period <= 1 ? '' : period <= 7 ? `${formatW(d)} ` : `${formatD(d)} `) + `${formatT(d)} | 每${period}天`,
     });
@@ -98,19 +115,19 @@ function ReminderList() {
             <Card.Section
               marginT-35
               marginB-25
-              content={[
-                {
-                  center: true,
-                  text40M: true,
-                  color: parseColor(o.progress),
-                  text: formatDistanceToNow(o.nextDate, { includeSeconds: false, locale: R.settings.timeLocal }),
-                },
-              ]}
+              content={[{
+                center: true,
+                text40M: true,
+                ...parseDistance(o.nextDate, o.offset),
+              }]}
             />
           }</Observer>
           <Observer>{() =>
             <Card.Section
-              content={[parseNextDate(o.nextDate, o.period)]}
+              content={[{
+                text70M: true,
+                ...parseNextDate(o.nextDate, o.period),
+              }]}
             />
           }</Observer>
         </Card>}
