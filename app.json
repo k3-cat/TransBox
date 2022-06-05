@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "TransBox",
+    "slug": "TransBox",
+    "privacy": "public",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#fcfcfc"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 7000
+    },
+    "assetBundlePatterns": [
+      "assets/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "permissions": [],
+      "package": "com.cybil.TransBox",
+      "googleServicesFile": "./google-services.json"
+    }
+  }
+}
