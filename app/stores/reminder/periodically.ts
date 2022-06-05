@@ -1,8 +1,7 @@
 import addDays from 'date-fns/addDays';
 import differenceInDays from 'date-fns/differenceInDays';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
-import * as Notifications from 'expo-notifications';
-import { types } from 'mobx-state-tree';
+import { Instance, types } from 'mobx-state-tree';
 
 function createTrigger(nextDate: Date, period: number, offset: number) {
   let tmp = new Date(nextDate);
@@ -30,6 +29,8 @@ function createTrigger(nextDate: Date, period: number, offset: number) {
 
 export const PeriodicallyEventStore = types
   .model({
+    id: types.identifier,
+
     name: types.string,
     nextDate: types.Date, // year, month, day, hour, minuts
     period: types.integer, // in days
@@ -39,6 +40,21 @@ export const PeriodicallyEventStore = types
   })
 
   .actions((self) => ({
+    setName(n: string) { self.name = n.trim(); },
+    setPeriod(p: number) { self.period = p; },
+    setOffset(o: number) { self.offset = o; },
+    setIsHide(v: boolean) { self.isHide = v; },
+    setDate(d: Date) {
+      let tmp = new Date(self.nextDate);
+      tmp.setFullYear(d.getFullYear(), d.getMonth(), d.getDate());
+      self.nextDate = tmp;
+    },
+    setTime(t: Date) {
+      let tmp = new Date(self.nextDate);
+      tmp.setHours(t.getHours(), t.getMinutes(), 0, 0);
+      self.nextDate = tmp;
+    },
+
     updateDate() {
       const now = new Date();
       if (differenceInMinutes(now, self.nextDate) < 60) {
@@ -47,26 +63,6 @@ export const PeriodicallyEventStore = types
       const diff = differenceInDays(now, self.nextDate); // DST safe
       self.nextDate = addDays(self.nextDate, self.period * Math.floor(1 + diff / self.period)); // round up | at least one period
     },
-
-    cancelNotif() {
-      if (self.notifId) {
-        Notifications.cancelScheduledNotificationAsync(self.notifId);
-      }
-    },
-
-    createNotif() {
-      this.cancelNotif();
-      this.updateDate();
-
-      Notifications
-        .scheduleNotificationAsync({
-          content: {
-            title: '之后有重要的事哦',
-            body: self.isHide ? '请访问app查看' : self.name,
-            data: { data: self.name },
-          },
-          trigger: createTrigger(self.nextDate, self.period, self.offset),
-        })
-        .then((id) => { self.notifId = id; });
-    },
   }));
+
+export interface IPeriodicallyEventStore extends Instance<typeof PeriodicallyEventStore> { }

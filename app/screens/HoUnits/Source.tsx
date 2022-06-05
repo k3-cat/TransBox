@@ -1,18 +1,17 @@
 import Clipboard from 'expo-clipboard';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Keyboard, TouchableOpacity, Vibration } from 'react-native';
-import { Text, View } from 'react-native-ui-lib/core';
-import TextField from 'react-native-ui-lib/textField';
+import { Keyboard, Vibration } from 'react-native';
 
 import { useStore } from '../../stores';
 import { vUnitIndex, wUnitIndex } from '../../stores/ho_units/data';
+import { Button, TextInput, View } from '../../ui-lib';
 import { clean } from './utils';
 
 function Source() {
   const R = useStore();
 
-  const autoPaste = async () => {
+  async function autoPaste() {
     let s = await Clipboard.getStringAsync();
     if (!s) { return; }
 
@@ -40,34 +39,29 @@ function Source() {
     u[0] = u[0].trim().replace('u', 'μ').replace('iu', 'IU');
     u[1] = u[1].trim().replace('l', 'L');
     if (wUnitIndex.has(u[0]) && vUnitIndex.has(u[1])) {
-      R.ho_units.setS(`${u[0]}/${u[1]}`);
+      R.ho_units.setDiag('s');
+      R.ho_units.setU(`${u[0]}/${u[1]}`);
     }
-  };
+  }
 
   return (
-    <View row>
-      <View flex style={{ maxHeight: 55 }}>
-        <TextField
-          accessibilityLabel='原始值'
-          blurOnSubmit
-          contextMenuHidden
-          selectTextOnFocus
-          keyboardType='numeric'
-          value={R.ho_units.value}
-          onFocus={autoPaste}
-          onChangeText={(v: string) => R.ho_units.setValue(clean(v))}
-        />
-      </View>
-      <View paddingV-5 right>
-        <TouchableOpacity
-          onPress={() => { R.ho_units.setDiag('s'); Keyboard.dismiss(); }}
-          hitSlop={{ top: 30, left: 15, right: 30, bottom: 30 }}
-        >
-          <View paddingL-15 paddingB-5>
-            <Text style={{ fontSize: 21.5, color: '#7e57c2' }}>{R.ho_units.sUnit}</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+    <View row centerV>
+      <TextInput
+        accessibilityLabel='原始值'
+        contextMenuHidden
+        selectTextOnFocus
+        keyboardType='numeric'
+        value={R.ho_units.value}
+        onFocus={autoPaste}
+        onChangeText={(v: string) => R.ho_units.setValue(clean(v))}
+      />
+      <Button
+        label={R.ho_units.sUnit}
+        color='#7e57c2'
+        labelStyle={{ fontSize: 21 }}
+        hitSlop={{ top: 30, left: 15, right: 30, bottom: 20 }}
+        onPress={() => { R.ho_units.setDiag('s'); Keyboard.dismiss(); }}
+      />
     </View>
   );
 }

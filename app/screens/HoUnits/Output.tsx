@@ -1,21 +1,20 @@
 import Clipboard from 'expo-clipboard';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Vibration } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { RadioButton } from 'react-native-ui-lib';
-import { Text, View } from 'react-native-ui-lib/core';
+import { TouchableOpacity, Vibration } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
+import QuickSelect from '../../components/QuickSelect';
 import { useStore } from '../../stores';
+import { Text, View } from '../../ui-lib';
 
 const com = ['pg/mL', 'ng/dL', 'ng/mL'];
 
 function Output() {
   const R = useStore();
 
-  const getTextResult = () => {
+  function getTextResult() {
     const result = R.ho_units.result;
 
     if (result === 0) { return `(zero) ${R.ho_units.tUnit}`; }
@@ -26,56 +25,41 @@ function Output() {
     if (result < 0.001) { return `< 0.001 ${R.ho_units.tUnit} `; }
 
     return `${result.toFixed(3)} ${R.ho_units.tUnit}`;
-  };
+  }
+
   const strResult = getTextResult();
 
   return (
     <>
-      <View paddingB-20>
-        {
-          strResult === ' x ' ?
-            <Text text50M center style={{ color: '#ef5350' }}>请检查输入是否有效</Text>
-            :
-            <TouchableWithoutFeedback
+      {
+        strResult === ' x ' ?
+          <Text text50M center style={{ color: '#ef5350' }}>请检查输入是否有效</Text>
+          :
+          <View row centerV>
+            <Text text40M style={{ color: '#808080', marginRight: -7, marginTop: 2 }}>=</Text>
+            <Ionicons size={30} color='#808080' name='chevron-forward-outline' />
+            <View paddingR-15 />
+            <TouchableOpacity
               onLongPress={() => {
                 if (strResult.endsWith(' ') || strResult.includes('zero')) { return; }
-                Clipboard.setString(strResult);
                 Vibration.vibrate(30);
+                Clipboard.setString(strResult);
               }}
-              hitSlop={{ top: 15, left: 35, right: 35, bottom: 10 }}
+              hitSlop={{ top: 15, left: 35, right: 35, bottom: 15 }}
             >
-              <View row centerV>
-                <Text style={{ fontSize: 27, color: '#808080', marginRight: -7, marginTop: -3 }}>=</Text>
-                <Ionicons size={27} color='#808080' name='chevron-forward-outline' />
-                <View paddingR-12 />
-                <Text text50M style={{ color: !strResult.endsWith(' ') ? '#64b5f6' : '#ef5350' }}>
-                  {strResult}
-                </Text>
-              </View>
-            </TouchableWithoutFeedback>
-        }
-      </View>
-      <View row paddingH-10 style={{ alignContent: 'space-between' }}>
-        {
-          com.map((u) =>
-            <View key={u} flexG>
-              <RadioButton
-                label={u}
-                selected={R.ho_units.tUnit === u}
-                onPress={() => R.ho_units.setT(u)}
-              />
-            </View>
-          )
-        }
-        <View>
-          <RadioButton
-            label={com.includes(R.ho_units.tUnit) ? '自定义' : R.ho_units.tUnit}
-            labelStyle={{ color: '#7e57c2', fontWeight: 'bold' }}
-            selected={!com.includes(R.ho_units.tUnit)}
-            onPress={() => R.ho_units.setDiag('t')}
-          />
-        </View>
-      </View>
+              <Text style={{ fontSize: 26, color: !strResult.endsWith(' ') ? '#64b5f6' : '#ef5350' }}>
+                {strResult}
+              </Text>
+            </TouchableOpacity>
+          </View>
+      }
+      <View marginB-22 />
+      <QuickSelect
+        list={com}
+        value={R.ho_units.tUnit}
+        select={R.ho_units.setU}
+        setDiag={() => R.ho_units.setDiag('t')}
+      />
     </>
   );
 }

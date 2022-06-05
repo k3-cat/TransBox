@@ -1,151 +1,139 @@
-import { useLocalObservable, observer, Observer } from 'mobx-react-lite';
-import React from 'react';
-import { PanningProvider } from 'react-native-ui-lib';
-import { Button, Text, TouchableOpacity, View } from 'react-native-ui-lib/core';
-import Dialog from 'react-native-ui-lib/dialog';
-import TextField from 'react-native-ui-lib/textField';
+import { observer } from 'mobx-react-lite';
+import React, { useState } from 'react';
 
-import { Ionicons } from '@expo/vector-icons';
+import { Button, Dialog, HelperText, IconButton, Portal, Text, TextInput, View } from '../ui-lib';
 
 interface NumInputProps {
+  visible: boolean;
+  init: number;
   min: number;
   max: number;
   step: number;
-  wholeNumber: boolean;
+  wholeNumber?: boolean;
   onCancell: () => void;
   onSubmit: (n: number) => void;
 }
 
-function NumInput({ min, max, step, wholeNumber, onCancell, onSubmit }: NumInputProps) {
-  const ob = useLocalObservable(() => ({
-    error: '',
-    value: '',
+function NumInput({ visible, init, min, max, step, wholeNumber, onCancell, onSubmit }: NumInputProps) {
+  const [error, setError] = useState('');
+  const [value, setVal] = useState('');
 
-    setValue(n: string) {
-      this.value = n;
-      const num = parseFloat(n);
-      if (isNaN(num)) {
-        this.error = '* 不是有效的数字';
-      } else if (num < min) {
-        this.error = `* 这里不能输入比 ${min} 小的值`;
-      } else if (num > max) {
-        this.error = `* 这里不能输入比 ${max} 大的值`;
-      } else {
-        this.error = '';
-      }
-    },
+  if (!value && visible) {
+    setVal(init.toString());
+  }
 
-    add() {
-      let num = parseFloat(this.value);
-      if (isNaN(num)) {
-        this.value = min.toString();
-      } else {
-        num += step;
-        if (num > max) { num = max; }
-        this.value = num.toString();
-      }
-    },
+  function setValue(n: string) {
+    if (!n) {
+      setVal(min.toString());
+      return;
+    }
 
-    minus() {
-      let num = parseFloat(this.value);
-      if (isNaN(num)) {
-        this.value = max.toString();
-      } else {
-        num -= step;
-        if (num < min) { num = min; }
-        this.value = num.toString();
-      }
-    },
+    const num = parseFloat(n);
+    if (isNaN(num)) {
+      setError('* 不是有效的数字');
+      setVal(n);
+      return;
+    }
 
-    submit() {
-      if (wholeNumber) {
-        onSubmit(parseInt(this.value, 10));
-      } else {
-        onSubmit(parseFloat(this.value));
-      }
-      onCancell();
-    },
-  }));
+    setVal(num.toString());
+    if (num < min) {
+      setError(`* 这里不能输入比 ${min} 小的值`);
+    } else if (num > max) {
+      setError(`* 这里不能输入比 ${max} 大的值`);
+    } else {
+      setError('');
+    }
+  }
 
-  if (!ob.value) {
-    ob.value = min.toString();
+  function plus(a: boolean) {
+    let num = parseFloat(value);
+    if (isNaN(num)) {
+      setVal(a ? min.toString() : max.toString());
+    } else {
+      num = step * Math.round((num + (a ? step : -step)) / step);
+      if (num > max) { num = max; }
+      else if (num < min) { num = min; }
+      setVal(num.toString());
+    }
+  }
+
+  function cancel() {
+    setError('');
+    setVal('');
+    onCancell();
+  }
+
+  function submit() {
+    if (wholeNumber ?? true) {
+      onSubmit(parseInt(value, 10));
+    } else {
+      onSubmit(parseFloat(value));
+    }
+    cancel();
   }
 
   return (
-    <Dialog
-      useSafeArea
-      visible
-      panDirection={PanningProvider.Directions.RIGHT}
-      containerStyle={{
-        alignSelf: 'center',
-        backgroundColor: '#fefefe',
-        paddingVertical: 25,
-        paddingHorizontal: 30,
-        borderRadius: 12,
-        width: 280,
-      }}
-      onDismiss={onCancell}
-    >
-      <View row>
-        <View flex style={{ maxHeight: 55 }}>
-          <TextField
-            placeholder='选择的数值'
-            floatingPlaceholder
-            floatOnFocus
-            blurOnSubmit
-            contextMenuHidden
-            selectTextOnFocus
-            keyboardType='numeric'
-            value={ob.value}
-            onChangeText={ob.setValue}
-          />
-        </View>
-        <TouchableOpacity
-          marginL-25
-          marginT-15
-          onPress={ob.minus}
-          hitSlop={{ top: 20, left: 20, right: 10, bottom: 20 }}
-        >
-          <Ionicons size={40} color='#707070' name='remove-circle-outline' />
-        </TouchableOpacity>
-        <TouchableOpacity
-          marginL-15
-          marginT-15
-          onPress={ob.add}
-          hitSlop={{ top: 20, left: 10, right: 20, bottom: 20 }}
-        >
-          <Ionicons size={40} color='#707070' name='add-circle-outline' />
-        </TouchableOpacity>
-      </View>
-      {
-        ob.error !== '' ?
-          <View style={{ marginBottom: -9 }}>
-            <Text text80M marginT-10 style={{ color: '#ef5350' }}>{ob.error}</Text>
+    <Portal>
+      <Dialog
+        visible={visible}
+        style={{
+          alignSelf: 'center',
+          width: 280,
+        }}
+        onDismiss={cancel}
+      >
+        <Dialog.Title>选择的数值</Dialog.Title>
+        <Dialog.Content>
+          <View row centerV>
+            <TextInput
+              contextMenuHidden
+              selectTextOnFocus
+              keyboardType='numeric'
+              value={value}
+              onChangeText={setValue}
+              error={error !== ''}
+            />
+            <View marginR-25 />
+            <IconButton
+              icon='remove-circle-outline'
+              size={30}
+              color='#707070'
+              onPress={() => plus(false)}
+              hitSlop={{ top: 20, left: 20, right: 5, bottom: 20 }}
+              style={{ marginHorizontal: -10 }}
+            />
+            <View marginR-22 />
+            <IconButton
+              icon='add-circle-outline'
+              size={30}
+              color='#707070'
+              onPress={() => plus(true)}
+              hitSlop={{ top: 20, left: 5, right: 20, bottom: 20 }}
+              style={{ marginHorizontal: -10 }}
+            />
           </View>
-          :
-          null
-      }
-      <View row marginT-30>
-        <Button
-          flex
-          marginR-10
-          outline
-          outlineColor='#ef5350'
-          label='取消'
-          onPress={onCancell}
-        />
-        <Button
-          flex
-          marginL-10
-          outline
-          outlineColor='#42a5f5'
-          label='确定'
-          disabled={ob.error !== ''}
-          onPress={ob.submit}
-        />
-      </View>
-
-    </Dialog >
+          <HelperText
+            type='error' padding='none' visible={error !== ''}
+            style={{ marginBottom: -15 }}
+          >
+            {error}
+          </HelperText>
+        </Dialog.Content>
+        <Dialog.Actions>
+          <Button
+            label='取消'
+            color='#3f51b5'
+            onPress={cancel}
+          />
+          <Button
+            label='确定'
+            color='#2196f3'
+            disabled={error !== ''}
+            onPress={submit}
+          />
+        </Dialog.Actions>
+      </Dialog >
+    </Portal >
   );
 }
 

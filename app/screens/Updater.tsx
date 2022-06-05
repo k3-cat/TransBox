@@ -2,9 +2,9 @@ import * as Updates from 'expo-updates';
 import React from 'react';
 import { Linking, ScrollView } from 'react-native';
 import Markdown from 'react-native-markdown-display';
-import { Button, Text, View } from 'react-native-ui-lib/core';
 
 import { useStore } from '../stores';
+import { Button, Text, View } from '../ui-lib';
 
 function PromoteUpdate() {
   const R = useStore();
@@ -36,9 +36,9 @@ function PromoteUpdate() {
             (R.updater.count > 10) ? `* 这个版本已经被下载 ${R.updater.count} 次啦~` : '* 这次更新需要重新安装才能正常使用哦'}
         </Text>
         <Button
-          outline
-          outlineColor='#42a5f5'
           label={R.updater.diag === 'apk' ? '帮我下载apk~' : '知道啦~ 帮我重启~'}
+          color='#2196f3'
+          mode='outlined'
           onPress={() => {
             if (R.updater.diag === 'apk') {
               Linking.openURL(R.updater.url);

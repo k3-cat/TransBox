@@ -1,32 +1,30 @@
-import differenceInHours from 'date-fns/differenceInHours';
-import differenceInMinutes from 'date-fns/differenceInMinutes';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import { Observer, observer } from 'mobx-react-lite';
 import React from 'react';
 import { Dimensions, FlatList } from 'react-native';
-import Card from 'react-native-ui-lib/card';
-import { Text, View } from 'react-native-ui-lib/core';
 
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 
 import { useStore } from '../../stores';
+import { IPeriodicallyEventStore } from '../../stores/reminder/periodically';
+import { Card, Text, View } from '../../ui-lib';
+
+const rows = Math.floor(Dimensions.get('window').width / 370);
 
 function ReminderList() {
   const R = useStore();
-  const navigation = useNavigation();
 
   const formatT = R.settings.format('t');
   const formatW = R.settings.format('w');
   const formatD = R.settings.format('d');
 
-  const parseDistance = (d: Date, offset: number) => {
-    const diff = differenceInMinutes(d, new Date());
+  function parseDistance(d: Date, offset: number) {
+    const diff = (d.getTime() - Date.now()) / 60000;
 
     if (diff <= 0) {
-      return {
-        color: '#ff7043',
-        text: '现在',
-      };
+      return (
+        <Text center text40BL style={{ color: '#ff7043' }}>! 现在 !</Text>
+      );
     }
 
     let color;
@@ -39,98 +37,86 @@ function ReminderList() {
     } else {
       color = `rgba(66, 165, 245, ${0.25 + 0.75 * (1 - (diff - offset) / 1440)})`;
     }
-    return {
-      color: color,
-      text: formatDistanceToNow(d, { includeSeconds: false, locale: R.settings.timeLocal }),
-    };
-  };
+    return (
+      <Text center text40M style={{ color: color }}>{formatDistanceToNow(d, { includeSeconds: false, locale: R.settings.timeLocal })}</Text>
+    );
+  }
 
-  const parseNextDate = (d: Date, period: number) => {
-    const diff = differenceInHours(d, new Date());
+  function parseNote(d: Date, period: number) {
+    const diff = (d.getTime() - Date.now()) / 3600000;
 
-    if (diff === 0 || (diff < 12 && period > 1)) {
-      return ({
-        center: true,
-        color: '#ff8a65',
-        text: `看这里看这里 要记得呦 | 每${period}天`,
-      });
+    if (diff <= 0) {
+      return null;
+    }
+    if (diff < 12 && period > 1) {
+      return (
+        <Text text70M style={{ marginLeft: 5, color: '#ff8a65' }}>* 还剩不到半天啦</Text>
+      );
     }
     if (diff < 36 && period > 3) {
-      return ({
-        center: true,
-        color: '#7986cb',
-        text: `还剩不到两天惹 | 每${period}天`,
-      });
+      return (
+        <Text text70M style={{ marginLeft: 5, color: '#7986cb' }}>* 还剩不到两天惹</Text>
+      );
     }
-    return ({
-      grey40: true,
-      text: '下次将在: ' + (period <= 1 ? '' : period <= 7 ? `${formatW(d)} ` : `${formatD(d)} `) + `${formatT(d)} | 每${period}天`,
-    });
-  };
+    return null;
+  }
 
   const isFocused = useIsFocused();
   if (isFocused) {
     R.reminder.refreshAll();
+    R.reminder.save();
   }
 
   if (R.reminder.events.length === 0) {
     return (
       <View flexG centerV>
         <View flexS>
-          <Text text65M grey30 center>以天为单位的固定周期提醒{'\n'}比如打针或者隔n天的吃的药{'\n'}点击按钮添加提醒&emsp;长按修改</Text>
+          <Text center text65M grey30>以天为单位的固定周期提醒{'\n'}比如打针或者隔n天的吃的药{'\n'}点击按钮添加提醒&emsp;长按修改</Text>
         </View>
       </View>
     );
   }
 
-  const rows = Math.floor(Dimensions.get('window').width / 370);
+
+  function Cards({ item: o, index }: { item: IPeriodicallyEventStore, index: number; }) {
+    if (!o.name) { return null; }
+
+    return (
+      <Card
+        style={{ width: 320, alignSelf: 'center', marginHorizontal: 25, marginVertical: 18 }}
+      >
+        <Observer>{() =>
+          <Card.Title
+            title={o.name}
+            subtitle={
+              '下次将在: '
+              + (o.period <= 1 ? '' : o.period <= 7 ? `${formatW(o.nextDate)} ` : `${formatD(o.nextDate)} `)
+              + `${formatT(o.nextDate)} | 每${o.period}天`
+            }
+            style={{ marginHorizontal: 5 }}
+            subtitleStyle={{ fontSize: 13 }}
+          />
+        }</Observer>
+        <View marginB-45 marginH-18 height={1} bg-dark70 />
+        <Card.Content>
+          <Observer>{() => parseDistance(o.nextDate, o.offset)}</Observer>
+          <View marginB-30 />
+          <Observer>{() => parseNote(o.nextDate, o.period)}</Observer>
+        </Card.Content>
+      </Card>
+    );
+  }
 
   return (
     <FlatList
       data={R.reminder.events.slice()}
       keyExtractor={(o) => o.name}
-      style={{ marginTop: 5 }}
+      style={{ marginVertical: 5 }}
       columnWrapperStyle={rows > 1 ? { alignSelf: 'center' } : null}
       numColumns={rows}
       ListHeaderComponent={<View marginB-20 />}
-      ListFooterComponent={<View marginT-50 />}
-      renderItem={({ item: o, index }) =>
-        <Card
-          marginH-25
-          marginV-18
-          containerStyle={{ width: 320, alignSelf: 'center', paddingHorizontal: 30, paddingVertical: 20 }}
-          onLongPress={() => {
-            R.reminder.edit(index);
-            navigation.navigate('-Detail');
-          }}
-        >
-          <Observer>{() =>
-            <Card.Section
-              marginB-5
-              content={[{ text: o.name, text65M: true, grey10: true }]}
-            />
-          }</Observer>
-          <View height={1.5} bg-dark60 />
-          <Observer>{() =>
-            <Card.Section
-              marginT-35
-              marginB-25
-              content={[{
-                center: true,
-                text40M: true,
-                ...parseDistance(o.nextDate, o.offset),
-              }]}
-            />
-          }</Observer>
-          <Observer>{() =>
-            <Card.Section
-              content={[{
-                text70M: true,
-                ...parseNextDate(o.nextDate, o.period),
-              }]}
-            />
-          }</Observer>
-        </Card>}
+      ListFooterComponent={<View marginT-20 />}
+      renderItem={Cards}
     />
   );
 }
