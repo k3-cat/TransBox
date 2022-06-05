@@ -1,17 +1,22 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, View } from 'react-native-ui-lib/core';
 
-function Index() {
+import { createStackNavigator } from '@react-navigation/stack';
+
+import DetailScreen from './DetailScreen';
+import ListScreen from './ListScreen';
+
+const Stack = createStackNavigator();
+
+function Reminder() {
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flexGrow: 1 }}>
-      <View flexG centerV>
-        <View flexS>
-          <Text center>设定以天为单位的固定周期提醒{'\n'}比如打针或者隔n天的吃的药{'\n'}支持设置在当天的某个时刻弹出通知</Text>
-        </View>
-      </View>
-    </SafeAreaView>
+    <Stack.Navigator
+      initialRouteName='Reminder'
+      screenOptions={{ header: () => null }}
+    >
+      <Stack.Screen name='Reminder' component={ListScreen} />
+      <Stack.Screen name='-Detail' component={DetailScreen} />
+    </Stack.Navigator>
   );
 }
 
-export default Index;
+export default Reminder;
