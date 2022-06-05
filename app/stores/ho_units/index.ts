@@ -58,7 +58,7 @@ export const HoUnitsStore = types
       self.qa.add({
         s: self.sUnit,
         t: self.tUnit,
-        m: !self.needMol || self.mol !== '0' ? self.mol : 'x'
+        m: self.needMol ? self.mol : null
       });
     }
   }));

@@ -24,11 +24,11 @@ function UnitDiag() {
 
   const update = (isW: boolean, unit: string) => {
     if (isW) {
-      if (ob.v) { R.ho_units.setUnit(unit + '/' + ob.v); ob.C(); return; }
+      if (ob.v) { R.ho_units.setUnit(`${unit}/${ob.v}`); ob.C(); return; }
       ob.W(unit);
     }
     else {
-      if (ob.w) { R.ho_units.setUnit(ob.w + '/' + unit); ob.C(); return; }
+      if (ob.w) { R.ho_units.setUnit(`${ob.w}/${unit}`); ob.C(); return; }
       ob.V(unit);
     }
   };
@@ -48,7 +48,7 @@ function UnitDiag() {
         borderRadius: 12
       }}
     >
-      <Text center text65M>{R.unit.unitDiag === 's' ? '所输入数据的单位' : '希望得到的单位'}</Text>
+      <Text center text65M>{R.ho_units.unitDiag === 's' ? '所输入数据的单位' : '希望得到的单位'}</Text>
       <View marginT-15 marginB-5 height={2} bg-dark70 />
       <View row>
         <View left marginR-20>

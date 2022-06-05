@@ -8,7 +8,7 @@ import Header from '../components/Header';
 
 function About() {
   const local = Constants.nativeAppVersion;
-  const revisionId = Constants.manifest.revisionId;
+  const revisionId = Constants.manifest.revisionId!.replace(`${local}-r.`, '');
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flexGrow: 1 }}>

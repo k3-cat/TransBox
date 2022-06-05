@@ -40,7 +40,7 @@ function Source() {
     u[0] = u[0].trim().replace('u', 'μ').replace('iu', 'IU');
     u[1] = u[1].trim().replace('l', 'L');
     if (wUnitIndex.has(u[0]) && vUnitIndex.has(u[1])) {
-      R.ho_units.setS(u[0] + '/' + u[1]);
+      R.ho_units.setS(`${u[0]}/${u[1]}`);
     }
   };
 

@@ -6,7 +6,7 @@ import { comMolIndex } from '../../screens/ho_units/utils';
 const Preset = types.model({
   s: types.string,
   t: types.string,
-  m: types.string
+  m: types.maybeNull(types.string)
 });
 
 export const QAStore = types
@@ -16,8 +16,8 @@ export const QAStore = types
   })
 
   .actions(self => ({
-    add(o: { s: string, t: string, m: string; }) {
-      if (o.m === 'x' || !comMolIndex.has(o.m) && (isNaN(parseFloat(o.m)) || parseFloat(o.m) <= 100)) {
+    add(o: { s: string, t: string, m: string | null; }) {
+      if (o.m && !comMolIndex.has(o.m) && (isNaN(parseFloat(o.m)) || parseFloat(o.m) <= 100)) {
         self.warning = '请先提供有效的分子量！';
         return;
       }
@@ -26,9 +26,7 @@ export const QAStore = types
         return;
       }
 
-      self.presets.push(
-        Preset.create({ s: o.s, t: o.t, m: o.m })
-      );
+      self.presets.push(Preset.create(o));
     },
 
     remove(i: number) {
