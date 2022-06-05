@@ -57,7 +57,7 @@ function Navigator() {
               }}
             />
             :
-            screens.map((p) =>
+            screens.map(p =>
               p.name !== '' &&
               <Drawer.Screen key={p.name} name={p.name} options={{ title: p.title }} component={p.comp} />
             )

@@ -18,27 +18,31 @@ function EditScreen() {
   const R = useStore();
   const navigation = useNavigation();
 
+  const formatD = R.settings.format('d');
+  const formatW = R.settings.format('w');
+
+  const o = R.reminder.t!;
+
   const [diag, setDiag] = useState('x');
   const [warning, setWarning] = useState('x');
   const [isNotif, setIsNotif] = useState<boolean | undefined>(undefined);
-  const getIsNotif = () => isNotif ?? R.reminder.notifs.has(R.reminder.t!.id);
+  const getIsNotif = () => isNotif ?? R.reminder.notifs.has(o.id);
 
   const formatD = R.settings.format('d');
   const formatW = R.settings.format('w');
 
   function flush() {
-    if (!R.reminder.t!.name) {
+    if (!o.name) {
       setWarning('必须要给事件起个名字哦');
-      return;
+      return false;
     }
-    if (R.reminder.events.some(e => e.name === R.reminder.t!.name && e.id !== R.reminder.t!.id)) {
+    if (R.reminder.events.some(e => e.name === o.name && e.id !== o.id)) {
       setWarning('已经存在同名的提醒了');
-      return;
+      return false;
     }
 
-    navigation.goBack();
     R.reminder.flush(getIsNotif());
-    R.reminder.save();
+    return true;
   }
 
   return (
@@ -46,37 +50,38 @@ function EditScreen() {
       <ScrollView style={{ marginHorizontal: 20, marginVertical: 10 }}>
         <TextInput
           label='名称'
-          value={R.reminder.t!.name}
-          onChangeText={R.reminder.t!.setName}
+          value={o.name}
+          onChangeText={o.setName}
         />
         <View row marginV-10>
 
-          {R.reminder.t!.period !== 1 && <>
+          {o.period !== 1 && <>
+            <View marginR-30 width='55%'>
             <DateTimePicker
               label='日期'
               mode='date'
-              value={R.reminder.t!.nextDate}
-              formatter={R.reminder.t!.period === 7 ? formatW : formatD}
-              onChange={R.reminder.t!.setDate}
+                value={o.nextDate}
+                formatter={o.period === 7 ? formatW : formatD}
+                onChange={o.setDate}
             />
-            <View marginH-15 />
+            </View>
           </>}
 
           <DateTimePicker
             label='时间'
             mode='time'
             is24Hour={R.settings.hour24}
-            value={R.reminder.t!.nextDate}
+            value={o.nextDate}
             formatter={R.settings.format('t')}
-            onChange={R.reminder.t!.setTime}
+            onChange={o.setTime}
           />
         </View>
         <QuickSelect
           title='周期'
           list={periods}
-          value={R.reminder.t!.period}
+          value={o.period}
           suffix='天'
-          select={R.reminder.t!.setPeriod}
+          select={o.setPeriod}
           setDiag={() => setDiag('d')}
         />
         <View marginV-25 marginH-40 height={1.5} bg-dark50 />
@@ -90,15 +95,15 @@ function EditScreen() {
         {getIsNotif() && <>
           <Switch
             label='通知里隐藏具体细节'
-            value={R.reminder.t!.isHide}
-            onChange={R.reminder.t!.setIsHide}
+            value={o.isHide}
+            onChange={o.setIsHide}
           />
           <QuickSelect
             title='提前多长时间提醒呢?'
             list={offsets}
-            value={R.reminder.t!.offset}
+            value={o.offset}
             suffix='分'
-            select={R.reminder.t!.setOffset}
+            select={o.setOffset}
             setDiag={() => setDiag('m')}
           />
         </>}
@@ -107,17 +112,17 @@ function EditScreen() {
       <BottomButtons onUpdate={flush} />
       <NumInput
         visible={diag === 'd'}
-        init={R.reminder.t!.period}
+        init={o.period}
         min={1} max={90} step={1}
         onCancell={() => setDiag('x')}
-        onSubmit={R.reminder.t!.setPeriod}
+        onSubmit={o.setPeriod}
       />
       <NumInput
         visible={diag === 'm'}
-        init={R.reminder.t!.offset}
+        init={o.offset}
         min={0} max={720} step={15}
         onCancell={() => setDiag('x')}
-        onSubmit={R.reminder.t!.setOffset}
+        onSubmit={o.setOffset}
       />
       <Snackbar
         text={warning}

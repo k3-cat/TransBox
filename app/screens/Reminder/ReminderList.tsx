@@ -61,26 +61,7 @@ function ReminderList() {
     return null;
   }
 
-  const isFocused = useIsFocused();
-  if (isFocused) {
-    R.reminder.refreshAll();
-    R.reminder.save();
-  }
-
-  if (R.reminder.events.length === 0) {
-    return (
-      <View flexG centerV>
-        <View flexS>
-          <Text center text65M grey30>以天为单位的固定周期提醒{'\n'}比如打针或者隔n天的吃的药{'\n'}点击按钮添加提醒&emsp;长按修改</Text>
-        </View>
-      </View>
-    );
-  }
-
-
   function Cards({ item: o, index }: { item: IPeriodicallyEventStore, index: number; }) {
-    if (!o.name) { return null; }
-
     return (
       <Card
         style={{ width: 320, alignSelf: 'center', marginHorizontal: 25, marginVertical: 18 }}
@@ -107,16 +88,27 @@ function ReminderList() {
     );
   }
 
+  const emptyMessage = (
+    <View flexG centerV>
+      <View flexS>
+        <Text center text65M grey30>以天为单位的固定周期提醒{'\n'}比如打针或者隔n天的吃的药{'\n'}点击按钮添加提醒&emsp;长按修改</Text>
+      </View>
+    </View>
+  );
+
   return (
     <FlatList
       data={R.reminder.events.slice()}
+      extraData={R.reminder.events.length}
       keyExtractor={(o) => o.name}
-      style={{ marginVertical: 5 }}
-      columnWrapperStyle={rows > 1 ? { alignSelf: 'center' } : null}
       numColumns={rows}
+      renderItem={Cards}
+      ListEmptyComponent={emptyMessage}
       ListHeaderComponent={<View marginB-20 />}
       ListFooterComponent={<View marginT-20 />}
-      renderItem={Cards}
+      style={{ marginVertical: 5 }}
+      contentContainerStyle={{ flexGrow: 1 }}
+      columnWrapperStyle={rows > 1 ? { alignSelf: 'center' } : null}
     />
   );
 }

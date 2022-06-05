@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { useLocalStore } from '../../stores/local';
+import { useLocalStore } from '../../stores/utils/localStore';
 import { FabGroup, Portal } from '../../ui-lib';
 
 interface ListScreenProps {

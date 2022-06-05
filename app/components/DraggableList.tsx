@@ -4,17 +4,19 @@ import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flat
 import Animated from 'react-native-reanimated';
 import SwipeableItem, { UnderlayParams } from 'react-native-swipeable-item';
 
-import { Button, Text, View } from '../ui-lib';
+import { useLocalStore } from '../stores/utils/localStore';
 
 interface DraggableList<T> {
   data: T[];
   title: (o: T) => string;
+  keyExtractor: (o: T) => string;
+  emptyMessage: JSX.Element;
   onPress: (i: number) => void;
   onDelete: (i: number) => void;
   onSort: (from: number, to: number) => void;
 }
 
-function DraggableList<T>({ data, title, onPress, onDelete, onSort }: DraggableList<T>) {
+function DraggableList<T>({ data, title, keyExtractor, emptyMessage, onPress, onDelete, onSort }: DraggableList<T>) {
   function renderUnderlayLeft({ item, percentOpen }: UnderlayParams<number>) {
     return (
       <Animated.View
@@ -66,10 +68,12 @@ function DraggableList<T>({ data, title, onPress, onDelete, onSort }: DraggableL
   return (
     <DraggableFlatList
       data={data}
-      keyExtractor={title}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      ListEmptyComponent={emptyMessage}
+      contentContainerStyle={{ flexGrow: 1 }}
       activationDistance={20}
       onDragEnd={({ from, to }) => onSort(from, to)}
-      renderItem={renderItem}
     />
   );
 }
