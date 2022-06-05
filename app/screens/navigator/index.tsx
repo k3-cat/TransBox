@@ -4,13 +4,13 @@ import React, { useRef } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 
-import Header from './navigator/Header';
-import { pages } from './navigator/pages';
-import SideDrawer from './navigator/SideDrawer';
+import Header from './Header';
+import { pages } from './pages';
+import SideDrawer from './SideDrawer';
 
 const Drawer = createDrawerNavigator();
 
-export default function Navigator() {
+function Navigator() {
   const navigationRef = useRef<NavigationContainerRef>(null);
   const routeNameRef = useRef('not-init');
 
@@ -55,3 +55,5 @@ export default function Navigator() {
     </NavigationContainer>
   );
 }
+
+export default Navigator;

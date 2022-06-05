@@ -8,7 +8,7 @@ import { Text, View } from 'react-native-ui-lib/core';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { useStore } from '../../stores/rootStore';
+import { useStore } from '../../stores';
 
 const com = ['pg/mL', 'ng/dL', 'ng/mL'];
 
@@ -43,12 +43,7 @@ function Output() {
                 Clipboard.setString(strResult);
                 Vibration.vibrate(30);
               }}
-              hitSlop={{
-                top: 15,
-                left: 35,
-                right: 35,
-                bottom: 10
-              }}
+              hitSlop={{ top: 15, left: 35, right: 35, bottom: 10 }}
             >
               <View row centerV>
                 <Text style={{ fontSize: 27, color: '#808080', marginRight: -7, marginTop: -3 }}>=</Text>

@@ -1,17 +1,21 @@
-node_modules/**/*
-.expo/*
+/.expo/
+
+# google services
+/google-services.json
+/GoogleService-Info.plist
+
+# node & builds
+/node_modules/
 npm-debug.*
+web-build/
+
+# macOS
+.DS_Store
+
+# safety
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
 *.orig.*
-web-build/
-
-# macOS
-.DS_Store
-
-# google services
-/google-services.json
-/app.config.ts

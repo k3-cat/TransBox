@@ -1,0 +1,12 @@
+{
+    "extends": "@react-native-community",
+    "rules": {
+        "prettier/prettier": "off",
+        "react-native/no-inline-styles": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "jsx-quotes": [
+            "warn",
+            "prefer-single"
+        ]
+    }
+}

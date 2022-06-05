@@ -1,7 +1,7 @@
 import About from '../About';
-import HoUnits from '../ho_units/Index';
-import Memorial from '../memorial/Index';
-import Reminder from '../reminder/Index';
+import HoUnits from '../HoUnits';
+import Memorial from '../Memorial';
+import Reminder from '../Reminder';
 
 interface page {
   name: string;
