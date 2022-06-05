@@ -1,8 +1,8 @@
 import { Observer, observer, useLocalObservable } from 'mobx-react-lite';
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native';
 import { PanningProvider } from 'react-native-ui-lib';
-import { Button, Text, View } from 'react-native-ui-lib/core';
+import { Text, View } from 'react-native-ui-lib/core';
 import Dialog from 'react-native-ui-lib/dialog';
 
 import { useStore } from '../../stores/rootStore';
@@ -40,46 +40,45 @@ function UnitDiag() {
       onDismiss={() => { R.ho_units.setDiag('x'); ob.C(); }}
       panDirection={PanningProvider.Directions.RIGHT}
       containerStyle={{
-        backgroundColor: 'white',
-        paddingVertical: 25,
+        alignSelf: 'center',
+        backgroundColor: '#fefefe',
+        paddingTop: 20,
+        paddingBottom: 25,
         paddingHorizontal: 35,
-        marginHorizontal: 50,
         borderRadius: 12
       }}
     >
-      <Text center style={{ fontSize: 17 }}>请选择单位</Text>
-      <View marginV-10 height={2} bg-dark70 />
+      <Text center text65M>{R.unit.unitDiag === 's' ? '所输入数据的单位' : '希望得到的单位'}</Text>
+      <View marginT-15 marginB-5 height={2} bg-dark70 />
       <View row>
-        <View left>
+        <View left marginR-20>
           <FlatList
             data={wUnits}
             style={{ flexGrow: 0 }}
             keyExtractor={(name) => name}
             renderItem={({ item: o }) => <Observer>{() =>
-              <Button
-                bg-transparent
-                label={o}
-                labelStyle={{ color: o === ob.ww ? '#ff5722' : '#2196f3' }}
-                onPress={() => update(true, o)}
-              />}
+              <TouchableOpacity onPress={() => update(true, o)}>
+                <View paddingL-30 paddingR-20 paddingV-8>
+                  <Text center text70M style={{ color: o === ob.ww ? '#ff5722' : '#2196f3' }}>{o}</Text>
+                </View>
+              </TouchableOpacity>}
             </Observer>}
           />
         </View>
-        <View flex centerV>
-          <Text center style={{ fontSize: 30 }}>/</Text>
+        <View centerV>
+          <Text center text40M>/</Text>
         </View>
-        <View right centerV>
+        <View right marginL-20 centerV>
           <FlatList
             data={vUnits}
             style={{ flexGrow: 0 }}
             keyExtractor={(name) => name}
             renderItem={({ item: o }) => <Observer>{() =>
-              <Button
-                bg-transparent
-                label={o}
-                labelStyle={{ color: o === ob.vv ? '#ff5722' : '#2196f3' }}
-                onPress={() => update(false, o)}
-              />}
+              <TouchableOpacity onPress={() => update(false, o)}>
+                <View paddingL-20 paddingR-30 paddingV-10>
+                  <Text center text70M style={{ color: o === ob.vv ? '#ff5722' : '#2196f3' }}>{o}</Text>
+                </View>
+              </TouchableOpacity>}
             </Observer>}
           />
         </View>

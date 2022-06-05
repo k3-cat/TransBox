@@ -7,14 +7,15 @@ import { Text, View } from 'react-native-ui-lib/core';
 
 import { useStore } from '../../stores/rootStore';
 
+const com = ['pg/mL', 'ng/dL', 'ng/mL'];
+
+
 function Output() {
   const R = useStore();
 
-  const com = ['pg/mL', 'ng/dL', 'ng/mL'];
-
   return (
     <Fragment>
-      <View paddingT-5 paddingB-20 paddingH-10>
+      <View paddingB-20>
         {
           R.ho_units.result < 0
             ?
@@ -28,49 +29,38 @@ function Output() {
             </Text>
         }
       </View>
-      <View row paddingL-10>
-        <View paddingH-7>
+      <View row paddingH-10 style={{ alignContent: 'space-between' }}>
+        <View flexG>
           <RadioButton
-            size={20}
-            color='#9ccc65'
             label={com[0]}
-            accessibilityLabel={'选择' + com[0] + '作目标单位'}
             selected={R.ho_units.tUnit === com[0]}
             onPress={() => R.ho_units.setT(com[0])}
           />
         </View>
-        <View paddingH-7>
+        <View flexG>
           <RadioButton
-            size={20}
-            color='#9ccc65'
             label={com[1]}
-            accessibilityLabel={'选择' + com[1] + '作目标单位'}
             selected={R.ho_units.tUnit === com[1]}
             onPress={() => R.ho_units.setT(com[1])}
           />
         </View>
-        <View paddingH-7>
+        <View flexG>
           <RadioButton
-            size={20}
-            color='#9ccc65'
             label={com[2]}
-            accessibilityLabel={'选择' + com[2] + '作目标单位'}
             selected={R.ho_units.tUnit === com[2]}
             onPress={() => R.ho_units.setT(com[2])}
           />
         </View>
-        <View paddingH-7>
+        <View>
           <RadioButton
-            size={20}
-            color='#9ccc65'
-            accessibilityLabel={'选择自定义目标单位' + com.includes(R.ho_units.tUnit) ? '' : '当前为' + R.ho_units.tUnit}
-            label={com.includes(R.ho_units.tUnit) ? '-自定义-' : R.ho_units.tUnit}
+            label={com.includes(R.ho_units.tUnit) ? '自定义' : R.ho_units.tUnit}
+            labelStyle={{ color: '#7e57c2', fontWeight: 'bold' }}
             selected={!com.includes(R.ho_units.tUnit)}
             onPress={() => R.ho_units.setDiag('t')}
           />
         </View>
       </View>
-    </Fragment>
+    </Fragment >
   );
 }
 

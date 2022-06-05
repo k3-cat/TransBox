@@ -1,13 +1,13 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React, { Fragment } from 'react';
-import { FlatList, Keyboard } from 'react-native';
+import { FlatList, Keyboard, TouchableOpacity } from 'react-native';
 import { PanningProvider } from 'react-native-ui-lib';
-import { Button, Text, View } from 'react-native-ui-lib/core';
+import { Text, View } from 'react-native-ui-lib/core';
 import Dialog from 'react-native-ui-lib/dialog';
 import TextField from 'react-native-ui-lib/textField';
 
 import { useStore } from '../../stores/rootStore';
-import { clean, comMols } from './utils';
+import { clean, comMolIndex, comMols } from './utils';
 
 function MolInput() {
   const R = useStore();
@@ -24,9 +24,9 @@ function MolInput() {
     <Fragment>
       <View row>
         <View left>
-          <Text style={{ fontSize: 20, marginRight: '2%' }}>@</Text>
+          <Text text60M style={{ marginRight: '2%' }}>@</Text>
         </View>
-        <View flex style={{ maxHeight: 50 }}>
+        <View flex style={{ maxHeight: 55 }}>
           <TextField
             value={R.ho_units.mol}
             contextMenuHidden
@@ -36,22 +36,22 @@ function MolInput() {
             onChangeText={(m: string) => R.ho_units.setMol(clean(m))} />
         </View>
         <View right>
-          {
-            !comMols.includes(R.ho_units.mol)
-              ?
-              <Text style={{ fontSize: 20, marginLeft: '2%', color: '#666' }}>g/mol</Text>
-              :
-              <Fragment></Fragment>
-          }
+          <Text text60M style={{ marginLeft: '2%', color: '#666' }}>{!comMolIndex.has(R.ho_units.mol) ? 'g/mol' : ''}</Text>
         </View>
-        <View paddingV-5 right>
-          <Button
-            bg-transparent
-            avoidInnerPadding
-            label='[常用值]'
-            labelStyle={{ fontSize: 19, color: '#7e57c2' }}
+        <View right>
+          <TouchableOpacity
             onPress={() => { ob.D(); Keyboard.dismiss(); }}
-          />
+            hitSlop={{
+              top: 5,
+              left: 30,
+              right: 30,
+              bottom: 30
+            }}
+          >
+            <View paddingL-15 paddingB-5>
+              <Text text65M style={{ color: '#7e57c2' }}>[常用值]</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
       <Dialog
@@ -59,26 +59,28 @@ function MolInput() {
         visible={ob.diag}
         panDirection={PanningProvider.Directions.RIGHT}
         containerStyle={{
-          backgroundColor: 'white',
-          paddingVertical: 25,
+          alignSelf: 'center',
+          backgroundColor: '#fefefe',
+          paddingTop: 20,
+          paddingBottom: 25,
           paddingHorizontal: 35,
           marginHorizontal: 50,
           borderRadius: 12
         }}
         onDismiss={() => ob.D()}
       >
-        <Text center style={{ fontSize: 17 }}>常用值</Text>
-        <View marginV-10 height={2} bg-dark70 />
+        <Text center text65M>常用分子量</Text>
+        <View marginT-14 marginB-10 height={2} bg-dark70 />
         <FlatList
           data={comMols}
           style={{ flexGrow: 0 }}
           keyExtractor={(name) => name}
-          renderItem={({ item: o }) => <Button
-            bg-transparent
-            label={o}
-            labelStyle={{ color: o === R.ho_units.mol ? '#ff5722' : '#2196f3' }}
-            onPress={() => { R.ho_units.setMol(o); ob.D(); }}
-          />}
+          renderItem={({ item: o }) =>
+            <TouchableOpacity onPress={() => { R.ho_units.setMol(o); ob.D(); }}>
+              <View marginH-20 paddingV-10 paddingH-10>
+                <Text center text70M style={{ color: o === R.ho_units.mol ? '#ff5722' : '#2196f3' }}>{o}</Text>
+              </View>
+            </TouchableOpacity>}
         />
       </Dialog>
     </Fragment >
