@@ -7,8 +7,9 @@ import { Button, Text, View } from 'react-native-ui-lib/core';
 
 
 function About() {
-  const local = Constants.nativeAppVersion;
-  const revisionId = Constants.manifest.revisionId?.replace(`${local}-r.`, '');
+  const localVer = Constants.nativeAppVersion;
+  const otaVer = Constants.manifest.version;
+  const revisionId = Constants.manifest.revisionId?.replace(`${otaVer}-r.`, '');
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flexGrow: 1 }}>
@@ -37,12 +38,21 @@ function About() {
           bg-transparent
           label='~ 给猫猫投喂棒棒糖 ~'
           labelStyle={{ color: '#f5a9b8' }}
-          onPress={() => Linking.openURL('https://github.com/k3-cat/TransBox/wiki/%E6%8A%95%E5%96%82%E7%8C%AB%E7%8C%AB')}
+          onPress={() => {
+            Linking.openURL('https://github.com/k3-cat/TransBox/wiki/%E6%8A%95%E5%96%82%E7%8C%AB%E7%8C%AB');
+            Analytics.logEvent('link_click', { 'target': 'lollipops' });
+          }}
         />
 
         <View marginV-15 marginH-45 height={2} bg-dark70 />
 
-        <Text center text70M style={{ marginTop: '2%', marginBottom: '0.5%', color: '#78909c' }}>本地版本：{local}</Text>
+        <Text center text70M style={{ marginTop: '2%', marginBottom: '0.5%', color: '#78909c' }}>本地版本：{localVer}</Text>
+        {
+          localVer !== otaVer ?
+            <Text center text70M style={{ marginTop: '0.5%', marginBottom: '0.5%', color: '#78909c' }}>OTA版本：{otaVer}</Text>
+            :
+            null
+        }
         <Text center text70M style={{ marginTop: '0.5%', marginBottom: '2%', color: '#78909c' }}>Revision：{revisionId}</Text>
         <Button
           centerH
