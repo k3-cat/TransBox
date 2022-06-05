@@ -4,15 +4,13 @@ import { Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Text, View } from 'react-native-ui-lib/core';
 
-import Header from '../components/Header';
 
 function About() {
   const local = Constants.nativeAppVersion;
-  const revisionId = Constants.manifest.revisionId!.replace(`${local}-r.`, '');
+  const revisionId = Constants.manifest.revisionId?.replace(`${local}-r.`, '');
 
   return (
     <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flexGrow: 1 }}>
-      <Header />
       <View flexG>
         <Text center text20M grey30 style={{ marginVertical: '8%' }}>About</Text>
 

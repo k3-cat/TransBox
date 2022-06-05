@@ -5,7 +5,11 @@ import { Text, View } from 'react-native-ui-lib/core';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 
-function Header() {
+interface HeaderProps {
+  title: string;
+}
+
+function Header({ title }: HeaderProps) {
   const navigation = useNavigation();
 
   return (
@@ -59,10 +63,10 @@ function Header() {
               color="#ff8a65"
             />
           </TouchableOpacity>
-          <Text center text65M>TransBox</Text>
+          <Text center text65M>{title}</Text>
         </View>
-      </View >
-    </Fragment >
+      </View>
+    </Fragment>
   );
 }
 
