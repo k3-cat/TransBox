@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 
 import { useStore } from '../../stores';
@@ -9,12 +10,11 @@ function PopUps() {
   const setChannel = (channel: 'google' | 'github') =>
     R.settings.toggleUpdateChannel(channel);
 
-  //mute as the release on Google Play not ready yet
-  if (false && !R.settings.updateChannel) {
+  if (!R.settings.updateChannel) {
     return <AskFromGoogle setChannel={setChannel} />;
   }
 
   return null;
 }
 
-export default PopUps;
+export default observer(PopUps);

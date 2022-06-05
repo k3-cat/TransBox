@@ -34,7 +34,7 @@ function AskFromGoogle({ setChannel }: AskFromGoogleProps) {
           label='~ 是的哦 ~'
           onPress={() => {
             setChannel('google');
-            Analytics.logEvent('update_channel', { 'from': 'google', 'pervious': null });
+            Analytics.logEvent('alter_upd_source', { 'from': 'google', 'pervious': null });
           }}
         />
         <View flexG />
@@ -43,7 +43,7 @@ function AskFromGoogle({ setChannel }: AskFromGoogleProps) {
           outlineColor='#42a5f5'
           label='带我过去'
           onPress={() => {
-            Linking.openURL('');
+            Linking.openURL('https://play.google.com/store/apps/details?id=com.cybil.transbox&utm_source=app');
             Analytics.logEvent('link_click', { 'target': 'google_play' });
           }}
         />
@@ -54,7 +54,7 @@ function AskFromGoogle({ setChannel }: AskFromGoogleProps) {
         label='不想用它  /  不方便用'
         onPress={() => {
           setChannel('github');
-          Analytics.logEvent('update_channel', { 'from': 'github', 'pervious': null });
+          Analytics.logEvent('alter_upd_source', { 'from': 'github', 'pervious': null });
         }}
       />
     </Dialog>

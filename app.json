@@ -23,6 +23,7 @@
     },
     "android": {
       "package": "com.cybil.transbox",
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.cybil.transbox&utm_source=expo",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
