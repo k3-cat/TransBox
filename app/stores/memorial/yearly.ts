@@ -1,7 +1,7 @@
 import { Instance, types } from 'mobx-state-tree';
 
 export const YearlyEventStore = types
-  .model({
+  .model('YearlyEventStore', {
     id: types.identifier,
 
     name: types.string,
@@ -32,9 +32,8 @@ export const YearlyEventStore = types
     setIsHide(v: boolean) { self.isHide = v; },
     setIsInAppNotif(v: boolean) { self.inAppNotif = v; },
     setDate(d: Date) {
-      let tmp = new Date(self.baseDate);
-      tmp.setFullYear(d.getFullYear(), d.getMonth(), d.getDate());
-      tmp.setHours(0, 0, 0, 0);
+      d.setHours(0, 0, 0, 0);
+      self.baseDate = d;
     },
   }));
 

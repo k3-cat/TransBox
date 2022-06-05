@@ -51,9 +51,3 @@ export const SettingStore = types
   }))
 
   .extend(withStorage({ key: 'settings' }));
-
-export function loadSettingStore() {
-  const store = SettingStore.create();
-  store.load();
-  return store;
-}
