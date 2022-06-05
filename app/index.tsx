@@ -2,14 +2,14 @@ import { registerRootComponent } from 'expo';
 import AppLoading from 'expo-app-loading';
 import React, { useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { enableScreens } from 'react-native-screens';
 
 import Screens from './screens';
 import { loadStores, rootStore, StoreProvider } from './stores';
 import { initTheme } from './themes/themeManager';
+import { triggerUpdate } from './updater';
 
 initTheme();
-enableScreens();
+triggerUpdate(rootStore);
 
 function App() {
   const [ready, setReady] = useState(false);
