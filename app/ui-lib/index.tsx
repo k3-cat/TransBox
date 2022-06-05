@@ -1,4 +1,6 @@
-import { Card, Dialog, FAB, HelperText, IconButton, Portal, RadioButton } from 'react-native-paper';
+import {
+  Card, Dialog, FAB, HelperText, IconButton, List, Portal, RadioButton,
+} from 'react-native-paper';
 import Text from 'react-native-ui-lib/text';
 import View from 'react-native-ui-lib/view';
 
@@ -16,6 +18,7 @@ export {
   FabGroup,
   HelperText,
   IconButton,
+  List,
   Portal,
   RadioButton,
   Snackbar,

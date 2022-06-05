@@ -1,13 +1,16 @@
-import { types } from 'mobx-state-tree';
+import { Instance, types } from 'mobx-state-tree';
 import { withStorage } from 'mst-easy-storage';
 
 import { convert } from './convertor';
+import { vUnitIndex, wUnitIndex } from './data';
 
 const Preset = types.model({
   s: types.string,
   t: types.string,
   m: types.maybeNull(types.string),
 });
+
+export interface IPreset extends Instance<typeof Preset> { }
 
 export const HoUnitsStore = types
   .model('HoUnitsStore', {
@@ -60,21 +63,18 @@ export const HoUnitsStore = types
       self.presets.push(Preset.create({ s: self.sUnit, t: self.tUnit, m: self.needMol ? self.mol : null }));
     },
 
-    loadPreset(i: number) {
-      const p = self.presets[i];
+    loadPreset(p: IPreset) {
       self.sUnit = p.s;
       self.tUnit = p.t;
       self.mol = p.m ?? '0';
     },
 
-    sortPreset(from: number, to: number) {
-      if (from === to) { return; }
-      const tmp = self.presets.slice();
-      tmp.splice(to, 0, ...tmp.splice(from, 1));
-      self.presets.replace(tmp);
+    sortPreset(data: any) {
+      self.presets = data;
     },
 
-    removePreset(i: number) {
+    removePreset(o: IPreset) {
+      const i = self.presets.findIndex(p => p.s === o.s && p.t === o.t && p.m === o.m);
       self.presets.splice(i, 1);
     },
   }))
