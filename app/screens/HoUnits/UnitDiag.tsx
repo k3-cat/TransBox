@@ -6,15 +6,17 @@ import { Text, View } from 'react-native-ui-lib/core';
 import Dialog from 'react-native-ui-lib/dialog';
 
 import { useStore } from '../../stores';
-import { vUnits, wUnits } from './utils';
+import { vUnits, wUnits } from '../../stores/ho_units/data';
 
 function UnitDiag() {
   const R = useStore();
   const ob = useLocalObservable(() => ({
     w: '',
     v: '',
+
     W(w: string) { this.w = w; },
     V(v: string) { this.v = v; },
+
     C() { this.w = ''; this.v = ''; },
   }));
 

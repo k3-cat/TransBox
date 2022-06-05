@@ -1,6 +1,6 @@
 import Clipboard from 'expo-clipboard';
 import { observer } from 'mobx-react-lite';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Vibration } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RadioButton } from 'react-native-ui-lib';
@@ -11,7 +11,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { useStore } from '../../stores';
 
 const com = ['pg/mL', 'ng/dL', 'ng/mL'];
-
 
 function Output() {
   const R = useStore();
@@ -31,7 +30,7 @@ function Output() {
   const strResult = getTextResult();
 
   return (
-    <Fragment>
+    <>
       <View paddingB-20>
         {
           strResult === ' x ' ?
@@ -58,8 +57,8 @@ function Output() {
       </View>
       <View row paddingH-10 style={{ alignContent: 'space-between' }}>
         {
-          com.map((u, i) =>
-            <View key={i} flexG>
+          com.map((u) =>
+            <View key={u} flexG>
               <RadioButton
                 label={u}
                 selected={R.ho_units.tUnit === u}
@@ -77,7 +76,7 @@ function Output() {
           />
         </View>
       </View>
-    </Fragment>
+    </>
   );
 }
 

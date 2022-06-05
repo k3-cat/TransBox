@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Platform, StatusBar, TouchableOpacity } from 'react-native';
 import { Text, View } from 'react-native-ui-lib/core';
 
@@ -13,7 +13,7 @@ function Header({ title }: HeaderProps) {
   const navigation = useNavigation();
 
   return (
-    <Fragment>
+    <>
       <StatusBar
         translucent
         backgroundColor='transparent'
@@ -57,7 +57,7 @@ function Header({ title }: HeaderProps) {
           <Text center text65M>{title}</Text>
         </View>
       </View>
-    </Fragment>
+    </>
   );
 }
 

@@ -6,7 +6,8 @@ import { Text, View } from 'react-native-ui-lib/core';
 import TextField from 'react-native-ui-lib/textField';
 
 import { useStore } from '../../stores';
-import { clean, vUnitIndex, wUnitIndex } from './utils';
+import { vUnitIndex, wUnitIndex } from '../../stores/ho_units/data';
+import { clean } from './utils';
 
 function Source() {
   const R = useStore();

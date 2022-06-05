@@ -1,5 +1,5 @@
 import { observer, useLocalObservable } from 'mobx-react-lite';
-import React, { Fragment } from 'react';
+import React from 'react';
 import { FlatList, Keyboard, TouchableOpacity } from 'react-native';
 import { PanningProvider } from 'react-native-ui-lib';
 import { Text, View } from 'react-native-ui-lib/core';
@@ -7,7 +7,8 @@ import Dialog from 'react-native-ui-lib/dialog';
 import TextField from 'react-native-ui-lib/textField';
 
 import { useStore } from '../../stores';
-import { clean, comMolIndex, comMols } from './utils';
+import { comMolIndex, comMols } from '../../stores/ho_units/data';
+import { clean } from './utils';
 
 function MolInput() {
   const R = useStore();
@@ -17,15 +18,13 @@ function MolInput() {
   }));
 
   if (!R.ho_units.needMol) {
-    return <Fragment />;
+    return <></>;
   }
 
   return (
-    <Fragment>
+    <>
       <View row>
-        <View left>
-          <Text text60M style={{ marginRight: '2%' }}>@</Text>
-        </View>
+        <Text text60M style={{ marginRight: '2%' }}>@</Text>
         <View flex style={{ maxHeight: 55 }}>
           <TextField
             accessibilityLabel='分子量'
@@ -34,21 +33,18 @@ function MolInput() {
             selectTextOnFocus
             keyboardType='numeric'
             value={R.ho_units.mol}
-            onChangeText={(m: string) => R.ho_units.setMol(clean(m))} />
+            onChangeText={(m: string) => R.ho_units.setMol(clean(m))}
+          />
         </View>
-        <View right>
-          <Text text60M style={{ marginLeft: '2%', color: '#666' }}>{!comMolIndex.has(R.ho_units.mol) ? 'g/mol' : ''}</Text>
-        </View>
-        <View right>
-          <TouchableOpacity
-            onPress={() => { ob.D(); Keyboard.dismiss(); }}
-            hitSlop={{ top: 5, left: 30, right: 30, bottom: 30 }}
-          >
-            <View paddingL-15 paddingB-5>
-              <Text text65M style={{ color: '#7e57c2' }}>[常用值]</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+        <Text text60M style={{ marginLeft: '2%', color: '#666' }}>{!comMolIndex.has(R.ho_units.mol) ? 'g/mol' : ''}</Text>
+        <TouchableOpacity
+          onPress={() => { ob.D(); Keyboard.dismiss(); }}
+          hitSlop={{ top: 5, left: 30, right: 30, bottom: 30 }}
+        >
+          <View paddingL-12 paddingB-5>
+            <Text text65M style={{ color: '#7e57c2' }}>[常用值]</Text>
+          </View>
+        </TouchableOpacity>
       </View>
       <Dialog
         useSafeArea
@@ -79,7 +75,7 @@ function MolInput() {
             </TouchableOpacity>}
         />
       </Dialog>
-    </Fragment>
+    </>
   );
 }
 
