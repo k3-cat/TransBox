@@ -4,9 +4,9 @@ import React, { useRef } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native';
 
-import Header from '../components/Header';
-import { pages } from '../components/pages';
-import SideDrawer from '../components/SideDrawer';
+import Header from './navigator/Header';
+import { pages } from './navigator/pages';
+import SideDrawer from './navigator/SideDrawer';
 
 const Drawer = createDrawerNavigator();
 

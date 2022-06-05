@@ -6,6 +6,8 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RadioButton } from 'react-native-ui-lib';
 import { Text, View } from 'react-native-ui-lib/core';
 
+import { Ionicons } from '@expo/vector-icons';
+
 import { useStore } from '../../stores/rootStore';
 
 const com = ['pg/mL', 'ng/dL', 'ng/mL'];
@@ -15,16 +17,16 @@ function Output() {
   const R = useStore();
 
   const getTextResult = () => {
-    const result = R.unit.result;
+    const result = R.ho_units.result;
 
-    if (result === 0) { return `(zero) ${R.unit.tUnit}`; }
+    if (result === 0) { return `(zero) ${R.ho_units.tUnit}`; }
     if (result === -1) { return ' x '; }
-    if (result > 10000000) { return `>> 10 000 ${R.unit.tUnit} `; }
-    if (result > 10000) { return `> 10 000 ${R.unit.tUnit} `; }
-    if (result < 0.000001) { return `<< 0.001 ${R.unit.tUnit} `; }
-    if (result < 0.001) { return `< 0.001 ${R.unit.tUnit} `; }
+    if (result > 10000000) { return `>> 10 000 ${R.ho_units.tUnit} `; }
+    if (result > 10000) { return `> 10 000 ${R.ho_units.tUnit} `; }
+    if (result < 0.000001) { return `<< 0.001 ${R.ho_units.tUnit} `; }
+    if (result < 0.001) { return `< 0.001 ${R.ho_units.tUnit} `; }
 
-    return `${result.toFixed(3)} ${R.unit.tUnit}`;
+    return `${result.toFixed(3)} ${R.ho_units.tUnit}`;
   };
   const strResult = getTextResult();
 
@@ -48,8 +50,10 @@ function Output() {
                 bottom: 10
               }}
             >
-              <View row>
-                <Text text50M>{'=>  '}</Text>
+              <View row centerV>
+                <Text style={{ fontSize: 27, color: '#808080', marginRight: -7, marginTop: -3 }}>=</Text>
+                <Ionicons size={27} color='#808080' name='chevron-forward-outline' />
+                <View paddingR-12 />
                 <Text text50M style={{ color: !strResult.endsWith(' ') ? '#64b5f6' : '#ef5350' }}>
                   {strResult}
                 </Text>
@@ -58,27 +62,17 @@ function Output() {
         }
       </View>
       <View row paddingH-10 style={{ alignContent: 'space-between' }}>
-        <View flexG>
-          <RadioButton
-            label={com[0]}
-            selected={R.ho_units.tUnit === com[0]}
-            onPress={() => R.ho_units.setT(com[0])}
-          />
-        </View>
-        <View flexG>
-          <RadioButton
-            label={com[1]}
-            selected={R.ho_units.tUnit === com[1]}
-            onPress={() => R.ho_units.setT(com[1])}
-          />
-        </View>
-        <View flexG>
-          <RadioButton
-            label={com[2]}
-            selected={R.ho_units.tUnit === com[2]}
-            onPress={() => R.ho_units.setT(com[2])}
-          />
-        </View>
+        {
+          com.map((u, i) =>
+            <View key={i} flexG>
+              <RadioButton
+                label={u}
+                selected={R.ho_units.tUnit === u}
+                onPress={() => R.ho_units.setT(u)}
+              />
+            </View>
+          )
+        }
         <View>
           <RadioButton
             label={com.includes(R.ho_units.tUnit) ? '自定义' : R.ho_units.tUnit}
@@ -88,7 +82,7 @@ function Output() {
           />
         </View>
       </View>
-    </Fragment >
+    </Fragment>
   );
 }
 

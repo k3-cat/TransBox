@@ -23,9 +23,9 @@ function QuickAccess() {
         R.ho_units.qa.presets.length === 0 ?
           <View centerV flexG>
             <View style={{ top: '-7%' }}>
-              <Text center text60M grey30 >点击按钮保存预设</Text>
+              <Text center text60M grey30>点击按钮保存预设</Text>
               <View paddingV-3 />
-              <Text center text60M grey30 >长按加载&emsp;左滑移除</Text>
+              <Text center text60M grey30>长按加载&emsp;左滑移除</Text>
             </View>
           </View>
           :
@@ -51,8 +51,7 @@ function QuickAccess() {
                     </Text>
                   </ListItem.Part>
                 </ListItem>
-              </Drawer>
-            }
+              </Drawer>}
           />
       }
     </View>
