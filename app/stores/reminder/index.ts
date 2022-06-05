@@ -76,3 +76,9 @@ export const ReminderStore = types
   }))
 
   .extend(withStorage({ key: 'reminder', mode: 'inclusive', 'names': ['events'] }));
+
+export function loadReminderStore() {
+  const store = ReminderStore.create();
+  store.load();
+  return store;
+}

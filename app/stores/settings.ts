@@ -6,7 +6,7 @@ import { dateF, fulldateF, hour12TimeF, hour24TimeF, timeLocal } from '../i18n/d
 
 export const SettingStore = types
   .model({
-    updateChannel: types.maybeNull(types.enumeration(['google', 'github'])),
+    updatingSource: types.maybeNull(types.enumeration(['google', 'github'])),
 
     localCode: 'zh-CN',
     timeLocalCode: 'zh-CN',
@@ -14,10 +14,6 @@ export const SettingStore = types
   })
 
   .views((self) => ({
-    github(url: string) {
-      return 'https://github.com' + url;
-    },
-
     get timeLocal() { return timeLocal.get(self.timeLocalCode)!; },
     format(type: 'y' | 'd' | 'w' | 't') {
       if (type === 'y') {
@@ -37,8 +33,8 @@ export const SettingStore = types
   }))
 
   .actions((self) => ({
-    toggleUpdateChannel(overide?: 'google' | 'github' | null) {
-      self.updateChannel = overide !== undefined ? overide : (self.updateChannel?.endsWith('github') ? 'google' : 'github');
+    setUpdatingSource(source: 'google' | 'github') {
+      self.updatingSource = source;
     },
 
     setLocal(local: string) {
@@ -55,3 +51,9 @@ export const SettingStore = types
   }))
 
   .extend(withStorage({ key: 'settings' }));
+
+export function loadSettingStore() {
+  const store = SettingStore.create();
+  store.load();
+  return store;
+}

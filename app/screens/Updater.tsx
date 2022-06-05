@@ -1,7 +1,6 @@
 import * as Updates from 'expo-updates';
 import React from 'react';
-import { Linking } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Linking, ScrollView } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import { Button, Text, View } from 'react-native-ui-lib/core';
 

@@ -7,11 +7,8 @@ import AskFromGoogle from './AskFromGoogle';
 function PopUps() {
   const R = useStore();
 
-  const setChannel = (channel: 'google' | 'github') =>
-    R.settings.toggleUpdateChannel(channel);
-
-  if (!R.settings.updateChannel) {
-    return <AskFromGoogle setChannel={setChannel} />;
+  if (!R.settings.updatingSource) {
+    return <AskFromGoogle setSource={R.settings.setUpdatingSource} />;
   }
 
   return null;
