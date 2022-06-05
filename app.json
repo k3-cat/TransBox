@@ -3,7 +3,8 @@
     "name": "TransBox",
     "slug": "TransBox",
     "privacy": "public",
-    "version": "1.1.0",
+    "version": "1.2.0",
+    "githubUrl": "https://github.com/k3-cat/TransBox",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -12,7 +13,7 @@
       "backgroundColor": "#fdfdfd"
     },
     "updates": {
-      "fallbackToCacheTimeout": 5000
+      "fallbackToCacheTimeout": 500
     },
     "assetBundlePatterns": [
       "assets/*"
@@ -26,6 +27,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "versionCode": 3,
       "useNextNotificationsApi": true,
       "googleServicesFile": "./google-services.json",
       "permissions": [
