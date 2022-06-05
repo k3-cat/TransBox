@@ -36,7 +36,7 @@ export async function triggerUpdate(R: typeof rootStore) {
     return;
   }
 
-  const res = await api.get('/repos/Pix-00/TransBox/releases/latest');
+  const res = await api.get('/repos/k3-cat/TransBox/releases/latest');
   if (!res.ok) {
     return;
   }
