@@ -8,6 +8,7 @@ import DateTimePicker from '../../components/DateTimePicker';
 import NumInput from '../../components/NumInput';
 import QuickSelect from '../../components/QuickSelect';
 import BottomButtons from '../../components/RMScreens/BottomButtons';
+import { formatD, formatT, formatW } from '../../i18n/datetime';
 import { useStore } from '../../stores';
 import { Snackbar, Switch, TextInput, View } from '../../ui-lib';
 
@@ -17,9 +18,6 @@ const offsets = [0, 10, 30, 60];
 function EditScreen() {
   const R = useStore();
   const navigation = useNavigation();
-
-  const formatD = R.settings.format('d');
-  const formatW = R.settings.format('w');
 
   const o = R.reminder.t!;
 
@@ -103,7 +101,7 @@ function EditScreen() {
             init={!R.reminder.adding || initT}
             is24Hour={R.settings.hour24}
             value={o.nextDate}
-            formatter={R.settings.format('t')}
+            formatter={formatT}
             onChange={(d) => { o.setTime(d); setInitT(true); }}
           />
         </View>
