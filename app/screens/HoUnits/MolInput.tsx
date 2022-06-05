@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
-import { FlatList, Keyboard } from 'react-native';
+import { Keyboard } from 'react-native';
 
 import { useStore } from '../../stores';
 import { comMolIndex, comMols } from '../../stores/ho_units/data';

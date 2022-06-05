@@ -59,6 +59,24 @@ export const HoUnitsStore = types
       self.unitDiag = s;
     },
 
+    autoPaste(s: string) {
+      s = s.trim().toLowerCase();
+      const num = parseFloat(s);
+      if (isNaN(num)) { return false; }
+
+      const n = num.toString();
+      const u = s.replace(n, '').trim().split('/');
+      if (self.value === n) { return false; }
+      self.value = n;
+
+      u[0] = u[0].trim().replace('u', 'μ').replace('iu', 'IU');
+      u[1] = u[1].trim().replace('l', 'L');
+      if (wUnitIndex.has(u[0]) && vUnitIndex.has(u[1])) {
+        self.sUnit = `${u[0]}/${u[1]}`;
+      }
+      return true;
+    },
+
     savePreset() {
       self.presets.push(Preset.create({ s: self.sUnit, t: self.tUnit, m: self.needMol ? self.mol : null }));
     },

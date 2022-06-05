@@ -1,27 +1,41 @@
 import format from 'date-fns/format';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import enUS from 'date-fns/locale/en-US';
 import zhCN from 'date-fns/locale/zh-CN';
 import zhTW from 'date-fns/locale/zh-TW';
 
-export const timeLocal = new Map([
+import { rootStore as R } from '../stores';
+
+const timeLocal = new Map([
   ['en-US', enUS],
   ['zh-CN', zhCN],
   ['zh-TW', zhTW],
 ]);
 
-export const hour12TimeF = new Map([
-  ['en-US', (d: Date) => format(d, 'h:mm aaa', { locale: enUS })],
-  ['zh-CN', (d: Date) => format(d, 'aaa h:mm', { locale: zhCN })],
+const hour12TimeM = new Map([
+  ['en-US', 'h:mm aaa'],
+  ['zh-CN', 'aaa h:mm'],
 ]);
 
-export const hour24TimeF = (d: Date) => format(d, 'HH:mm');
+const hour24TimeF = (d: Date) => format(d, 'HH:mm');
 
-export const dateF = new Map([
-  ['en-US', (d: Date) => format(d, 'EEE, dd-MMM', { locale: enUS })],
-  ['zh-CN', (d: Date) => format(d, 'MMMdo EEE', { locale: zhCN })],
+const dateM = new Map([
+  ['en-US', 'EEE, dd-MMM'],
+  ['zh-CN', 'MMMdo EEE'],
 ]);
 
-export const fulldateF = new Map([
-  ['en-US', (d: Date) => format(d, 'EEE, dd MMM yyyy', { locale: enUS })],
-  ['zh-CN', (d: Date) => format(d, 'yyyy年MMMdo EEE', { locale: zhCN })],
+const fullDateM = new Map([
+  ['en-US', 'EEE, dd MMM yyyy'],
+  ['zh-CN', 'yyyy年MMMdo EEE'],
 ]);
+
+
+// - - - - - - - - - - - - - - - -
+const localCode = R.settings.timeLocalCode;
+const local = timeLocal.get(localCode)!;
+
+export const formatY = (d: Date) => format(d, fullDateM.get(localCode)!, { locale: local });
+export const formatD = (d: Date) => format(d, dateM.get(localCode)!, { locale: local });
+export const formatW = (d: Date) => format(d, 'EEE', { locale: local });
+export const formatT = R.settings.hour24 ? hour24TimeF : (d: Date) => format(d, hour12TimeM.get(localCode)!, { locale: local });
+export const formatDistance = (d: Date) => formatDistanceToNow(d, { includeSeconds: false, locale: timeLocal.get(R.settings.timeLocalCode)! });
