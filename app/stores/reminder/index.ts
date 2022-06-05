@@ -2,7 +2,7 @@ import { toJS } from 'mobx';
 import { types } from 'mobx-state-tree';
 import { withStorage } from 'mst-easy-storage';
 
-import { PeriodicallyEventStore } from './periodically';
+import { IPeriodicallyEventStore, PeriodicallyEventStore } from './periodically';
 
 let snapshot: any = null;
 
@@ -56,6 +56,11 @@ export const ReminderStore = types
       snapshot = toJS(self.events[i]);
     },
 
+    editO(o: IPeriodicallyEventStore) {
+      const i = self.events.findIndex(e => e.id === o.id);
+      return this.edit(i);
+    },
+
     revert() {
       if (self.adding) {
         self.events.pop();
@@ -86,14 +91,12 @@ export const ReminderStore = types
       snapshot = null;
     },
 
-    sort(from: number, to: number) {
-      if (from === to) { return; }
-      const tmp = self.events.slice();
-      tmp.splice(to, 0, ...tmp.splice(from, 1));
-      self.events.replace(tmp);
+    sort(data: any) {
+      self.events = data;
     },
 
-    remove(i: number) {
+    remove(o: IPeriodicallyEventStore) {
+      const i = self.events.findIndex(e => e.id === o.id);
       this.cancelNotif(self.events[i].id);
       self.events.splice(i, 1);
     },
