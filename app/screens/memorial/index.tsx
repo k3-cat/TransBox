@@ -1,18 +1,22 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, View } from 'react-native-ui-lib/core';
 
+import { createStackNavigator } from '@react-navigation/stack';
 
-function Index() {
+import DetailScreen from './DetailScreen';
+import ListScreen from './ListScreen';
+
+const Stack = createStackNavigator();
+
+function Memorial() {
   return (
-    <SafeAreaView edges={['bottom', 'left', 'right']} style={{ flexGrow: 1 }}>
-      <View flexG centerV>
-        <View>
-          <Text center>各种纪念日之类的{'\n'}比如吃糖糖的起始日期啥的{'\n'}带有总天数展示和周年提醒</Text>
-        </View>
-      </View>
-    </SafeAreaView>
+    <Stack.Navigator
+      initialRouteName='Memorial'
+      screenOptions={{ header: () => null }}
+    >
+      <Stack.Screen name='Memorial' component={ListScreen} />
+      <Stack.Screen name='-Detail' component={DetailScreen} />
+    </Stack.Navigator>
   );
 }
 
-export default Index;
+export default Memorial;
