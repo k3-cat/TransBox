@@ -13,7 +13,7 @@ import { useNavigation } from '@react-navigation/core';
 import NumInput from '../../components/NumInput';
 import { useStore } from '../../stores';
 
-const days = [1, 3, 7, 10];
+const periods = [2, 3, 7, 10];
 const offsets = [0, 10, 30, 60];
 
 function AddingScreen() {
@@ -22,7 +22,7 @@ function AddingScreen() {
   const ob = useLocalObservable(() => ({
     name: '',
     nextDate: new Date(),
-    period: 1,
+    period: 2,
     offset: 0,
     isHide: true,
     isNotif: false,
@@ -145,7 +145,7 @@ function AddingScreen() {
         <View marginT-5 marginB-15 height={1.5} bg-dark70 />
         <View row paddingH-10 style={{ alignContent: 'space-between' }}>
           {
-            days.map((p) =>
+            periods.map((p) =>
               <View key={p} flexG>
                 <RadioButton
                   label={`${p}天`}
@@ -157,9 +157,9 @@ function AddingScreen() {
           }
           <View>
             <RadioButton
-              label={days.includes(ob.period) ? '自定义' : `${ob.period}天`}
+              label={periods.includes(ob.period) ? '自定义' : `${ob.period}天`}
               labelStyle={{ color: '#7e57c2', fontWeight: 'bold' }}
-              selected={!days.includes(ob.period)}
+              selected={!periods.includes(ob.period)}
               onPress={() => ob.setDiag('d')}
             />
           </View>
