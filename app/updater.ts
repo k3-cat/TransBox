@@ -1,7 +1,7 @@
 import { create } from 'apisauce';
 import Constants from 'expo-constants';
 
-import { rootStore } from './stores';
+import { IRootStore } from './stores';
 
 const api = create({
   baseURL: 'https://api.github.com',
@@ -31,7 +31,7 @@ function verComp(small: string, big: string) {
   return true;
 }
 
-export async function triggerUpdate(R: typeof rootStore) {
+export async function triggerUpdate(R: IRootStore) {
   if (R.settings.updatingSource === 'google') {
     return;
   }

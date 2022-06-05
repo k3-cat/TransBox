@@ -3,32 +3,8 @@ import differenceInDays from 'date-fns/differenceInDays';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import { Instance, types } from 'mobx-state-tree';
 
-function createTrigger(nextDate: Date, period: number, offset: number) {
-  let tmp = new Date(nextDate);
-  tmp.setMinutes(tmp.getMinutes() - offset);
-
-  if (period === 1) {
-    return {
-      hour: tmp.getHours(),
-      minute: tmp.getMinutes(),
-      repeats: true,
-    };
-  } else if (period === 7) {
-    return {
-      weekday: tmp.getDay(),
-      hour: tmp.getHours(),
-      minute: tmp.getMinutes(),
-      repeats: true,
-    };
-  } else {
-    return {
-      date: tmp,
-    };
-  }
-}
-
 export const PeriodicallyEventStore = types
-  .model({
+  .model('PeriodicallyEventStore', {
     id: types.identifier,
 
     name: types.string,
@@ -45,14 +21,12 @@ export const PeriodicallyEventStore = types
     setOffset(o: number) { self.offset = o; },
     setIsHide(v: boolean) { self.isHide = v; },
     setDate(d: Date) {
-      let tmp = new Date(self.nextDate);
-      tmp.setFullYear(d.getFullYear(), d.getMonth(), d.getDate());
-      self.nextDate = tmp;
+      d.setHours(self.nextDate.getHours(), self.nextDate.getMinutes(), 0, 0);
+      self.nextDate = d;
     },
     setTime(t: Date) {
-      let tmp = new Date(self.nextDate);
-      tmp.setHours(t.getHours(), t.getMinutes(), 0, 0);
-      self.nextDate = tmp;
+      t.setFullYear(self.nextDate.getFullYear(), self.nextDate.getMonth(), self.nextDate.getDate());
+      self.nextDate = t;
     },
 
     updateDate() {

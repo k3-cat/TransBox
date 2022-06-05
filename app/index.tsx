@@ -1,5 +1,6 @@
 import { registerRootComponent } from 'expo';
-import React from 'react';
+import AppLoading from 'expo-app-loading';
+import React, { useState } from 'react';
 import { Platform, UIManager } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -7,7 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import Screens from './screens';
-import { rootStore, StoreProvider } from './stores';
+import { loadRootStores, rootStore, StoreProvider } from './stores';
 import { triggerUpdate } from './updater';
 
 if (Platform.OS === 'android') {
@@ -17,6 +18,18 @@ if (Platform.OS === 'android') {
 }
 
 function App() {
+  const [isReady, setIsReady] = useState(false);
+
+  if (!isReady) {
+    return (
+      <AppLoading
+        startAsync={() => loadRootStores(rootStore)}
+        onFinish={() => setIsReady(true)}
+        onError={console.warn}
+      />
+    );
+  }
+
   triggerUpdate(rootStore);
 
   return (

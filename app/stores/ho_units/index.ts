@@ -10,7 +10,7 @@ const Preset = types.model({
 });
 
 export const HoUnitsStore = types
-  .model({
+  .model('HoUnitsStore', {
     // converter
     value: '0',
     sUnit: 'μg/L',
@@ -80,9 +80,3 @@ export const HoUnitsStore = types
   }))
 
   .extend(withStorage({ key: 'ho_unit', autoSave: false, mode: 'inclusive', names: ['presets'] }));
-
-export function loadHoUnitsStore() {
-  const store = HoUnitsStore.create();
-  store.load();
-  return store;
-}
