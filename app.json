@@ -21,7 +21,9 @@
       "supportsTablet": true
     },
     "android": {
-      "permissions": [],
+      "permissions": [
+        "VIBRATE"
+      ],
       "package": "com.cybil.TransBox",
       "googleServicesFile": "./google-services.json"
     }

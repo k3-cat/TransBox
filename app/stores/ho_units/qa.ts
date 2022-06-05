@@ -1,6 +1,8 @@
 import { types } from 'mobx-state-tree';
 import { withStorage } from 'mst-easy-storage';
 
+import { comMolIndex } from '../../screens/ho_units/utils';
+
 const Preset = types.model({
   s: types.string,
   t: types.string,
@@ -15,7 +17,7 @@ export const QAStore = types
 
   .actions(self => ({
     add(o: { s: string, t: string, m: string; }) {
-      if (o.m === 'x' || isNaN(parseFloat(o.m))) {
+      if (o.m === 'x' || !comMolIndex.has(o.m) && (isNaN(parseFloat(o.m)) || parseFloat(o.m) <= 100)) {
         self.warning = '请先提供有效的分子量！';
         return;
       }

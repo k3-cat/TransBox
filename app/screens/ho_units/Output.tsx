@@ -2,6 +2,7 @@ import Clipboard from 'expo-clipboard';
 import { observer } from 'mobx-react-lite';
 import React, { Fragment } from 'react';
 import { Vibration } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { RadioButton } from 'react-native-ui-lib';
 import { Text, View } from 'react-native-ui-lib/core';
 
@@ -13,20 +14,47 @@ const com = ['pg/mL', 'ng/dL', 'ng/mL'];
 function Output() {
   const R = useStore();
 
+  const getTextResult = () => {
+    const result = R.unit.result;
+
+    if (result === 0) { return `(zero) ${R.unit.tUnit}`; }
+    if (result === -1) { return ' x '; }
+    if (result > 10000000) { return `>> 10 000 ${R.unit.tUnit} `; }
+    if (result > 10000) { return `> 10 000 ${R.unit.tUnit} `; }
+    if (result < 0.000001) { return `<< 0.001 ${R.unit.tUnit} `; }
+    if (result < 0.001) { return `< 0.001 ${R.unit.tUnit} `; }
+
+    return result.toFixed(3) + ' ' + R.unit.tUnit;
+  };
+  const strResult = getTextResult();
+
   return (
     <Fragment>
       <View paddingB-20>
         {
-          R.ho_units.result < 0
-            ?
-            <Text center style={{ fontSize: 19, color: '#ef5350' }}>请选择合适的单位或检查输入</Text>
+          strResult === ' x ' ?
+            <Text text50M center style={{ color: '#ef5350' }}>请检查输入是否有效</Text>
             :
-            <Text
-              style={{ fontSize: 25, color: '#64b5f6' }}
-              onLongPress={() => { Vibration.vibrate(30); Clipboard.setString(R.ho_units.textResult); }}
+            <TouchableWithoutFeedback
+              onLongPress={() => {
+                if (strResult.endsWith(' ') || strResult.includes('zero')) { return; }
+                Clipboard.setString(strResult);
+                Vibration.vibrate(30);
+              }}
+              hitSlop={{
+                top: 15,
+                left: 35,
+                right: 35,
+                bottom: 10
+              }}
             >
-              {'=  ' + R.ho_units.textResult}
-            </Text>
+              <View row>
+                <Text text50M>{'=>  '}</Text>
+                <Text text50M style={{ color: !strResult.endsWith(' ') ? '#64b5f6' : '#ef5350' }}>
+                  {strResult}
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
         }
       </View>
       <View row paddingH-10 style={{ alignContent: 'space-between' }}>

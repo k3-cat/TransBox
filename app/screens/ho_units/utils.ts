@@ -20,16 +20,18 @@ export const vUnitIndex = new Map([
 export const vUnits = [...vUnitIndex.keys()];
 
 export const comMolIndex = new Map([
-  ['雌二醇 (E2)', 272.38],
-  ['孕酮 (P)', 314.46],
-  ['泌乳素 (PRL)', 21276.6],
-  ['睾酮 (T)', 288.42]
+  ['雌二醇(E2)', 272.382],
+  ['孕酮(P)', 314.462],
+  ['睾酮(T)', 288.424],
+  ['催乳素(PRL)', 21276.6],
+  ['*促黄体激素(LH)', 29500],
+  ['*促卵泡激素(FSH)', 32000],
 ]);
 
 export const comMols = [...comMolIndex.keys()];
 
 export function clean(text: string) {
-  var num = text.length ? parseFloat(text) : 0;
+  const num = text.length ? parseFloat(text) : 0;
 
   if (isNaN(num)) { return text; }
 

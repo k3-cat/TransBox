@@ -6,28 +6,40 @@ import { TextField } from 'react-native-ui-lib';
 import { Text, View } from 'react-native-ui-lib/core';
 
 import { useStore } from '../../stores/rootStore';
-import { clean, vUnits, wUnits } from './utils';
+import { clean, vUnitIndex, wUnitIndex } from './utils';
+
 
 function Source() {
   const R = useStore();
 
   const autoPaste = async () => {
-    var s = await Clipboard.getStringAsync();
+    let s = await Clipboard.getStringAsync();
     if (!s) { return; }
 
     s = s.trim().toLowerCase();
-    var num = parseFloat(s.trim());
+    const num = parseFloat(s.trim());
     if (isNaN(num)) { return; }
 
-    var n = num === 0 ? '0' : num.toString();
+    let n;
+    let u;
+    if (s.includes(' ')) {
+      const ss = s.split(' ');
+      n = ss[0];
+      u = ss[1].trim().split('/');
+    }
+    else {
+      n = num.toString();
+      u = s.replace(n, '').trim().split('/');
+    }
     if (R.ho_units.value === n) { return; }
-    var u = s.replace(n, '').trim().split('/');
-    u[0] = u[0].trim().replace('u', 'μ').replace('iu', 'IU');
-    u[1] = u[1].trim().replace('l', 'L');
 
     R.ho_units.setValue(n);
+    Clipboard.setString('');
     Vibration.vibrate(30);
-    if (wUnits.includes(u[0]) && vUnits.includes(u[1])) {
+
+    u[0] = u[0].trim().replace('u', 'μ').replace('iu', 'IU');
+    u[1] = u[1].trim().replace('l', 'L');
+    if (wUnitIndex.has(u[0]) && vUnitIndex.has(u[1])) {
       R.ho_units.setS(u[0] + '/' + u[1]);
     }
   };

@@ -20,10 +20,6 @@ export const HoUnitsStore = types
 
     get result() {
       return convert(self.value, self.sUnit, self.tUnit, self.mol);
-    },
-
-    get textResult() {
-      return this.result.toFixed(3) + ' ' + self.tUnit;
     }
   }))
 
