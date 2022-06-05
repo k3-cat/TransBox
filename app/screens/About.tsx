@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+import * as Analytics from 'expo-firebase-analytics';
 import React from 'react';
 import { Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -23,9 +24,12 @@ function About() {
           bg-transparent
           label='~ 加群(1156382384) ~'
           labelStyle={{ color: '#5bcefa' }}
-          onPress={() => Linking.openURL('https://jq.qq.com/?_wv=1027&k=bW9uLBir')}
+          onPress={() => {
+            Linking.openURL('https://jq.qq.com/?_wv=1027&k=bW9uLBir');
+            Analytics.logEvent('link_click', { 'target': 'qq' });
+          }}
         />
-        <View marginV-12></View>
+        <View marginV-12 />
         <Text center text60M style={{ color: '#f5a9b8' }}>by: kikoの猫猫</Text>
         <Button
           centerH
@@ -45,7 +49,10 @@ function About() {
           bg-transparent
           label='- 访问项目主页 -'
           labelStyle={{ fontSize: 21, color: '#ffab91' }}
-          onPress={() => Linking.openURL('https://github.com/k3-cat/TransBox')}
+          onPress={() => {
+            Linking.openURL('https://github.com/k3-cat/TransBox');
+            Analytics.logEvent('link_click', { 'target': 'homepage' });
+          }}
         />
       </View>
       <View marginB-25>
