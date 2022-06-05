@@ -18,24 +18,25 @@ function EditScreen() {
   const R = useStore();
   const navigation = useNavigation();
 
+  const o = R.memorial.t!;
+
   const [diag, setDiag] = useState('x');
   const [warning, setWarning] = useState('x');
   const [isNotif, setIsNotif] = useState(false);
-  const getIsNotif = () => isNotif ?? R.reminder.notifs.has(R.reminder.t!.id);
+  const getIsNotif = () => isNotif ?? R.reminder.notifs.has(o.id);
 
   function flush() {
-    if (!R.memorial.t!.name) {
+    if (!o.name) {
       setWarning('必须要给纪念日起个名字哦');
-      return;
+      return false;
     }
-    if (R.memorial.adding && R.memorial.events.some(e => e.name === R.memorial.t!.name && e.id !== R.memorial.t!.id)) {
+    if (R.memorial.adding && R.memorial.events.some(e => e.name === o.name && e.id !== o.id)) {
       setWarning('已经存在同名的纪念日了');
-      return;
+      return false;
     }
 
-    navigation.goBack();
     R.memorial.flush(getIsNotif());
-    R.memorial.save();
+    return true;
   }
 
   return (
@@ -43,25 +44,25 @@ function EditScreen() {
       <ScrollView style={{ marginHorizontal: 20, marginVertical: 10 }}>
         <TextInput
           label='名称'
-          value={R.memorial.t!.name}
-          onChangeText={R.memorial.t!.setName}
+          value={o.name}
+          onChangeText={o.setName}
         />
         <View marginB-10 />
         <DateTimePicker
           label='日期'
           mode='date'
-          value={R.memorial.t!.baseDate}
+          value={o.baseDate}
           formatter={R.settings.format('y')}
-          onChange={R.memorial.t!.setDate}
+          onChange={o.setDate}
         />
         <View marginV-35 marginH-40 height={1.5} bg-dark50 />
         <Switch
           label='开启app内的文字提醒'
-          value={R.memorial.t!.inAppNotif}
-          onChange={R.memorial.t!.setIsInAppNotif}
+          value={o.inAppNotif}
+          onChange={o.setIsInAppNotif}
         />
 
-        {R.memorial.t!.inAppNotif && <>
+        {o.inAppNotif && <>
           <Switch
             disabled
             label='开启系统通知提醒'
@@ -72,23 +73,23 @@ function EditScreen() {
           {getIsNotif() && <>
             <Switch
               label='通知里隐藏具体细节'
-              value={R.memorial.t!.isHide}
-              onChange={R.memorial.t!.setIsHide}
+              value={o.isHide}
+              onChange={o.setIsHide}
             />
             <QuickSelect
               title='提前几天提醒呢?'
               list={offsets}
-              value={R.memorial.t!.offset}
+              value={o.offset}
               suffix='天'
-              select={R.memorial.t!.setOffset}
+              select={o.setOffset}
               setDiag={() => setDiag('d')}
             />
             <QuickSelect
               title='在几点提醒呢?'
               list={hours}
-              value={R.memorial.t!.hours}
+              value={o.hours}
               suffix='时'
-              select={R.memorial.t!.setHours}
+              select={o.setHours}
               setDiag={() => setDiag('h')}
             />
           </>}
@@ -99,17 +100,17 @@ function EditScreen() {
       <BottomButtons onUpdate={flush} />
       <NumInput
         visible={diag === 'd'}
-        init={R.memorial.t!.offset}
+        init={o.offset}
         min={0} max={90} step={7}
         onCancell={() => setDiag('x')}
-        onSubmit={R.memorial.t!.setOffset}
+        onSubmit={o.setOffset}
       />
       <NumInput
         visible={diag === 'h'}
-        init={R.memorial.t!.hours}
+        init={o.hours}
         min={0} max={23} step={1}
         onCancell={() => setDiag('x')}
-        onSubmit={R.memorial.t!.setHours}
+        onSubmit={o.setHours}
       />
       <Snackbar
         text={warning}

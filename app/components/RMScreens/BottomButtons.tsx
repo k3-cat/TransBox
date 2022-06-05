@@ -1,13 +1,13 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { useLocalStore } from '../../stores/local';
+import { useLocalStore } from '../../stores/utils/localStore';
 import { Button, View } from '../../ui-lib';
-import { observer } from 'mobx-react-lite';
 
 interface BottomButtonsProps {
-  onUpdate: () => void;
+  onUpdate: () => boolean;
 }
 
 function BottomButtons({ onUpdate }: BottomButtonsProps) {
@@ -31,7 +31,12 @@ function BottomButtons({ onUpdate }: BottomButtonsProps) {
         mode='outlined'
         style={{ flexGrow: 1 }}
         labelStyle={{ fontSize: 17 }}
-        onPress={onUpdate}
+        onPress={() => {
+          if (onUpdate()) {
+            navigation.goBack();
+            store.save();
+          }
+        }}
       />
     </View>
   );

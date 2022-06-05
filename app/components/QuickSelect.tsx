@@ -1,4 +1,3 @@
-import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 
@@ -66,4 +65,4 @@ function QuickSelect<T extends StringAble>({ title, list, value, select, setDiag
   );
 }
 
-export default observer(QuickSelect);
+export default QuickSelect;
